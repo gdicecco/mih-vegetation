@@ -1,0 +1,104 @@
+### MIH code ####
+# want to make 4 plots
+
+# NDVI:abun, NDVI:occ
+# EVH:abun, EVH:occ
+# for specialists/generalists and core-transient split out
+
+library(ggplot2)
+library(dplyr)
+library(rgdal)
+library(raster)
+library(rdataretriever)
+##### ecoretriever to download bbs data and derive occupancy values #####
+# bbs_eco = rdataretriever::fetch("breed-bird-survey")
+# Years = (bbs_eco$breed_bird_survey_counts)
+# Years$stateroute = Years$statenum*1000 + Years$route
+
+# filter to land birds
+# landbirds <- Years %>%
+#  filter(aou > 2880) %>%
+#  filter(aou < 3650 | aou > 3810) %>%
+#  filter(aou < 3900 | aou > 3910) %>%
+#  filter(aou < 4160 | aou > 4210) %>%
+#  filter(aou != 7010)
+
+landbirds = read.csv("//bioark/HurlbertLab/Snell/MIH/bbs_data.csv", header = TRUE)
+
+# Get subset of stateroutes that have been surveyed every year from 2001-2015
+good_rtes = landbirds %>% 
+  dplyr::filter(year > 1994, year < 2011) %>% 
+  dplyr::select(year, stateroute) %>%
+  unique() %>%    
+  dplyr::count(stateroute) %>% 
+  filter(n == 15) # have to stay at 15 to keep # of years consistent
+
+# Calculate occupancy for all species at subset of stateroutes above
+bbs_sub1 = landbirds %>% 
+  filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+  dplyr::select(year, stateroute, aou) %>%
+  dplyr::count(aou, stateroute) %>%
+  filter(n <= 15) 
+
+bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
+
+landbirds$rich = 1
+bbs_rich = landbirds %>%
+  group_by(stateroute) %>%
+  count(rich) 
+bbs_rich$sprich = bbs_rich$n
+
+bbs_abun = landbirds %>% 
+  filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+  dplyr::select(year, stateroute, aou, speciestotal) %>%
+  group_by(stateroute, aou) %>%
+  summarise(sum = sum(speciestotal)) 
+
+# ndvi data #
+gimms_ndvi = read.csv("gimms_ndvi_bbs_data.csv", header = TRUE)
+gimms_agg = gimms_ndvi %>% filter(month == c("may", "jun", "jul")) %>% 
+  group_by(site_id)  %>%  summarise(ndvi.mean=mean(ndvi))
+gimms_agg$stateroute = gimms_agg$site_id
+ndvi = gimms_agg[,c("stateroute", "ndvi.mean")]
+
+# canopy height data #
+nbcd =  read.csv("//bioark/HurlbertLab/GIS/NBCD/data/nbcd_processed.csv", header = TRUE)
+nbcd_bbs = left_join(bbs_sub1, nbcd, by = "stateroute")
+nbcd_bbs = na.omit(nbcd_bbs)
+
+# join ndvi and nbcd #
+ndvi_nbcd = inner_join(ndvi, nbcd, by = "stateroute")
+
+# left join to get temporal occupancy
+env_bbs = left_join(bbs_sub1, ndvi_nbcd, by = "stateroute")
+env_bbs = na.omit(env_bbs)
+
+# left join to get abundance
+env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
+env_bbs_abun = na.omit(ndvi_bbs)
+
+# occ
+ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
+ggsave("C:/Git/Biotic-Interactions/Figures/occ_ndvi.png", height = 8, width = 12)
+
+# abun
+env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
+env_bbs_abun = na.omit(env_bbs_abun)
+ggplot(ndvi_bbs_abun, aes(x = log10(ndvi.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
+ggsave("C:/Git/Biotic-Interactions/Figures/abun_ndvi.png", height = 8, width = 12)
+
+# sprich
+# ggplot(nbcd_bbs, aes(x = nbcd.mean, y = sprich)) + geom_point() + geom_smooth(method = "lm")
+
+# occ
+ggplot(env_bbs, aes(x = nbcd.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
+ggsave("C:/Git/Biotic-Interactions/Figures/occ_nbcd.png", height = 8, width = 12)
+
+# abun
+ggplot(env_bbs_abun, aes(x = log10(nbcd.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
+ggsave("C:/Git/Biotic-Interactions/Figures/abun_nbcd.png", height = 8, width = 12)
+
+
+routes_nbcd = routes[routes@data$stateroute %in% nbcd_bbs$stateroute,]
+plot(routes_nbcd)
+
