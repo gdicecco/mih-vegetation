@@ -7,8 +7,6 @@
 
 library(ggplot2)
 library(dplyr)
-library(rgdal)
-library(raster)
 library(rdataretriever)
 ##### ecoretriever to download bbs data and derive occupancy values #####
 # bbs_eco = rdataretriever::fetch("breed-bird-survey")
@@ -75,7 +73,7 @@ env_bbs = na.omit(env_bbs)
 
 # left join to get abundance
 env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
-env_bbs_abun = na.omit(ndvi_bbs)
+env_bbs_abun = na.omit(env_bbs_abun)
 
 # occ
 ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
@@ -84,7 +82,7 @@ ggsave("C:/Git/mih-vegetation/Figures/occ_ndvi.png", height = 8, width = 12)
 # abun
 env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
 env_bbs_abun = na.omit(env_bbs_abun)
-ggplot(ndvi_bbs_abun, aes(x = log10(ndvi.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs_abun, aes(x = log10(ndvi.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
 ggsave("C:/Git/mih-vegetation/Figures/abun_ndvi.png", height = 8, width = 12)
 
 # sprich
@@ -99,6 +97,6 @@ ggplot(env_bbs_abun, aes(x = log10(nbcd.mean), y = log10(sum))) + geom_point() +
 ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 
 
-routes_nbcd = routes[routes@data$stateroute %in% nbcd_bbs$stateroute,]
-plot(routes_nbcd)
+# routes_nbcd = routes[routes@data$stateroute %in% nbcd_bbs$stateroute,]
+# plot(routes_nbcd)
 
