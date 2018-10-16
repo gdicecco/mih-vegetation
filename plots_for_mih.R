@@ -79,24 +79,24 @@ env_bbs_abun = na.omit(ndvi_bbs)
 
 # occ
 ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
-ggsave("C:/Git/Biotic-Interactions/Figures/occ_ndvi.png", height = 8, width = 12)
+ggsave("C:/Git/mih-vegetation/Figures/occ_ndvi.png", height = 8, width = 12)
 
 # abun
 env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
 env_bbs_abun = na.omit(env_bbs_abun)
 ggplot(ndvi_bbs_abun, aes(x = log10(ndvi.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
-ggsave("C:/Git/Biotic-Interactions/Figures/abun_ndvi.png", height = 8, width = 12)
+ggsave("C:/Git/mih-vegetation/Figures/abun_ndvi.png", height = 8, width = 12)
 
 # sprich
 # ggplot(nbcd_bbs, aes(x = nbcd.mean, y = sprich)) + geom_point() + geom_smooth(method = "lm")
 
 # occ
 ggplot(env_bbs, aes(x = nbcd.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
-ggsave("C:/Git/Biotic-Interactions/Figures/occ_nbcd.png", height = 8, width = 12)
+ggsave("C:/Git/mih-vegetation/Figures/occ_nbcd.png", height = 8, width = 12)
 
 # abun
 ggplot(env_bbs_abun, aes(x = log10(nbcd.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
-ggsave("C:/Git/Biotic-Interactions/Figures/abun_nbcd.png", height = 8, width = 12)
+ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 
 
 routes_nbcd = routes[routes@data$stateroute %in% nbcd_bbs$stateroute,]
