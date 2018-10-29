@@ -97,6 +97,32 @@ ggplot(env_bbs_abun, aes(x = log10(nbcd.mean), y = log10(sum))) + geom_point() +
 ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 
 
+##### models for varpar #####
+occ_nbcd <- lm(env_bbs$occ ~  env_bbs$nbcd.mean) 
+# z scores separated out for env effects - abundance
+occ_ndvi = lm(env_bbs$occ ~  env_bbs$ndvi.mean) 
+# z scores separated out for env effects - abundance
+occ_both = lm(env_bbs$occ ~  env_bbs$nbcd.mean + env_bbs$ndvi.mean) 
+
+NDVI = summary(occ_both)$r.squared - summary(occ_nbcd)$r.squared #ndvi only
+NBCD = summary(occ_both)$r.squared - summary(occ_ndvi)$r.squared #nbcd only
+SHARED = summary(occ_nbcd)$r.squared - NBCD #shared variance
+NONE = 1 - summary(occ_both)$r.squared # neither variance
+
+abun_nbcd <- lm(env_bbs_abun$sum ~  env_bbs_abun$nbcd.mean) 
+# z scores separated out for env effects - abundance
+abun_ndvi = lm(env_bbs_abun$sum ~  env_bbs_abun$ndvi.mean) 
+# z scores separated out for env effects - abundance
+abun_both = lm(env_bbs_abun$sum ~  env_bbs_abun$nbcd.mean + env_bbs_abun$ndvi.mean) 
+
+NDVI = summary(abun_both)$r.squared - summary(abun_nbcd)$r.squared #ndvi only
+NBCD = summary(abun_both)$r.squared - summary(abun_ndvi)$r.squared #nbcd only
+SHARED = summary(abun_nbcd)$r.squared - NBCD #shared variance
+NONE = 1 - summary(abun_both)$r.squared # neither variance
+
+
+
+
 # routes_nbcd = routes[routes@data$stateroute %in% nbcd_bbs$stateroute,]
 # plot(routes_nbcd)
 
