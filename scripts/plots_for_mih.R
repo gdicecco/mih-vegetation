@@ -106,7 +106,7 @@ ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 
 # rich
 ggplot(env_bbs_rich, aes(x = log10(nbcd.mean), y = log10(sprich))) + geom_point() + geom_smooth(method = "lm")
-ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
+ggsave("C:/Git/mih-vegetation/Figures/rich_nbcd.png", height = 8, width = 12)
 
 
 ##### models for varpar #####
