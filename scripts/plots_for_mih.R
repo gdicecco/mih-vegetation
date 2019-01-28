@@ -81,31 +81,31 @@ env_bbs_rich = na.omit(env_bbs_rich)
 
 
 # occ
-ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")+theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NDVI")+ ylab("Occupancy") + xlim(0,1) + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("Figures/occ_ndvi.png", height = 8, width = 12)
 
 # abun
 env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
 env_bbs_abun = na.omit(env_bbs_abun)
-ggplot(env_bbs_abun, aes(x = log10(ndvi.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs_abun, aes(x = log10(ndvi.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("log(Mean NDVI)")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
 
 # rich
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
 env_bbs_rich = na.omit(env_bbs_rich)
-ggplot(env_bbs_rich, aes(x = log10(ndvi.mean), y = log10(sprich))) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs_rich, aes(x = log10(ndvi.mean), y = log10(sprich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("log(Mean NDVI)")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +ylim(0,4)
 ggsave("Figures/rich_ndvi.png", height = 8, width = 12)
 
 # occ
-ggplot(env_bbs, aes(x = nbcd.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs, aes(x = nbcd.mean, y = occ)) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NBCD")+ ylab("Occupancy")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("C:/Git/mih-vegetation/Figures/occ_nbcd.png", height = 8, width = 12)
 
 # abun
-ggplot(env_bbs_abun, aes(x = log10(nbcd.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs_abun, aes(x = log10(nbcd.mean), y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("log(Mean NBCD)")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 
 # rich
-ggplot(env_bbs_rich, aes(x = log10(nbcd.mean), y = log10(sprich))) + geom_point() + geom_smooth(method = "lm")
+ggplot(env_bbs_rich, aes(x = log10(nbcd.mean), y = log10(sprich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("log(Mean NBCD)")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("C:/Git/mih-vegetation/Figures/rich_nbcd.png", height = 8, width = 12)
 
 
