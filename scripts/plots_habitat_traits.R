@@ -39,7 +39,26 @@ traits %<>% left_join(select(MO_correlates, AOU, AbundClass, Trophic.Group), by 
   mutate(habStatus = ifelse(nHabitats1 > 2, "generalist", "specialist")) %>%
   mutate(dietStatus = ifelse(Trophic.Group == "omnivore" | Trophic.Group == "insct/om", "generalist", "specialist"))
 
+table(traits$habStatus, traits$dietStatus)
+hab_test <- table(traits$habStatus, traits$AbundClass)[, -1]
+diet_test <- table(traits$dietStatus, traits$AbundClass)[, -1]
+
+chisq.test(hab_test)
+chisq.test(diet_test)
+
 ### Plots
+
+# productivity vs. canopy height
+
+theme_set(theme_classic())
+
+ndvi_nbcd <- ggplot(env, aes(x = ndvi.mean, y = nbcd.mean)) + geom_point(alpha = 0.5) + 
+  geom_smooth(method = "lm", se = F, cex = 1.5) +
+  labs(x = "Mean NDVI", y = "Mean Canopy Height")
+ndvi_nbcd
+ggsave("figures/ndvi_nbcd.pdf")
+
+summary(lm(nbcd.mean ~ ndvi.mean, data = env))
 
 # Abundance at each route by habitat specialization
 hab_counts <- counts.subs %>%
