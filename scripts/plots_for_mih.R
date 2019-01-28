@@ -42,6 +42,7 @@ bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
 
 landbirds$rich = 1
 bbs_rich = landbirds %>%
+  filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   group_by(stateroute) %>%
   count(rich) 
 bbs_rich$sprich = bbs_rich$n
