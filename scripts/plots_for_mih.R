@@ -50,7 +50,7 @@ bbs_rich$sprich = bbs_rich$n
 bbs_abun = landbirds %>% 
   filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   dplyr::select(year, stateroute, aou, speciestotal) %>%
-  group_by(stateroute, aou) %>%
+  group_by(stateroute) %>%
   summarise(sum = sum(speciestotal)) 
 
 # ndvi data #
@@ -151,11 +151,6 @@ NONE = 1 - summary(rich_both)$r.squared # neither variance
 
 
 #### From CT Figure 5b ####
-# read in route level ndvi and elevation data (radius = 40 km)
-# we want to agg by month here
-gimms_ndvi = read.csv("output/tabular_data/gimms_ndvi_bbs_data.csv", header = TRUE)
-gimms_agg = gimms_ndvi %>% filter(month == c("may", "jun", "jul")) %>% 
-  group_by(site_id)  %>%  summarise(ndvi=mean(ndvi))
 
 lat_scale_rich = read.csv("output/tabular_data/lat_scale_rich_3_30.csv", header = TRUE)
 lat_scale_bbs = filter(lat_scale_rich, datasetID == 1)
