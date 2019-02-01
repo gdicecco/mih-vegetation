@@ -42,7 +42,7 @@ bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
 
 landbirds$rich = 1
 bbs_rich = landbirds %>%
-  filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+ # filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   group_by(stateroute) %>%
   count(rich) 
 bbs_rich$sprich = bbs_rich$n
@@ -148,4 +148,40 @@ NONE = 1 - summary(rich_both)$r.squared # neither variance
 
 # routes_nbcd = routes[routes@data$stateroute %in% nbcd_bbs$stateroute,]
 # plot(routes_nbcd)
+
+
+#### From CT Figure 5b ####
+# read in route level ndvi and elevation data (radius = 40 km)
+# we want to agg by month here
+gimms_ndvi = read.csv("output/tabular_data/gimms_ndvi_bbs_data.csv", header = TRUE)
+gimms_agg = gimms_ndvi %>% filter(month == c("may", "jun", "jul")) %>% 
+  group_by(site_id)  %>%  summarise(ndvi=mean(ndvi))
+
+lat_scale_rich = read.csv("output/tabular_data/lat_scale_rich_3_30.csv", header = TRUE)
+lat_scale_bbs = filter(lat_scale_rich, datasetID == 1)
+
+bbs_5km_elev = read.csv("data/BBS/bbs_elevation_5km.csv", header = TRUE)
+
+bbsocc = read.csv('data/propOcc_datasets/propOcc_1.csv', header=T, stringsAsFactors = F)
+rich = dplyr::count(bbsocc, site)
+rich_notrans = bbsocc %>% filter(propOcc > 1/3) %>% count(site)
+
+bbsocc_rich = left_join(bbsocc, rich)
+bbsocc_rich$spRich = bbsocc_rich$n
+bbsocc_rich = bbsocc_rich[ , !names(bbsocc_rich) %in% c("n")] 
+bbsocc_rich = left_join(bbsocc_rich, rich_notrans)
+bbsocc_rich$spRichnotrans = bbsocc_rich$n
+bbsocc_rich = bbsocc_rich[ , !names(bbsocc_rich) %in% c("n")] 
+
+bbs_env = left_join(bbsocc_rich, gimms_agg, c("site" = "site_id"))
+bbs_env = merge(bbs_env, lat_scale_bbs[,c("site", "elev.point", "elev.mean", "elev.var")], by = "site")
+
+# cor test not really working - need for loop?
+cor.test(bbs_env$spRich, bbs_env$ndvi)
+bar1 = cor.test(bbs_env$spRich, bbs_env$ndvi)$estimate
+CI1lower =  cor.test(bbs_env$spRich, bbs_env$ndvi)$conf.int[1]
+CI1upper = cor.test(bbs_env$spRich, bbs_env$ndvi)$conf.int[2]
+bar3 = cor.test(bbs_env$spRich, bbs_env$elev.mean)$estimate
+CI3lower = cor.test(bbs_env$spRich, bbs_env$elev.mean)$conf.int[1]
+CI3upper =  cor.test(bbs_env$spRich, bbs_env$elev.mean)$conf.int[2]
 
