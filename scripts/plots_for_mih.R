@@ -7,6 +7,7 @@
 
 library(ggplot2)
 library(dplyr)
+library(tidyr)
 library(rdataretriever)
 ##### ecoretriever to download bbs data and derive occupancy values #####
 # bbs_eco = rdataretriever::fetch("breed-bird-survey")
@@ -44,19 +45,19 @@ landbirds$rich = 1
 bbs_rich = landbirds %>%
  # filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   group_by(stateroute) %>%
-  count(rich) 
-bbs_rich$sprich = bbs_rich$n
+  dplyr::count(rich) 
+bbs_rich$spRich = bbs_rich$n
 
 bbs_abun = landbirds %>% 
   filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   dplyr::select(year, stateroute, aou, speciestotal) %>%
   group_by(stateroute) %>%
-  summarise(sum = sum(speciestotal)) 
+  dplyr::summarise(sum = sum(speciestotal)) 
 
 # ndvi data #
 gimms_ndvi = read.csv("data/gimms_ndvi_bbs_data.csv", header = TRUE)
 gimms_agg = gimms_ndvi %>% filter(month == c("may", "jun", "jul")) %>% 
-  group_by(site_id)  %>%  summarise(ndvi.mean=mean(ndvi))
+  group_by(site_id)  %>%  dplyr::summarise(ndvi.mean=mean(ndvi))
 gimms_agg$stateroute = gimms_agg$site_id
 ndvi = gimms_agg[,c("stateroute", "ndvi.mean")]
 
@@ -80,7 +81,7 @@ env_bbs_abun = na.omit(env_bbs_abun)
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
 env_bbs_rich = na.omit(env_bbs_rich)
 
-
+#### plotting ####
 # occ
 ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")+theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NDVI")+ ylab("Occupancy") + xlim(0,1) + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("Figures/occ_ndvi.png", height = 8, width = 12)
@@ -151,32 +152,114 @@ NONE = 1 - summary(rich_both)$r.squared # neither variance
 
 
 #### From CT Figure 5b ####
+library(plyr)
 
-lat_scale_rich = read.csv("output/tabular_data/lat_scale_rich_3_30.csv", header = TRUE)
-lat_scale_bbs = filter(lat_scale_rich, datasetID == 1)
+bbs_abun_occ = landbirds %>% 
+  filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+  dplyr::select(year, stateroute, aou, speciestotal)
+subsettedData1 = subset(bbs_abun_occ, speciestotal > 0)
+spTime = ddply(subsettedData1, .(stateroute, aou), summarize, 
+               spTime = length(unique(year)))
+siteTime = ddply(subsettedData1, .(stateroute), summarize, 
+                 siteTime = length(unique(year)))
+spSiteTime = merge(spTime, siteTime)
+propOcc = data.frame(site = spSiteTime$stateroute, 
+                     species = spSiteTime$aou,
+                     propOcc = spSiteTime$spTime/spSiteTime$siteTime)
 
-bbs_5km_elev = read.csv("data/BBS/bbs_elevation_5km.csv", header = TRUE)
+rich_notrans = propOcc %>% filter(propOcc > 1/3) %>% dplyr::count(site)
 
-bbsocc = read.csv('data/propOcc_datasets/propOcc_1.csv', header=T, stringsAsFactors = F)
-rich = dplyr::count(bbsocc, site)
-rich_notrans = bbsocc %>% filter(propOcc > 1/3) %>% count(site)
-
-bbsocc_rich = left_join(bbsocc, rich)
-bbsocc_rich$spRich = bbsocc_rich$n
+bbsocc_rich = left_join(propOcc, bbs_rich, by = c("site" = "stateroute"))
 bbsocc_rich = bbsocc_rich[ , !names(bbsocc_rich) %in% c("n")] 
 bbsocc_rich = left_join(bbsocc_rich, rich_notrans)
 bbsocc_rich$spRichnotrans = bbsocc_rich$n
 bbsocc_rich = bbsocc_rich[ , !names(bbsocc_rich) %in% c("n")] 
 
-bbs_env = left_join(bbsocc_rich, gimms_agg, c("site" = "site_id"))
-bbs_env = merge(bbs_env, lat_scale_bbs[,c("site", "elev.point", "elev.mean", "elev.var")], by = "site")
+bbs_env = left_join(bbsocc_rich, ndvi_nbcd, c("site" = "stateroute"))
 
 # cor test not really working - need for loop?
-cor.test(bbs_env$spRich, bbs_env$ndvi)
-bar1 = cor.test(bbs_env$spRich, bbs_env$ndvi)$estimate
-CI1lower =  cor.test(bbs_env$spRich, bbs_env$ndvi)$conf.int[1]
-CI1upper = cor.test(bbs_env$spRich, bbs_env$ndvi)$conf.int[2]
-bar3 = cor.test(bbs_env$spRich, bbs_env$elev.mean)$estimate
-CI3lower = cor.test(bbs_env$spRich, bbs_env$elev.mean)$conf.int[1]
-CI3upper =  cor.test(bbs_env$spRich, bbs_env$elev.mean)$conf.int[2]
+cor.test(bbs_env$spRich, bbs_env$ndvi.mean)
+bar1 = cor.test(bbs_env$spRich, bbs_env$ndvi.mean)$estimate
+CI1lower =  cor.test(bbs_env$spRich, bbs_env$ndvi.mean)$conf.int[1]
+CI1upper = cor.test(bbs_env$spRich, bbs_env$ndvi.mean)$conf.int[2]
+bar3 = cor.test(bbs_env$spRich, bbs_env$nbcd.mean)$estimate
+CI3lower = cor.test(bbs_env$spRich, bbs_env$nbcd.mean)$conf.int[1]
+CI3upper =  cor.test(bbs_env$spRich, bbs_env$nbcd.mean)$conf.int[2]
 
+bar2 = cor.test(bbs_env$spRichnotrans, bbs_env$ndvi.mean)$estimate
+CI2lower = cor.test(bbs_env$spRichnotrans, bbs_env$ndvi.mean)$conf.int[1]
+CI2upper =   cor.test(bbs_env$spRichnotrans, bbs_env$ndvi.meani)$conf.int[2]
+bar4 = cor.test(bbs_env$spRichnotrans, bbs_env$nbcd.mean)$estimate
+CI4lower =  cor.test(bbs_env$spRichnotrans, bbs_env$nbcd.mean)$conf.int[1]
+CI4upper =  cor.test(bbs_env$spRichnotrans, bbs_env$nbcd.mean)$conf.int[2]
+
+bar5 = cor.test(bbs_env$spRich-bbs_env$spRichnotrans, bbs_env$ndvi.mean)$estimate
+CI5lower = cor.test(bbs_env$spRich-bbs_env$spRichnotrans, bbs_env$ndvi.mean)$conf.int[1]
+CI5upper =  cor.test(bbs_env$spRich-bbs_env$spRichnotrans, bbs_env$ndvi.meani)$conf.int[2]
+bar6 = cor.test(bbs_env$spRich-bbs_env$spRichnotrans, bbs_env$nbcd.mean)$estimate
+CI6lower = cor.test(bbs_env$spRich-bbs_env$spRichnotrans, bbs_env$nbcd.mean)$conf.int[1]
+CI6upper =  cor.test(bbs_env$spRich-bbs_env$spRichnotrans, bbs_env$nbcd.mean)$conf.int[2]
+
+corr_res <- data.frame(All = c(bar1, bar3), Ntrans = c(bar2, bar4), Trans = c(bar5, bar6)) 
+corr_res$env = c("NDVI", "NBCD")
+corr_res_long = gather(corr_res, "class","value", c(All:Trans))
+corr_res_long$CIlower = c(CI1lower,CI3lower,CI2lower,CI4lower, CI5lower, CI6lower)
+corr_res_long$CIupper = c(CI1upper,CI3upper,CI2upper,CI4upper, CI5upper, CI6upper)
+corr_res_long$env = factor(corr_res_long$env, levels = c("NDVI", "NBCD"), ordered = TRUE)
+
+corr_NDVI = filter(corr_res_long, env == "NDVI")
+corr_nbcd = filter(corr_res_long, env == "NBCD")
+colscale = c("dark orange2","yellow","#c51b8a")
+limits = aes(ymax = corr_res_long$CIupper, ymin=corr_res_long$CIlower)
+# no variation - add in CIS?
+l = ggplot(data=corr_res_long, aes(factor(env), value, fill = class, alpha = 0.7))+ geom_bar(width = 0.8, position = position_dodge(width = 0.9), stat="identity")+ scale_fill_manual(values = c("All" = "dark orange2","Trans" = "#c51b8a","Ntrans" = "yellow"), labels = c("All species","Excluding transients", "Transients only"))+ geom_bar(data=corr_res_long, aes(factor(env), value, fill = class), width = 0.8, position = position_dodge(width = 0.9), stat="identity")+ geom_errorbar(aes(ymin = corr_res_long$CIlower, ymax = corr_res_long$CIupper), width =.1, position = position_dodge(.9))+ theme_classic() + theme(axis.text.x=element_text(size=46, color = "black", vjust = 5), axis.ticks.x=element_blank(),axis.text.y=element_text(size=30, color = "black"),axis.title.x=element_text(size=46, color = "black"),axis.title.y=element_text(size=46,angle=90,vjust = 2))+ xlab(NULL) + ylab(expression(paste(italic("r")))) + scale_y_continuous(breaks=c(-0.5,-0.3,-0.1,.1,.3,.5))+ guides(fill=guide_legend(title=NULL)) + theme(legend.text = element_text(size = 38), legend.title = element_blank(), legend.key.height=unit(3,"line")) + geom_hline(yintercept=0, lty = "dashed", lwd = 1.25) + theme(plot.margin=unit(c(1,1,2,1),"cm"))
+
+
+
+
+#### sum abun instead of rich ####
+bbsocc_abun = left_join(propOcc, bbs_abun, by = c("site" = "stateroute"))
+bbsocc_abun = bbsocc_abun[ , !names(bbsocc_abun) %in% c("n")]
+abun_notrans = bbsocc_abun %>% filter(propOcc > 1/3) %>% dplyr::count(sum)
+bbsocc_abun = left_join(bbsocc_abun, abun_notrans)
+bbsocc_abun$abunnotrans = bbsocc_abun$n
+bbsocc_abun = bbsocc_abun[ , !names(bbsocc_abun) %in% c("n")] 
+
+bbs_env = left_join(bbsocc_abun, ndvi_nbcd, c("site" = "stateroute"))
+
+# cor test not really working - need for loop?
+cor.test(bbs_env$sum, bbs_env$ndvi.mean)
+bar1 = cor.test(bbs_env$sum, bbs_env$ndvi.mean)$estimate
+CI1lower =  cor.test(bbs_env$sum, bbs_env$ndvi.mean)$conf.int[1]
+CI1upper = cor.test(bbs_env$sum, bbs_env$ndvi.mean)$conf.int[2]
+bar3 = cor.test(bbs_env$sum, bbs_env$nbcd.mean)$estimate
+CI3lower = cor.test(bbs_env$sum, bbs_env$nbcd.mean)$conf.int[1]
+CI3upper =  cor.test(bbs_env$sum, bbs_env$nbcd.mean)$conf.int[2]
+
+bar2 = cor.test(bbs_env$abunnotrans, bbs_env$ndvi.mean)$estimate
+CI2lower = cor.test(bbs_env$abunnotrans, bbs_env$ndvi.mean)$conf.int[1]
+CI2upper =   cor.test(bbs_env$abunnotrans, bbs_env$ndvi.meani)$conf.int[2]
+bar4 = cor.test(bbs_env$abunnotrans, bbs_env$nbcd.mean)$estimate
+CI4lower =  cor.test(bbs_env$abunnotrans, bbs_env$nbcd.mean)$conf.int[1]
+CI4upper =  cor.test(bbs_env$abunnotrans, bbs_env$nbcd.mean)$conf.int[2]
+
+bar5 = cor.test(bbs_env$sum-bbs_env$abunnotrans, bbs_env$ndvi.mean)$estimate
+CI5lower = cor.test(bbs_env$sum-bbs_env$abunnotrans, bbs_env$ndvi.mean)$conf.int[1]
+CI5upper =  cor.test(bbs_env$sum-bbs_env$abunnotrans, bbs_env$ndvi.meani)$conf.int[2]
+bar6 = cor.test(bbs_env$sum-bbs_env$abunnotrans, bbs_env$nbcd.mean)$estimate
+CI6lower = cor.test(bbs_env$sum-bbs_env$abunnotrans, bbs_env$nbcd.mean)$conf.int[1]
+CI6upper =  cor.test(bbs_env$sum-bbs_env$abunnotrans, bbs_env$nbcd.mean)$conf.int[2]
+
+corr_res <- data.frame(All = c(bar1, bar3), Ntrans = c(bar2, bar4), Trans = c(bar5, bar6)) 
+corr_res$env = c("NDVI", "NBCD")
+corr_res_long = gather(corr_res, "class","value", c(All:Trans))
+corr_res_long$CIlower = c(CI1lower,CI3lower,CI2lower,CI4lower, CI5lower, CI6lower)
+corr_res_long$CIupper = c(CI1upper,CI3upper,CI2upper,CI4upper, CI5upper, CI6upper)
+corr_res_long$env = factor(corr_res_long$env, levels = c("NDVI", "NBCD"), ordered = TRUE)
+
+corr_NDVI = filter(corr_res_long, env == "NDVI")
+corr_nbcd = filter(corr_res_long, env == "NBCD")
+colscale = c("dark orange2","yellow","#c51b8a")
+limits = aes(ymax = corr_res_long$CIupper, ymin=corr_res_long$CIlower)
+# no variation - add in CIS?
+l = ggplot(data=corr_res_long, aes(factor(env), value, fill = class, alpha = 0.7))+ geom_bar(width = 0.8, position = position_dodge(width = 0.9), stat="identity")+ scale_fill_manual(values = c("All" = "dark orange2","Trans" = "#c51b8a","Ntrans" = "yellow"), labels = c("All species","Excluding transients", "Transients only"))+ geom_bar(data=corr_res_long, aes(factor(env), value, fill = class), width = 0.8, position = position_dodge(width = 0.9), stat="identity")+ geom_errorbar(aes(ymin = corr_res_long$CIlower, ymax = corr_res_long$CIupper), width =.1, position = position_dodge(.9))+ theme_classic() + theme(axis.text.x=element_text(size=46, color = "black", vjust = 5), axis.ticks.x=element_blank(),axis.text.y=element_text(size=30, color = "black"),axis.title.x=element_text(size=46, color = "black"),axis.title.y=element_text(size=46,angle=90,vjust = 2))+ xlab(NULL) + ylab(expression(paste(italic("r")))) + scale_y_continuous(breaks=c(-0.5,-0.3,-0.1,.1,.3,.5))+ guides(fill=guide_legend(title=NULL)) + theme(legend.text = element_text(size = 38), legend.title = element_blank(), legend.key.height=unit(3,"line")) + geom_hline(yintercept=0, lty = "dashed", lwd = 1.25) + theme(plot.margin=unit(c(1,1,2,1),"cm"))
