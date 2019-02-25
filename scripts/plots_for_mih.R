@@ -22,7 +22,7 @@ library(rdataretriever)
 #  filter(aou < 4160 | aou > 4210) %>%
 #  filter(aou != 7010)
 
-landbirds = read.csv("//bioark/HurlbertLab/Snell/MIH/bbs_data.csv", header = TRUE)
+landbirds = read.csv("/Volumes/hurlbertlab/Snell/MIH/bbs_data.csv", header = TRUE)
 
 # Get subset of stateroutes that have been surveyed every year from 2001-2015
 good_rtes = landbirds %>% 
@@ -40,6 +40,8 @@ bbs_sub1 = landbirds %>%
   filter(n <= 15) 
 
 bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
+bbs_sub1$trans = "core"
+bbs_sub1$trans[bbs_sub1$occ <= 0.333333] = "trans"
 
 landbirds$rich = 1
 bbs_rich = landbirds %>%
