@@ -22,7 +22,7 @@ library(rdataretriever)
 #  filter(aou < 4160 | aou > 4210) %>%
 #  filter(aou != 7010)
 
-landbirds = read.csv("/Volumes/hurlbertlab/Snell/MIH/bbs_data.csv", header = TRUE)
+landbirds = read.csv("//bioark/HurlbertLab/Snell/MIH/bbs_data.csv", header = TRUE)
 
 # Get subset of stateroutes that have been surveyed every year from 2001-2015
 good_rtes = landbirds %>% 
@@ -41,7 +41,7 @@ bbs_sub1 = landbirds %>%
 
 bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
 bbs_sub1$trans = "core"
-bbs_sub1$trans[bbs_sub1$occ <= 0.333333] = "trans"
+bbs_sub1$trans[bbs_sub1$occ <= 0.34] = "trans"
 
 landbirds$rich = 1
 bbs_rich = landbirds %>%
@@ -75,6 +75,8 @@ ndvi_nbcd = inner_join(ndvi, nbcd, by = "stateroute")
 env_bbs = left_join(bbs_sub1, ndvi_nbcd, by = "stateroute")
 env_bbs = na.omit(env_bbs)
 
+env_bbs_notrans = filter(env_bbs, trans == "core")
+
 # left join to get abundance
 env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
 env_bbs_abun = na.omit(env_bbs_abun)
@@ -83,6 +85,16 @@ env_bbs_abun = na.omit(env_bbs_abun)
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
 env_bbs_rich = na.omit(env_bbs_rich)
 
+ndvi_range = c()
+sp_list = unique(env_bbs_notrans$aou)
+for(i in sp_list){
+  sp = filter(env_bbs_notrans, aou == i)
+  ndvi = range(sp$ndvi.mean)
+  ndvi_range = rbind(ndvi_range, c(i, ndvi))
+}
+ndvi_range = data.frame(ndvi_range)
+write.csv(ndvi_range, "data/ndvi_range.csv", row.names = FALSE)  
+  
 #### plotting ####
 # occ
 ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")+theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NDVI")+ ylab("Occupancy") + xlim(0,1) + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
