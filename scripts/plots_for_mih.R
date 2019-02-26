@@ -102,7 +102,7 @@ ndvi_range$range = ndvi_range$NDVI.max - ndvi_range$NDVI.min
 ndvi_range$AOU = as.factor(ndvi_range$AOU)
 ndvi_plot = filter(ndvi_range, range > 0)
 # NDVI plot
-ggplot(ndvi_plot, aes(x = reorder(AOU, - NDVI.max), y = range)) + geom_errorbar(width = 0, size = 1, aes(ymin= ndvi_plot$NDVI.min, ymax=ndvi_plot$NDVI.max)) +theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("AOU")+ ylab("NDVI Range")+ theme(axis.text.x=element_text(size = 20, angle = 90),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
+ggplot(ndvi_plot, aes(x = reorder(AOU, - range), y = range)) + geom_errorbar(width = 0, size = 1, aes(ymin= ndvi_plot$NDVI.min, ymax=ndvi_plot$NDVI.max)) +theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("AOU")+ ylab("NDVI Range")+ theme(axis.text.x=element_text(size = 20, angle = 90),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("Figures/ndvi_range.pdf", height = 32, width = 42)
  
 # occ
