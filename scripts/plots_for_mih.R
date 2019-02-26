@@ -93,9 +93,18 @@ for(i in sp_list){
   ndvi_range = rbind(ndvi_range, c(i, ndvi))
 }
 ndvi_range = data.frame(ndvi_range)
+names(ndvi_range) = c("AOU", "NDVI.min", "NDVI.max")
 write.csv(ndvi_range, "data/ndvi_range.csv", row.names = FALSE)  
   
 #### plotting ####
+ndvi_range$range = ndvi_range$NDVI.max - ndvi_range$NDVI.min
+# zero = 1 occurrence
+ndvi_range$AOU = as.factor(ndvi_range$AOU)
+ndvi_plot = filter(ndvi_range, range > 0)
+# NDVI plot
+ggplot(ndvi_plot, aes(x = reorder(AOU, - NDVI.max), y = range)) + geom_errorbar(width = 0, size = 1, aes(ymin= ndvi_plot$NDVI.min, ymax=ndvi_plot$NDVI.max)) +theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("AOU")+ ylab("NDVI Range")+ theme(axis.text.x=element_text(size = 20, angle = 90),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
+ggsave("Figures/ndvi_range.pdf", height = 32, width = 42)
+ 
 # occ
 ggplot(env_bbs, aes(x = ndvi.mean, y = occ)) + geom_point() + geom_smooth(method = "lm")+theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NDVI")+ ylab("Occupancy") + xlim(0,1) + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("Figures/occ_ndvi.png", height = 8, width = 12)
