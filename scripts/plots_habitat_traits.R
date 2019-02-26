@@ -38,11 +38,25 @@ counts.subs <- counts %>%
 traits <- read.csv("data/spp_traits.csv", stringsAsFactors = F)
 MO_correlates <- read.csv("data/Master_RO_Correlates_20110610.csv")
 
+ndvi_range <- read.csv("data/ndvi_range.csv", stringsAsFactors = F)
+ndvi_range$range <- ndvi_range$NDVI.max-ndvi_range$NDVI.min
+
+ndvi_quant <- quantile(ndvi_range$range, c(0.33, 0.66, 1))
+
 traits %<>% left_join(select(MO_correlates, AOU, Trophic.Group), by = c("aou" = "AOU")) %>%
+  left_join(ndvi_range, by = c("aou" = "AOU")) %>%
+  mutate(ndviStatus = ifelse(range < ndvi_quant[[1]], "specialist", 
+                             ifelse(range < ndvi_quant[[2]], "intermediate", "generalist"))) %>%
   mutate(habStatus = ifelse(nHabitats1 > 2, "generalist", "specialist")) %>%
   mutate(dietStatus = ifelse(Trophic.Group == "omnivore" | Trophic.Group == "insct/om", "generalist", "specialist"))
 
 hist(traits$nHabitats1)
+
+pdf("figures/histogram_ndvi_range.pdf")
+hist(traits$range, xlab = "NDVI range", main = "")
+abline(v = ndvi_quant[1], col = "red")
+abline(v = ndvi_quant[2], col = "red")
+dev.off()
 
 # Abundance at each route by habitat specialization
 hab_counts <- counts.subs %>%
@@ -289,3 +303,106 @@ plot_grid(hab_ndvi_S, hab_nbcd_S, diet_ndvi_S, diet_nbcd_S, abund_ndvi_S, abund_
 
 ggsave("figures/traits_spp.pdf", width = 11, height = 8.5)
 
+## NDVI range trait groups vs. NDVI
+
+# All spp - core and transient
+ndvi_counts <- counts.subs %>%
+  left_join(traits) %>%
+  group_by(stateroute, year, ndviStatus) %>%
+  summarize(nIndiv = sum(speciestotal), nSpp = dplyr::n()) %>% 
+  group_by(stateroute, ndviStatus) %>%
+  summarize(meanIndiv = mean(nIndiv), meanS = mean(nSpp)) %>%
+  left_join(env)
+
+sppR_ndviStatus <- filter(ndvi_counts, !is.na(ndviStatus)) %>%
+  ggplot(aes(x = ndvi.mean, y = meanS, color = ndviStatus)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group")
+sppR_ndviStatus
+
+ggsave("figures/ndvi_traits_sppN.pdf", units = "in", height = 6, width = 8)
+
+sppR_ndviStatus_spec <- filter(ndvi_counts, !is.na(ndviStatus), ndviStatus == "specialist") %>%
+  ggplot(aes(x = ndvi.mean, y = meanS)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group") +
+  ylim(1, 40)
+sppR_ndviStatus_spec
+
+sppR_ndviStatus_int <- filter(ndvi_counts, !is.na(ndviStatus), ndviStatus == "intermediate") %>%
+  ggplot(aes(x = ndvi.mean, y = meanS)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group") +
+  ylim(1, 40)
+sppR_ndviStatus_int
+
+sppR_ndviStatus_gen <- filter(ndvi_counts, !is.na(ndviStatus), ndviStatus == "generalist") %>%
+  ggplot(aes(x = ndvi.mean, y = meanS)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group") +
+  ylim(1, 40)
+sppR_ndviStatus_gen
+
+plot_grid(sppR_ndviStatus_gen, sppR_ndviStatus_int, sppR_ndviStatus_spec, 
+          nrow = 1,
+          labels = c("NDVI Generalist", "NDVI Intermediate", "NDVI Specialist"))
+ggsave("figures/ndvi_traitgrps_panels.pdf", units = "in", height = 6, width = 18)
+
+
+#### From CT Figure 5b ####
+
+good_rtes = counts.subs %>%
+  dplyr::select(year, stateroute) %>%
+  unique() %>%    
+  dplyr::count(stateroute) %>% 
+  filter(n == 15) # have to stay at 15 to keep # of years consistent
+
+bbs_abun_occ = counts.subs %>% 
+  filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+  dplyr::select(year, stateroute, aou, speciestotal)
+subsettedData1 = subset(bbs_abun_occ, speciestotal > 0)
+spTime = ddply(subsettedData1, .(stateroute, aou), summarize, 
+               spTime = length(unique(year)))
+siteTime = ddply(subsettedData1, .(stateroute), summarize, 
+                 siteTime = length(unique(year)))
+spSiteTime = merge(spTime, siteTime)
+propOcc = data.frame(site = spSiteTime$stateroute, 
+                     species = spSiteTime$aou,
+                     propOcc = spSiteTime$spTime/spSiteTime$siteTime)
+
+# NDVI trait plots with only core spp
+ndvi_counts_core <- counts.subs %>%
+  left_join(traits) %>%
+  left_join(propOcc, by = c("stateroute" = "site", "aou" = "species")) %>%
+  dplyr::filter(propOcc >= 0.34) %>%
+  group_by(stateroute, year, ndviStatus) %>%
+  summarize(nIndiv = sum(speciestotal), nSpp = dplyr::n()) %>% 
+  group_by(stateroute, ndviStatus) %>%
+  summarize(meanIndiv = mean(nIndiv), meanS = mean(nSpp)) %>%
+  left_join(env)
+
+sppR_ndviStatus_core <- filter(ndvi_counts_core, !is.na(ndviStatus)) %>%
+  ggplot(aes(x = ndvi.mean, y = meanS, color = ndviStatus)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group")
+sppR_ndviStatus_core
+
+ggsave("figures/ndvi_traits_sppN_core.pdf", units = "in", height = 6, width = 8)
+
+sppR_ndviStatus_spec_core <- filter(ndvi_counts_core, !is.na(ndviStatus), ndviStatus == "specialist") %>%
+  ggplot(aes(x = ndvi.mean, y = meanS)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group") +
+  ylim(1, 40)
+sppR_ndviStatus_spec_core
+
+sppR_ndviStatus_int_core <- filter(ndvi_counts_core, !is.na(ndviStatus), ndviStatus == "intermediate") %>%
+  ggplot(aes(x = ndvi.mean, y = meanS)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group") +
+  ylim(1, 40)
+sppR_ndviStatus_int_core
+
+sppR_ndviStatus_gen_core <- filter(ndvi_counts_core, !is.na(ndviStatus), ndviStatus == "generalist") %>%
+  ggplot(aes(x = ndvi.mean, y = meanS)) + geom_point(alpha = 0.15) + geom_smooth(method = "lm", se = F) +
+  scale_y_log10() + xlab("Mean NDVI") + ylab("Number of Species") + labs(color = "NDVI group") +
+  ylim(1, 40)
+sppR_ndviStatus_gen_core
+
+plot_grid(sppR_ndviStatus_gen_core, sppR_ndviStatus_int_core, sppR_ndviStatus_spec_core, 
+          nrow = 1,
+          labels = c("NDVI Generalist", "NDVI Intermediate", "NDVI Specialist"))
+ggsave("figures/ndvi_traitgrps_panels_core.pdf", units = "in", height = 6, width = 18)
