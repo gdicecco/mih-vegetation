@@ -43,7 +43,7 @@ p <- plot_grid(ndvi25, nbcd25)
 title <- ggdraw() + draw_label("Max proportion of landscape > 0.25", fontface='bold')
 
 plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
-ggsave("Figures/ndvi_canHeight_by_class_p25.pdf", units = 'in', height = 8, width = 12)
+ggsave("Figures/ndvi_canHeight_by_class_p25.pdf", units = 'in', height = 8, width = 16)
 
 ## Max proportion landscape > 0.5
 nlcd_50 <- nlcd2001 %>%
@@ -67,7 +67,7 @@ p <- plot_grid(ndvi50, nbcd50)
 title <- ggdraw() + draw_label("Max proportion of landscape > 0.50", fontface='bold')
 
 plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
-ggsave("Figures/ndvi_canHeight_by_class_p50.pdf", units = 'in', height = 8, width = 12)
+ggsave("Figures/ndvi_canHeight_by_class_p50.pdf", units = 'in', height = 8, width = 16)
 
 ## Max proportion landscape > 0.75
 nlcd_75 <- nlcd2001 %>%
@@ -91,5 +91,5 @@ p <- plot_grid(ndvi75, nbcd75)
 title <- ggdraw() + draw_label("Max proportion of landscape > 0.75", fontface='bold')
 
 plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
-ggsave("Figures/ndvi_canHeight_by_class_p75.pdf", units = 'in', height = 8, width = 12)
+ggsave("Figures/ndvi_canHeight_by_class_p75.pdf", units = 'in', height = 8, width = 16)
 
