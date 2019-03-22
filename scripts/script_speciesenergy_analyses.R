@@ -79,6 +79,13 @@ counts.subs <- counts %>%
   filter(aou %in% species_list$aou) %>% # Only diurnal land bird species, no birds of prey
   filter(stateroute %in% ndvi_nbcd$stateroute) %>% # Routes we have NDVI/NBCD for
   filter(!(stateroute %in% ag_routes$stateroute)) # Remove routes that are predominantly agricultural
+# add a filter term to exclude everything in the occ_calc vector OR Inner join by st & aou
 # 1135 routes
 
 # Filter out transient species at each route
+occ_calc <- counts.subs %>% 
+  dplyr::select(year, stateroute, aou) %>%
+  dplyr::count(aou, stateroute) %>%
+  filter(n > 1) 
+
+# occ_calc$occ = occ_calc$n/5 # new occupancy values calculated
