@@ -43,12 +43,11 @@ bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
 bbs_sub1$trans = "core"
 bbs_sub1$trans[bbs_sub1$occ <= 0.34] = "trans"
 
-landbirds$rich = 1
 bbs_rich = landbirds %>%
- # filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+ filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   group_by(stateroute) %>%
-  dplyr::count(rich) 
-bbs_rich$spRich = bbs_rich$n
+  dplyr::summarise(spRich = n_distinct(aou))
+
 
 bbs_abun = landbirds %>% 
   filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
