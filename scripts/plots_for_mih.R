@@ -43,12 +43,11 @@ bbs_sub1$occ = bbs_sub1$n/15 # new occupancy values calculated
 bbs_sub1$trans = "core"
 bbs_sub1$trans[bbs_sub1$occ <= 0.34] = "trans"
 
-landbirds$rich = 1
 bbs_rich = landbirds %>%
- # filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
+ filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
   group_by(stateroute) %>%
-  dplyr::count(rich) 
-bbs_rich$spRich = bbs_rich$n
+  dplyr::summarise(spRich = n_distinct(aou))
+
 
 bbs_abun = landbirds %>% 
   filter(year > 1994, year < 2011, stateroute %in% good_rtes$stateroute) %>% 
@@ -133,6 +132,13 @@ ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 ggplot(env_bbs_rich, aes(x = nbcd.mean, y = log10(sprich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NBCD")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
 ggsave("C:/Git/mih-vegetation/Figures/rich_nbcd.png", height = 8, width = 12)
 
+# rich vs NDVI plot
+bbs_nlcd = read.csv("data/bbs_nlcd2001.csv", header = TRUE)
+env_rich_nlcd = left_join(env_bbs_rich, bbs_nlcd, by = "stateroute")
+env_rich_nlcd = na.omit(env_rich_nlcd) %>%
+  filter(prop.landscape > 0.75)
+ggplot(env_rich_nlcd, aes(x = ndvi.mean, y = log10(spRich))) + geom_point(aes(col = env_rich_nlcd$legend), size = 2) + xlab("Mean NDVI")+ ylab("log(Species Richness)") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +ylim(0,4)
+ggsave("C:/Git/mih-vegetation/Figures/nlcd_75.png", height = 8, width = 12)
 
 ##### models for varpar #####
 occ_nbcd <- lm(env_bbs$occ ~  env_bbs$nbcd.mean) 
@@ -287,3 +293,8 @@ limits = aes(ymax = corr_res_long$CIupper, ymin=corr_res_long$CIlower)
 # no variation - add in CIS?
 l = ggplot(data=corr_res_long, aes(factor(env), value, fill = class, alpha = 0.7))+ geom_bar(width = 0.8, position = position_dodge(width = 0.9), stat="identity")+ scale_fill_manual(values = c("All" = "dark orange2","Trans" = "#c51b8a","Ntrans" = "yellow"), labels = c("All species","Excluding transients", "Transients only"))+ geom_bar(data=corr_res_long, aes(factor(env), value, fill = class), width = 0.8, position = position_dodge(width = 0.9), stat="identity")+ geom_errorbar(aes(ymin = corr_res_long$CIlower, ymax = corr_res_long$CIupper), width =.1, position = position_dodge(.9))+ theme_classic() + theme(axis.text.x=element_text(size=46, color = "black", vjust = 5), axis.ticks.x=element_blank(),axis.text.y=element_text(size=30, color = "black"),axis.title.x=element_text(size=46, color = "black"),axis.title.y=element_text(size=46,angle=90,vjust = 2))+ xlab(NULL) + ylab(expression(paste(italic("r")))) + scale_y_continuous(breaks=c(-0.5,-0.3,-0.1,.1,.3,.5))+ guides(fill=guide_legend(title=NULL)) + theme(legend.text = element_text(size = 38), legend.title = element_blank(), legend.key.height=unit(3,"line")) + geom_hline(yintercept=0, lty = "dashed", lwd = 1.25) + theme(plot.margin=unit(c(1,1,2,1),"cm"))
 ggsave("Figures/abunenv.png", height = 8, width = 12)
+
+
+
+
+
