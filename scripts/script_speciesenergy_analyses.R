@@ -71,6 +71,14 @@ species_list <- species %>%
 ag_routes <- nlcd2001 %>%
   filter(prop.landscape > 0.5, legend == "Agricultural")
 
+# Filter out transient species at each route
+occ_calc <- counts.subs %>% 
+  dplyr::select(year, stateroute, aou) %>%
+  dplyr::count(aou, stateroute) %>%
+  filter(n > 1) 
+# occ_calc$occ = occ_calc$n/5 # new occupancy values calculated
+
+# final abun df: 1135 routes, 360 spp
 counts.subs <- counts %>%
   inner_join(RT1.routes, by = c("statenum", "stateroute", "year")) %>% # Remove RT = 0 route-years
   filter(year >= 2000, year <= 2004) %>% # Five year period
@@ -78,14 +86,34 @@ counts.subs <- counts %>%
   filter(n_distinct(year) == 5) %>% # Only routes with consecutive sampling during five year period
   filter(aou %in% species_list$aou) %>% # Only diurnal land bird species, no birds of prey
   filter(stateroute %in% ndvi_nbcd$stateroute) %>% # Routes we have NDVI/NBCD for
-  filter(!(stateroute %in% ag_routes$stateroute)) # Remove routes that are predominantly agricultural
-# add a filter term to exclude everything in the occ_calc vector OR Inner join by st & aou
-# 1135 routes
+  filter(!(stateroute %in% ag_routes$stateroute)) %>% # Remove routes that are predominantly agricultural
+  filter(aou %in% occ_calc$aou) # add a filter term to exclude everything in the occ_calc vector OR Inner join by st & aou
 
-# Filter out transient species at each route
-occ_calc <- counts.subs %>% 
-  dplyr::select(year, stateroute, aou) %>%
-  dplyr::count(aou, stateroute) %>%
-  filter(n > 1) 
+# bbs richness
+bbs_rich <- counts.subs %>% 
+  group_by(stateroute) %>%
+  dplyr::summarise(spRich = n_distinct(aou))
 
-# occ_calc$occ = occ_calc$n/5 # new occupancy values calculated
+final.counts <- left_join(counts.subs, bbs_rich, by = "stateroute")
+
+#### Plots ####
+# ndvi abun
+env_bbs_abun = left_join(bbs_abun, ndvi_nbcd, by = "stateroute")
+env_bbs_abun = na.omit(env_bbs_abun)
+ggplot(env_bbs_abun, aes(x = ndvi.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NDVI")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
+ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
+
+# ndvi rich
+env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
+env_bbs_rich = na.omit(env_bbs_rich)
+ggplot(env_bbs_rich, aes(x = ndvi.mean, y = log10(sprich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NDVI")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +ylim(0,4)
+ggsave("Figures/rich_ndvi.png", height = 8, width = 12)
+
+
+# nbcd abun
+ggplot(env_bbs_abun, aes(x = nbcd.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NBCD")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
+ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
+
+# nbcd rich
+ggplot(env_bbs_rich, aes(x = nbcd.mean, y = log10(sprich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("Mean NBCD")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
+ggsave("C:/Git/mih-vegetation/Figures/rich_nbcd.png", height = 8, width = 12)
