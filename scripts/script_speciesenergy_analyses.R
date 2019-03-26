@@ -111,7 +111,7 @@ ni_a = ggplot(env_bbs_abun, aes(x = ndvi.mean, y = log10(sum))) + geom_point() +
 
 # ndvi rich
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
-ni_r = ggplot(env_bbs_rich, aes(x = ndvi.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) +ylim(0,2)
+ni_r = ggplot(env_bbs_rich, aes(x = ndvi.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) +ylim(0,2)
 # ggsave("Figures/rich_ndvi.png", height = 8, width = 12)
 
 # nbcd abun
@@ -119,7 +119,7 @@ nd_a = ggplot(env_bbs_abun, aes(x = nbcd.mean, y = log10(sum))) + geom_point() +
 # ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
 
 # nbcd rich
-nd_r = ggplot(env_bbs_rich, aes(x = nbcd.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Species Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
+nd_r = ggplot(env_bbs_rich, aes(x = nbcd.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
 # ggsave("C:/Git/mih-vegetation/Figures/rich_nbcd.png", height = 8, width = 12)
 
 z <- plot_grid(ni_a + theme(legend.position="top"),
