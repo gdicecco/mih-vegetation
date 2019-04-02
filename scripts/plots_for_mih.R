@@ -1,8 +1,8 @@
 ### MIH code ####
 # want to make 4 plots
 
-# NDVI:abun, NDVI:occ
-# EVH:abun, EVH:occ
+# NDVI:abun, NDVI:rich
+# EVH:abun, EVH:rich
 # for specialists/generalists and core-transient split out
 
 library(ggplot2)
