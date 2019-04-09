@@ -126,10 +126,8 @@ bbc_popdens_all <- bbc %>%
             meanPopDens = mean(popdens, na.rm = T)) %>%
   filter(!is.na(meanPopDens), !is.na(meanNDVI))
 
-ggplot(bbc_popdens_all, aes(x =meanNDVI, y = meanPopDens, col = species)) +
+ggplot(bbc_popdens_all, aes(x =meanNDVI, y = meanPopDens, group = species)) +
   geom_point() + geom_smooth(method = "lm", se = F) +
-  scale_color_viridis_d(option = "D") +
-  theme(legend.position = "none") +
   labs(x = "NDVI", y = "Population density (breeding pairs/hectare)")
 ggsave("Figures/popDensity_NDVI_bbc.pdf")
 
@@ -151,10 +149,10 @@ nindiv <- bbc %>%
   group_by(siteID) %>%
   mutate(obsIndiv = row_number())
 
-ggplot(nindiv, aes(x = obsIndiv, y = rarefy, col = factor(siteID))) +
+ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID))) +
   geom_line() +
-  scale_color_viridis_d() +
-  labs(x = "Observed number of individuals", y = "E(S)", color = "Site")
+  labs(x = "Observed number of individuals", y = "E(S)", color = "Site") +
+  geom_vline(xintercept = 175)
 ggsave("Figures/rarefaction_curves_BBC.pdf")
 
 ## E(S) vs. NDVI 
@@ -167,7 +165,6 @@ raref_ndvi <- nindiv %>%
 
 ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
   geom_smooth(method = "lm", color = "black") +
-  geom_point(aes(col = factor(siteID))) +
-  scale_color_viridis_d() +
-  labs(x = "NDVI", y = "E(S)", color = "Site")
+  geom_point() +
+  labs(x = "NDVI", y = "E(S)")
 ggsave("Figures/estS_ndvi_bbc.pdf")
