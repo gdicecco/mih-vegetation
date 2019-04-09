@@ -152,13 +152,13 @@ nindiv <- bbc %>%
 ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID))) +
   geom_line() +
   labs(x = "Observed number of individuals", y = "E(S)", color = "Site") +
-  geom_vline(xintercept = 175)
+  geom_vline(xintercept = 100, lty = 2)
 ggsave("Figures/rarefaction_curves_BBC.pdf")
 
 ## E(S) vs. NDVI 
 
 raref_ndvi <- nindiv %>%
-  filter(obsIndiv == 175) %>%
+  filter(obsIndiv == 100) %>%
   left_join(bbc_ndvi) %>%
   group_by(siteID, rarefy) %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T))
