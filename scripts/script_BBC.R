@@ -24,12 +24,10 @@ sites_distinct <- bbc_sites %>%
 bbc <- bbc_counts %>%
   left_join(bbc_censuses, by = c("siteID", "year")) %>%
   left_join(sites_distinct, by = c("siteID", "sitename")) %>%
-  filter(status == "breeder") %>%
-  filter(year > 2000)
+  filter(status == "breeder") 
 
 bbc_sf <- bbc_censuses %>%
   left_join(sites_distinct, by = c("siteID", "sitename")) %>%
-  filter(year > 2000) %>% 
   dplyr::select(siteID, sitename, latitude, longitude, year, area, richness) %>%
   mutate_at("longitude", .funs = ~{.*-1}) %>%
   st_as_sf(coords = c("longitude", "latitude"), crs = st_crs(us_states))
@@ -108,6 +106,13 @@ bbc_popdens <- bbc %>%
   unnest() %>%
   filter(term == "meanNDVI")
 
+bbc_popdens_comm <- bbc %>%
+  left_join(bbc_ndvi, by = c("siteID", "year")) %>%
+  group_by(siteID, NDVI, year) %>%
+  summarize(popdens = sum(as.numeric(count), na.rm = T)/mean(as.numeric(area))) %>% # NAs introduced by counts that are pluses
+  group_by(siteID, NDVI) %>%
+  summarize(meanPopDens = mean(popdens))
+
 ggplot(bbc_popdens, aes(x = fct_reorder(species, estimate), y = estimate, col = nSites)) +
   geom_point() + 
   geom_errorbar(aes(ymin= estimate - 1.96*std.error, ymax = estimate + 1.96*std.error)) +
@@ -158,7 +163,7 @@ ggsave("Figures/rarefaction_curves_BBC.pdf")
 ## E(S) vs. NDVI 
 
 raref_ndvi <- nindiv %>%
-  filter(obsIndiv == 100) %>%
+  filter(obsIndiv == 80) %>%
   left_join(bbc_ndvi) %>%
   group_by(siteID, rarefy) %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T))
