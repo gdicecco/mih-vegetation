@@ -72,7 +72,7 @@ ggplot(null_output_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geo
 
 null_long <- gather(null_output_agg, "Troph", "Num", FGObs:mean_FGNull)
 ggplot(null_long, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
-
+ggsave("FG_ndvi.pdf")
 # sample from pool of spp that occur at a given ndvi band - pool in groups of 0.05 (20 groups)
 # what are all the species observed in that bin
 #### null model ####
@@ -112,3 +112,4 @@ ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() 
 
 null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:mean_FGNull)
 ggplot(null_long_bins, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+ggsave("FG_ndvi_binned.pdf")
