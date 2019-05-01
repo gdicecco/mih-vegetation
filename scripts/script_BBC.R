@@ -32,7 +32,6 @@ bbc <- bbc_counts %>%
 
 bbc_sf <- bbc_censuses %>%
   left_join(sites_distinct, by = c("siteID", "sitename")) %>%
-  filter(year > 2000) %>% 
   dplyr::select(siteID, sitename, latitude, longitude, year, area, richness) %>%
   mutate_at("longitude", .funs = ~{.*-1}) %>%
   st_as_sf(coords = c("longitude", "latitude"), crs = st_crs(us_states))
@@ -93,7 +92,7 @@ nsites_spp <- bbc %>%
 bbc_popdens <- bbc %>%
   filter(species %in% nsites_spp$species) %>%
   left_join(bbc_ndvi, by = c("siteID", "year")) %>%
-  group_by(siteID, year) %>%
+  group_by(siteID, species) %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T),
             PopDens = sum(nTerritory)/mean(as.numeric(area))) %>%
   filter(!is.na(PopDens), !is.na(meanNDVI))  %>%
@@ -136,7 +135,7 @@ siteArea <- bbc_censuses %>%
   summarize(area = mean(as.numeric(area), na.rm = T))
 
 raref_ndvi <- nindiv %>%
-  filter(obsIndiv == 175) %>%
+  filter(obsIndiv == 80) %>%
   left_join(bbc_ndvi) %>%
   group_by(siteID, rarefy) %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T)) %>%
