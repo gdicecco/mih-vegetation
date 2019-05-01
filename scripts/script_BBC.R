@@ -25,7 +25,10 @@ bbc <- bbc_counts %>%
   left_join(bbc_censuses, by = c("siteID", "year")) %>%
   left_join(sites_distinct, by = c("siteID", "sitename")) %>%
   filter(status == "breeder") %>%
-  filter(year > 2000)
+  filter(year > 2000) %>%
+  mutate(count_sub = as.numeric(count),
+         count_repl = replace_na(count_sub, 0.25),
+         nTerritory = as.numeric(count_repl)*4)
 
 bbc_sf <- bbc_censuses %>%
   left_join(sites_distinct, by = c("siteID", "sitename")) %>%
@@ -90,53 +93,24 @@ nsites_spp <- bbc %>%
 bbc_popdens <- bbc %>%
   filter(species %in% nsites_spp$species) %>%
   left_join(bbc_ndvi, by = c("siteID", "year")) %>%
-  mutate(popdens = as.numeric(count)/as.numeric(area)) %>% # NAs introduced by counts that are pluses
-  group_by(siteID, species) %>%
+  group_by(siteID, year) %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T),
-            meanPopDens = mean(popdens, na.rm = T)) %>%
-  filter(!is.na(meanPopDens), !is.na(meanNDVI)) %>%
-  group_by(species) %>%
-  nest() %>%
-  mutate(pop_lm = map(data, ~{
-    df <- .
-    mod <- lm(meanPopDens ~ meanNDVI, data = df)
-    tidy(mod)
-  }),
-  nSites = map_dbl(data, ~{nrow(.)})) %>%
-  filter(nSites > 5) %>%
-  dplyr::select(species, pop_lm, nSites) %>%
-  unnest() %>%
-  filter(term == "meanNDVI")
+            PopDens = sum(nTerritory)/mean(as.numeric(area))) %>%
+  filter(!is.na(PopDens), !is.na(meanNDVI))  %>%
+  group_by(siteID) %>%
+  summarize(meanNDVI = mean(meanNDVI),
+            meanPopDens = mean(PopDens))
 
-ggplot(bbc_popdens, aes(x = fct_reorder(species, estimate), y = estimate, col = nSites)) +
-  geom_point() + 
-  geom_errorbar(aes(ymin= estimate - 1.96*std.error, ymax = estimate + 1.96*std.error)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  geom_hline(yintercept = 0, lty = 2) +
-  theme(axis.title.x = element_blank()) +
-  labs(y = "Slope estimate: pop. density vs. NDVI", col = "Number of BBC sites")
-ggsave("Figures/slope_estimates_popDensity.pdf", units = "in", height = 8, width = 16)
-
-bbc_popdens_all <- bbc %>%
-  filter(species %in% nsites_spp$species) %>%
-  left_join(bbc_ndvi, by = c("siteID", "year")) %>%
-  mutate(popdens = as.numeric(count)/as.numeric(area)) %>% # NAs introduced by counts that are pluses
-  group_by(siteID, species) %>%
-  summarize(meanNDVI = mean(NDVI, na.rm = T),
-            meanPopDens = mean(popdens, na.rm = T)) %>%
-  filter(!is.na(meanPopDens), !is.na(meanNDVI))
-
-ggplot(bbc_popdens_all, aes(x =meanNDVI, y = meanPopDens, group = species)) +
-  geom_point() + geom_smooth(method = "lm", se = F) +
-  labs(x = "NDVI", y = "Population density (breeding pairs/hectare)")
-ggsave("Figures/popDensity_NDVI_bbc.pdf")
-
+ggplot(bbc_popdens, aes(x = meanNDVI, y = meanPopDens)) + geom_point(size = 2) +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "Mean NDVI", y = "Community territory density")
+ggsave("Figures/community_density_vs_NDVI.pdf")
 
 ### Rarefaction curves for BBC sites
 
 nindiv <- bbc %>%
   group_by(siteID, species) %>%
-  summarize(meanIndiv = mean(2*as.numeric(count), na.rm = T)) %>%
+  summarize(meanIndiv = mean(nTerritory, na.rm = T)) %>%
   na.omit() %>%
   group_by(siteID) %>%
   nest() %>%
@@ -152,19 +126,28 @@ nindiv <- bbc %>%
 ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID))) +
   geom_line() +
   labs(x = "Observed number of individuals", y = "E(S)", color = "Site") +
-  geom_vline(xintercept = 175)
+  geom_vline(xintercept = 175, lty = 2)
 ggsave("Figures/rarefaction_curves_BBC.pdf")
 
 ## E(S) vs. NDVI 
+
+siteArea <- bbc_censuses %>%
+  group_by(siteID) %>%
+  summarize(area = mean(as.numeric(area), na.rm = T))
 
 raref_ndvi <- nindiv %>%
   filter(obsIndiv == 175) %>%
   left_join(bbc_ndvi) %>%
   group_by(siteID, rarefy) %>%
-  summarize(meanNDVI = mean(NDVI, na.rm = T))
+  summarize(meanNDVI = mean(NDVI, na.rm = T)) %>%
+  left_join(siteArea, by = "siteID")
 
 ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
-  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "black", se = F) +
   geom_point() +
   labs(x = "NDVI", y = "E(S)")
 ggsave("Figures/estS_ndvi_bbc.pdf")
+
+ggplot(raref_ndvi, aes(x = area, y = rarefy)) + geom_point() + geom_smooth(method = "lm", se = F) +
+  labs(x = "Site area (ha)", y = "E(S)")
+ggsave("Figures/estS_vs_area.pdf")
