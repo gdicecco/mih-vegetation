@@ -43,8 +43,10 @@ df_null <- data.frame(env_bbs$aou, env_bbs$Trophic.guild) %>%
 #### null model ####
 null_output = c()
 init.time = Sys.Date()
-for(ndvi in unique(env_bbs$ndvi.mean)){
-  subdata = filter(env_bbs, ndvi.mean == ndvi)
+for(route in #env_bbs){
+  # filter(to get species list at the stateroute)
+# for(ndvi in unique(env_bbs$ndvi.mean)){ CUT
+  subdata = filter(env_bbs, stateroute == route)
   if(length(unique(subdata$stateroute)) > 1){
     print(subdata$ndvi.mean)
   }
@@ -83,16 +85,19 @@ df_pool <- data.frame(env_bbs$aou, env_bbs$Trophic.guild, env_bbs$bin) %>%
   distinct()
 
 null_output_bins = c() 
-for(ndvi in unique(env_bbs$ndvi.mean)){
-  subdata = filter(env_bbs, ndvi.mean == ndvi)
-  if(length(unique(subdata$stateroute)) > 1){
+for(route in #env_bbs){
+    # filter(to get species list at the stateroute)
+    # for(ndvi in unique(env_bbs$ndvi.mean)){ CUT
+    subdata = filter(env_bbs, stateroute == route)
+    if(length(unique(subdata$stateroute)) > 1){
     print(subdata$ndvi.mean)
-  }
+    }
+  null_pool2 = filter(env_bbs, ndvi #== bin)
   for(r in 1:100){
     # print(paste(ndvi, r, Sys.Date()))
     FGobs = length(unique((subdata$Trophic.guild)))
     Sobs = length(unique((subdata$aou)))
-    Fnull = sample_n(df_pool, Sobs, replace = FALSE) 
+    Fnull = sample_n(null_pool2, Sobs, replace = FALSE) 
     FGNull = length(unique((Fnull$env_bbs.Trophic.guild)))
     null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
   }
