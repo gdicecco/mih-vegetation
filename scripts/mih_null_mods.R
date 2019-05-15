@@ -65,7 +65,7 @@ colnames(null_output) = c("iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
 # aggregate by ndvi mean
 null_output_agg <- null_output %>% group_by(ndvi.mean) %>%
   summarise(FGObs = mean(FGObs), mean_FGNull = mean(FGNull),Sobs = mean(Sobs))
-
+mod <- lm(FGObs ~ mean_FGNull, data = null_output_agg)
 
 ggplot(null_output_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 
@@ -105,6 +105,7 @@ colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull
 # aggregate by ndvi mean
 null_output_bins_agg <- null_output_bins %>% group_by(ndvi.mean) %>%
   summarise(Sobs = mean(Sobs), FGObs = mean(FGObs), mean_FGNull = mean(FGNull))
+mod <- lm(FGObs ~ mean_FGNull, data = null_output_bins_agg)
 
 
 ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
@@ -113,3 +114,6 @@ ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() 
 null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:mean_FGNull)
 ggplot(null_long_bins, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 ggsave("FG_ndvi_binned.pdf")
+
+
+
