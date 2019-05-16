@@ -37,22 +37,21 @@ env_bbs = left_join(bbs_troph, ndvi, by = "stateroute") %>%
   left_join(., troph_guild) %>% 
   na.omit(.) 
 
-df_null <- data.frame(env_bbs$aou, env_bbs$Trophic.guild) %>%
+null_pool1 <- data.frame(env_bbs$aou, env_bbs$Trophic.guild) %>%
   distinct()
 
 #### null model ####
 null_output = c()
-init.time = Sys.Date()
-for(ndvi in unique(env_bbs$ndvi.mean)){
-  subdata = filter(env_bbs, ndvi.mean == ndvi)
+for(route in env_bbs$stateroute){
+  subdata = filter(env_bbs, stateroute == route)
   if(length(unique(subdata$stateroute)) > 1){
     print(subdata$ndvi.mean)
   }
     for(r in 1:100){
-     # print(paste(ndvi, r, Sys.Date()))
+      ndvi = unique(subdata$ndvi.mean)
       FGobs = length(unique((subdata$Trophic.guild)))
       Sobs = length(unique((subdata$aou)))
-      Fnull = sample_n(df_null, Sobs, replace = FALSE) 
+      Fnull = sample_n(null_pool1, Sobs, replace = FALSE) 
       FGNull = length(unique((Fnull$env_bbs.Trophic.guild)))
       null_output = rbind(null_output, c(r, ndvi, Sobs, FGobs, FGNull))      
       }
@@ -65,7 +64,7 @@ colnames(null_output) = c("iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
 # aggregate by ndvi mean
 null_output_agg <- null_output %>% group_by(ndvi.mean) %>%
   summarise(FGObs = mean(FGObs), mean_FGNull = mean(FGNull),Sobs = mean(Sobs))
-
+mod <- lm(FGObs ~ mean_FGNull, data = null_output_agg)
 
 ggplot(null_output_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 
@@ -79,20 +78,20 @@ ggsave("FG_ndvi.pdf")
 init.time = Sys.Date()
 env_bbs$bin <- binsize*floor(env_bbs$ndvi.mean/binsize) + binsize/2
 binsize <- 0.05
-df_pool <- data.frame(env_bbs$aou, env_bbs$Trophic.guild, env_bbs$bin) %>%
-  distinct()
 
 null_output_bins = c() 
-for(ndvi in unique(env_bbs$ndvi.mean)){
-  subdata = filter(env_bbs, ndvi.mean == ndvi)
+for(route in env_bbs$stateroute){
+  subdata = filter(env_bbs, stateroute == route)
   if(length(unique(subdata$stateroute)) > 1){
     print(subdata$ndvi.mean)
-  }
+    }
+  null_pool2 = filter(env_bbs, subdata$bin == bin)
   for(r in 1:100){
-    # print(paste(ndvi, r, Sys.Date()))
+    ndvi = unique(subdata$ndvi.mean)
+    print(paste(ndvi, r, Sys.Date()))
     FGobs = length(unique((subdata$Trophic.guild)))
     Sobs = length(unique((subdata$aou)))
-    Fnull = sample_n(df_pool, Sobs, replace = FALSE) 
+    Fnull = sample_n(null_pool2, Sobs, replace = FALSE) 
     FGNull = length(unique((Fnull$env_bbs.Trophic.guild)))
     null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
   }
@@ -105,6 +104,7 @@ colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull
 # aggregate by ndvi mean
 null_output_bins_agg <- null_output_bins %>% group_by(ndvi.mean) %>%
   summarise(Sobs = mean(Sobs), FGObs = mean(FGObs), mean_FGNull = mean(FGNull))
+mod <- lm(FGObs ~ mean_FGNull, data = null_output_bins_agg)
 
 
 ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
@@ -113,3 +113,6 @@ ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() 
 null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:mean_FGNull)
 ggplot(null_long_bins, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 ggsave("FG_ndvi_binned.pdf")
+
+
+
