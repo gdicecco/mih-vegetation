@@ -64,6 +64,7 @@ species_list <- species %>%
   filter(aou < 4160 | aou > 4210) %>%
   filter(aou != 7010) %>%
   filter(sporder != "Accipitriformes", sporder != "Falconiformes", sporder != "Anseriformes")
+#write.csv(species_list, "data/species_list.csv", row.names = F)
 
 ## Filter BBS data
 
