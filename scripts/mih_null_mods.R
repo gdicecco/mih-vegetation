@@ -70,7 +70,8 @@ null_output_agg$z_score <- (null_output_agg$FGObs - null_output_agg$mean_FGNull)
 
 hist(null_output_agg$z_score)
 
-ggplot(null_output_agg, aes(x = ndvi.mean, y = z_score)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+ggplot(null_output_agg, aes(x = ndvi.mean, y = z_score)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 0, col = "black", lwd = 1.5, lty = "dashed") + geom_smooth(method = "lm", se = F, color = "red") +xlab("Mean NDVI")+ ylab("Number of Guilds z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+ggsave("Figures/FG_ndvi_z.pdf")
 
 null_long <- gather(null_output_agg, "Troph", "Num", FGObs:mean_FGNull)
 ggplot(null_long, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph, alpha = 0.5), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
@@ -95,7 +96,7 @@ for(route in env_bbs$stateroute){
     FGobs = length(unique((subdata$Trophic.guild)))
     Sobs = length(unique((subdata$aou)))
     Fnull = sample_n(null_pool2, Sobs, replace = FALSE) 
-    FGNull = length(unique((Fnull$env_bbs.Trophic.guild)))
+    FGNull = length(unique((Fnull$Trophic.guild)))
     null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
   }
 } # end r loop
@@ -109,6 +110,12 @@ null_output_bins_agg <- null_output_bins %>% group_by(ndvi.mean) %>%
   summarise(Sobs = mean(Sobs), FGObs = mean(FGObs), mean_FGNull = mean(FGNull))
 mod <- lm(FGObs ~ mean_FGNull, data = null_output_bins_agg)
 
+null_output_bins_agg$z_score <- (null_output_bins_agg$FGObs - null_output_bins_agg$mean_FGNull)/sd(null_output_bins_agg$mean_FGNull)
+
+hist(null_output_bins_agg$z_score)
+
+ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = z_score)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 0, col = "black", lwd = 1.5, lty = "dashed") + geom_smooth(method = "lm", se = F, color = "red") +xlab("Mean NDVI")+ ylab("Number of Guilds z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+ggsave("Figures/FG_ndvi_binz.pdf")
 
 ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 
