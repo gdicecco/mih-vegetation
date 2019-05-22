@@ -47,7 +47,7 @@ for(route in env_bbs$stateroute){
   if(length(unique(subdata$stateroute)) > 1){
     print(subdata$ndvi.mean)
   }
-    for(r in 1:100){
+    for(r in 1:999){
       ndvi = unique(subdata$ndvi.mean)
       FGobs = length(unique((subdata$Trophic.guild)))
       Sobs = length(unique((subdata$aou)))
@@ -59,7 +59,7 @@ for(route in env_bbs$stateroute){
 
 null_output = data.frame(null_output)
 colnames(null_output) = c("iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
-# write.csv(null_output, "Data/null_output.csv", row.names = FALSE)
+# write.csv(null_output, "Z:/Snell/MIH/null_output.csv", row.names = FALSE)
 
 # aggregate by ndvi mean
 null_output_agg <- null_output %>% group_by(ndvi.mean) %>%
@@ -90,7 +90,7 @@ for(route in env_bbs$stateroute){
     print(subdata$ndvi.mean)
     }
   null_pool2 = filter(env_bbs, subdata$bin == bin)
-  for(r in 1:100){
+  for(r in 1:999){
     ndvi = unique(subdata$ndvi.mean)
     print(paste(ndvi, r, Sys.Date()))
     FGobs = length(unique((subdata$Trophic.guild)))
@@ -103,7 +103,7 @@ for(route in env_bbs$stateroute){
 
 null_output_bins = data.frame(null_output_bins)
 colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
-# write.csv(null_output_bins, "Data/null_output_bins.csv", row.names = FALSE)
+# write.csv(null_output_bins, "Z:/Snell/MIH/null_output_bins.csv", row.names = FALSE)
 
 # aggregate by ndvi mean
 null_output_bins_agg <- null_output_bins %>% group_by(ndvi.mean) %>%
