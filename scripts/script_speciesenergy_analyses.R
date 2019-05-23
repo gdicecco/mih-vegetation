@@ -63,7 +63,10 @@ species_list <- species %>%
   filter(aou < 3900 | aou > 3910) %>%
   filter(aou < 4160 | aou > 4210) %>%
   filter(aou != 7010) %>%
-  filter(sporder != "Accipitriformes", sporder != "Falconiformes", sporder != "Anseriformes")
+  filter(sporder != "Accipitriformes", 
+         sporder != "Falconiformes", 
+         sporder != "Anseriformes",
+         sporder != "Cathartiformes")
 #write.csv(species_list, "data/species_list.csv", row.names = F)
 
 ## Filter BBS data
@@ -108,20 +111,20 @@ final.abun <- final.counts %>%
 # ndvi abun
 env_bbs_abun = left_join(final.abun, ndvi_nbcd, by = "stateroute")
 ni_a = ggplot(env_bbs_abun, aes(x = ndvi.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-# ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
+ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
 
 # ndvi rich
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
 ni_r = ggplot(env_bbs_rich, aes(x = ndvi.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) +ylim(0,2)
-# ggsave("Figures/rich_ndvi.png", height = 8, width = 12)
+ggsave("Figures/rich_ndvi.png", height = 8, width = 12)
 
 # nbcd abun
 nd_a = ggplot(env_bbs_abun, aes(x = nbcd.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-# ggsave("C:/Git/mih-vegetation/Figures/abun_nbcd.png", height = 8, width = 12)
+ggsave("Figures/abun_nbcd.png", height = 8, width = 12)
 
 # nbcd rich
 nd_r = ggplot(env_bbs_rich, aes(x = nbcd.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-# ggsave("C:/Git/mih-vegetation/Figures/rich_nbcd.png", height = 8, width = 12)
+ggsave("Figures/rich_nbcd.png", height = 8, width = 12)
 
 z <- plot_grid(ni_a + theme(legend.position="top"),
                ni_r + theme(legend.position="none"),
@@ -148,7 +151,7 @@ ndvi_range = data.frame(ndvi_range)
 names(ndvi_range) = c("AOU", "NDVI.min", "NDVI.max", "NDVI.mean")
 #write.csv(ndvi_range, "data/ndvi_range.csv", row.names = FALSE)  
 
-#### plotting ####
+#### NDVI range ranked ####
 ndvi_range$range = ndvi_range$NDVI.max - ndvi_range$NDVI.min
 # zero = 1 occurrence
 ndvi_range$AOU = as.factor(ndvi_range$AOU)
@@ -162,7 +165,7 @@ ggsave("Figures/ndvi_range_rank.pdf", height = 32, width = 42)
 
 ndvi_range <- read.csv("data/ndvi_range.csv", stringsAsFactors = F)
 troph_guild <- read.csv("\\\\BioArk\\HurlbertLab\\Databases/Trophic Guilds/Troph_guilds.csv", header = TRUE)
-bbs_sub1 <- read.csv("data/bbs_sub1.csv", header = TRUE)
+
 gimms_ndvi = read.csv("data/gimms_ndvi_bbs_data.csv", header = TRUE)
 tax_code <- read.csv("data/Bird_Taxonomy.csv", header = TRUE) %>%
   dplyr::select(AOU_OUT, CRC_SCI_NAME) %>%
@@ -174,8 +177,8 @@ tax_code2 = tax_code1[-grep("sp.", tax_code1$CRC_SCI_NAME),]
 troph_AOU <- left_join(troph_guild, tax_code2, by = c("Species" = "CRC_SCI_NAME"))
 troph_AOU$Species = gsub('Dendroica','Setophaga', troph_AOU$Species)
 
-bbs_sub2 <- filter(bbs_sub1, aou %in% tax_code2$AOU_OUT)
-bbs_troph <- left_join(bbs_sub2, troph_AOU, by = c("aou" = "AOU_OUT"))
+bbs_sub2 <- filter(final.counts, aou %in% tax_code2$AOU_OUT)
+bbs_troph <- left_join(final.counts, troph_AOU, by = c("aou" = "AOU_OUT"))
 
 test <- filter(bbs_troph, is.na(Species) == TRUE)
 tcode <- left_join(test, tax_code2, by = c("aou"="AOU_OUT")) %>%
@@ -205,7 +208,7 @@ bbs_niches <- env_bbs %>%
 ### NDVI range vs. mean NDVI
 bbs_niches %>%
   distinct(aou, Trophic.guild, spp_ndvi_mean, spp_ndvi_max, spp_ndvi_min) %>%
-  ggplot(aes(x = spp_ndvi_mean, y = spp_ndvi_max - spp_ndvi_min)) + geom_point() + geom_smooth(method = "lm", se = F) +
+  ggplot(aes(x = spp_ndvi_mean, y = spp_ndvi_max - spp_ndvi_min)) + geom_point() +
     labs(x = "Mean NDVI", y = "NDVI Range")
 
 ggsave("Figures/species_ndvi_range_vs_meanNDVI.pdf", units = "in", height = 6, width = 8)
@@ -219,17 +222,35 @@ bbs_niches$ndvi_bin <- binsize*floor(bbs_niches$route_ndvi/binsize) + binsize/2
 bbs_niches %>%
   group_by(ndvi_bin) %>%
   summarize(avg_range = mean(spp_ndvi_max - spp_ndvi_min, na.rm = T)) %>%
-  ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point() +
+  ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 2) +
   labs(x = "NDVI bin", y = "Average NDVI range")
 ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
 
 ### NDVI range for spp in each foraging guild
 
 trophic_abbv <- bbs_niches %>%
+  ungroup() %>%
   distinct(Trophic.guild) %>%
-  mutate(abbv = abbreviate(Trophic.guild, minlength = 3))
+  mutate(abbv = abbreviate(Trophic.guild, minlength = 3)) %>%
+  arrange(Trophic.guild)
+trophic_abbv$color <- c("deeppink", 
+                        "palevioletred", "lightpink",
+                        "mediumorchid", "mediumorchid1",
+                        "green3",
+                        "dodgerblue4", "dodgerblue2", 
+                        "deepskyblue3", 
+                        "steelblue", "steelblue3", "steelblue2", "steelblue1", 
+                        "violetred3", 
+                        "seagreen3", "seagreen2") 
+
+trophic_colors <- trophic_abbv$color
+names(trophic_colors) <- trophic_abbv$Trophic.guild
+
+trophic_labels <- trophic_abbv$abbv
+names(trophic_labels) <- trophic_abbv$Trophic.guild
 
 bbs_niches %>%
+  ungroup() %>%
   distinct(aou, Trophic.guild, spp_ndvi_min, spp_ndvi_max, spp_ndvi_mean) %>%
   na.omit(.) %>%
   group_by(Trophic.guild) %>%
@@ -241,8 +262,8 @@ bbs_niches %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title.x = element_blank()) +
   ylim(0, 1) +
   labs(y = "NDVI range", fill = "Trophic guild") +
-  scale_fill_viridis_d() +
-  scale_x_discrete(labels = trophic_abbv$abbv)
+  scale_fill_manual(values = trophic_colors) +
+  scale_x_discrete(labels = trophic_labels)
 ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
 
 ### Spp by foraging guild in each NDVI bin
@@ -254,6 +275,6 @@ foraging_rich <- bbs_niches %>%
   summarize(nSpp = n_distinct(aou))
 
 ggplot(foraging_rich, aes(x = ndvi_bin, y = nSpp, fill = Trophic.guild)) +
-  geom_col(position = "stack", col = "black") + scale_fill_viridis_d() +
+  geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_colors) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild")
 ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
