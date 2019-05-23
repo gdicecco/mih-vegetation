@@ -16,6 +16,7 @@ library(broom)
 # Get species list - diurnal land birds
 species_list <- read.csv("data/species_list.csv", stringsAsFactors = F)
 
+# Match species common names to BBS species list
 fix_spp <- list(new_species = c("Sage Sparrow" = "Sagebrush Sparrow", 
                                 "Western Scrub Jay" = "California Scrub Jay", 
                                 "Sharp-tailed Sparrow" = "Nelson's Sparrow", 
