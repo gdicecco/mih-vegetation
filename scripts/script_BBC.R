@@ -23,7 +23,8 @@ fix_spp <- list(new_species = c("Sage Sparrow" = "Sagebrush Sparrow",
                                 "Common Crackle" = "Common Grackle", 
                                 "Three-toed Woodpecker" = "American Three-toed Woodpecker", 
                                 "Yellow-rumped Warbler" = "(unid. Myrtle/Audubon's) Yellow-rumped Warbler", 
-                                "Rock Dove" = "Rock Pigeon", "Northern Oriole" = "Baltimore Oriole", 
+                                "Rock Dove" = "Rock Pigeon", 
+                                "Northern Oriole" = "Baltimore Oriole", 
                                 "Plain Titmouse" = "unid. Oak Titmouse / Juniper Titmouse", 
                                 "Scrub Jay" = "California Scrub Jay", 
                                 "Northern Flicker" = "(unid. Red/Yellow Shafted) Northern Flicker", 
@@ -34,7 +35,7 @@ fix_spp <- list(new_species = c("Sage Sparrow" = "Sagebrush Sparrow",
                                 "Rufous-sided Towhee" = "unid. Spotted Towhee / Eastern Towhee"))
 
 new_spp_names <- as.data.frame(fix_spp)
-new_spp_names$species <- row.names(new_spp_names)
+new_spp_names$common_names <- row.names(new_spp_names)
 
 # Read in BBC data
 bbc_censuses <- read.csv("data/bbc_censuses.csv", stringsAsFactors = F)
@@ -58,9 +59,20 @@ bbc <- bbc_counts %>%
   right_join(site_census, by = c("siteID", "year")) %>%
   mutate(count_sub = as.numeric(count),
          count_repl = replace_na(count_sub, 0.25),
-         nTerritory = as.numeric(count_repl)*4) %>%
-  mutate(new_species = ifelse(species %in% new_spp_names$species, 
-                              as.character(filter(new_spp_names, species == species)$new_species), species)) %>%
+         nTerritory = as.numeric(count_repl)*4)
+
+new_species <- c()
+for(spp in bbc$species) {
+  if (spp %in% new_spp_names$common_names) {
+    new_species <- c(new_species, as.character(new_spp_names[new_spp_names$common_names == spp, 1]))
+  } else {
+    new_species <- c(new_species, spp)
+  }
+}
+
+bbc$new_species <- new_species
+
+bbc <- bbc %>%
   left_join(species_list, by = c("new_species" = "english_common_name")) %>%
   filter(!(is.na(aou)))
 
@@ -202,3 +214,79 @@ ggsave("Figures/estS_ndvi_bbc.pdf")
 ggplot(raref_ndvi, aes(x = area, y = rarefy)) + geom_point() + geom_smooth(method = "lm", se = F) +
   labs(x = "Site area (ha)", y = "E(S)")
 ggsave("Figures/estS_vs_area.pdf")
+
+## Foraging niche null model
+
+# Trophic guilds
+tax_code <- read.csv("data/Bird_Taxonomy.csv", header = TRUE) %>%
+  dplyr::select(AOU_OUT, CRC_SCI_NAME) %>%
+  unique() %>% na.omit()
+
+tax_code1 = tax_code[-grep("/", tax_code$CRC_SCI_NAME),] 
+tax_code2 = tax_code1[-grep("sp.", tax_code1$CRC_SCI_NAME),]
+
+
+troph_AOU <- left_join(troph_guild, tax_code2, by = c("Species" = "CRC_SCI_NAME"))
+troph_AOU$Species = gsub('Dendroica','Setophaga', troph_AOU$Species)
+
+binsize <- 0.05
+
+bbc_trophic <- bbc %>%
+  filter(status == "breeder") %>%
+  left_join(bbc_ndvi, by = c("siteID", "year")) %>%
+  mutate(scientific_name = paste(genus, species.y)) %>%
+  left_join(troph_AOU, by = c("scientific_name" = "Species")) %>%
+  mutate(ndvi_bin = binsize*floor(NDVI/binsize) + binsize/2)
+
+null_pool1 <- bbc_trophic %>%
+  ungroup() %>%
+  filter(!(is.na(Trophic.guild))) %>%
+  distinct(scientific_name, Trophic.guild)
+
+#### null model ####
+null_output = c()
+for(site in bbc_trophic$siteID){
+  subdata = filter(bbc_trophic, siteID == site)
+  for(r in 1:999){
+    ndvi = unique(subdata$NDVI)
+    FGobs = length(unique((subdata$Trophic.guild)))
+    Sobs = length(unique((subdata$scientific_name)))
+    Fnull = sample_n(null_pool1, Sobs, replace = FALSE) 
+    FGNull = length(unique((Fnull$Trophic.guild)))
+    null_output = rbind(null_output, c(r, ndvi, Sobs, FGobs, FGNull))      
+  }
+} # end r loop
+
+null_output = data.frame(null_output)
+colnames(null_output) = c("iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
+write.csv(null_output,"data/bbc_null_output.csv", row.names = FALSE)
+
+## Foraging niche null model with bins
+
+Sys.time()
+
+null_output_bins = c() 
+for(site in bbc_trophic$siteID){
+  subdata = filter(bbc_trophic, siteID == site)
+  
+  null_pool2 = filter(bbc_trophic, bin == unique(subdata$bin))
+  for(r in 1:999){
+    ndvi = unique(subdata$NDVI)
+    print(paste(ndvi, r, Sys.Date()))
+    FGobs = length(unique((subdata$Trophic.guild)))
+    Sobs = length(unique((subdata$scientific_name)))
+    Fnull = sample_n(null_pool2, Sobs, replace = FALSE) 
+    FGNull = length(unique((Fnull$Trophic.guild)))
+    null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
+  }
+} # end r loop
+
+null_output_bins = data.frame(null_output_bins)
+colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
+write.csv(null_output_bins, "data/bbc_null_output_bins.csv", row.names = FALSE)
+
+Sys.time()
+
+## Z score null model plots
+
+## Percentile null model plots
