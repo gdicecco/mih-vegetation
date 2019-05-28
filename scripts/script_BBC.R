@@ -253,19 +253,20 @@ for(site in unique(bbc_trophic$siteID)) {
   init.time <- Sys.time()
   subdata = filter(bbc_trophic, siteID == site)
   for(r in 1:999){
+    siteID <- unique(subdata$siteID)
     ndvi = unique(subdata$NDVI)
     FGobs = length(unique((subdata$Trophic.guild)))
     Sobs = length(unique((subdata$scientific_name)))
     Fnull = sample_n(null_pool1, Sobs, replace = FALSE) 
     FGNull = length(unique((Fnull$Trophic.guild)))
-    null_output = rbind(null_output, c(r, ndvi, Sobs, FGobs, FGNull))      
+    null_output = rbind(null_output, c(siteID, r, ndvi, Sobs, FGobs, FGNull))      
   }
   end.time <- Sys.time()
   print(paste(site, "-", end.time - init.time, "seconds elapsed"))
 } # end r loop
 
 null_output = data.frame(null_output)
-colnames(null_output) = c("iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
+colnames(null_output) = c("siteID", "iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
 write.csv(null_output,"data/bbc_null_output.csv", row.names = FALSE)
 
 ## Foraging niche null model with bins
@@ -275,28 +276,82 @@ for(site in unique(bbc_trophic$siteID)) {
   init.time <- Sys.time()
   subdata = filter(bbc_trophic, siteID == site)
   
-  null_pool2 = filter(bbc_trophic, bin == unique(subdata$bin)) %>%
+  null_pool2 = filter(bbc_trophic, ndvi_bin == unique(subdata$ndvi_bin)) %>%
     ungroup() %>%
     filter(!(is.na(Trophic.guild))) %>%
     distinct(scientific_name, Trophic.guild)
   
   for(r in 1:999){
+    siteID <- unique(subdata$siteID)
     ndvi = unique(subdata$NDVI)
-    print(paste(ndvi, r, Sys.Date()))
     FGobs = length(unique((subdata$Trophic.guild)))
     Sobs = length(unique((subdata$scientific_name)))
     Fnull = sample_n(null_pool2, Sobs, replace = FALSE) 
     FGNull = length(unique((Fnull$Trophic.guild)))
-    null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
+    null_output_bins = rbind(null_output_bins, c(siteID, r, ndvi, FGobs, Sobs, FGNull))      
   }
   end.time <- Sys.time()
   print(paste(site, "-", end.time - init.time, "seconds elapsed"))
 } # end r loop
 
 null_output_bins = data.frame(null_output_bins)
-colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
+colnames(null_output_bins) = c("siteID", "iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
 write.csv(null_output_bins, "data/bbc_null_output_bins.csv", row.names = FALSE)
+
+## Null model results
+
+null_output_z <- null_output %>%
+  group_by(siteID) %>%
+  summarize(FGnull_mean = mean(FGNull),
+            FGnull_sd = sd(FGNull),
+            FGObs = mean(FGObs),
+            ndvi.mean = mean(ndvi.mean),
+            Sobs = mean(Sobs),
+            FGnull_pct = sum(FGObs > FGNull)/1000) %>%
+  mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+null_output_bins_z <- null_output_bins %>%
+  group_by(siteID) %>%
+  summarize(FGnull_mean = mean(FGNull),
+            FGnull_sd = sd(FGNull),
+            FGObs = mean(FGObs),
+            ndvi.mean = mean(ndvi.mean),
+            Sobs = mean(Sobs),
+            FGnull_pct = sum(FGObs > FGNull)/1000) %>%
+  mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
 
 ## Z score null model plots
 
+ggplot(null_output_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
+  geom_point() +
+  geom_hline(yintercept = 0, lty = 2) +
+  geom_smooth(method = "lm", se = F, col = "black") +
+  labs(x = "NDVI", y = "Foraging guild Z-score", col = "Obs. Foraging Guilds") +
+  ggtitle("BBC, no bins")
+ggsave("Figures/BBC_null_mod_z.pdf", units = "in", width = 8, height = 6)
+
+ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
+  geom_point() +
+  geom_hline(yintercept = 0, lty = 2) +
+  geom_smooth(method = "lm", se = F, col = "black") +
+  labs(x = "NDVI", y = "Foraging guild Z-score", col = "Obs. Foraging Guilds") +
+  ggtitle("BBC, NDVI bins")
+ggsave("Figures/BBC_null_mod_bins_z.pdf", units = "in", width = 8, height = 6)
+
 ## Percentile null model plots
+
+ggplot(null_output_z, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
+  geom_point() + 
+  geom_hline(yintercept = 0.5, lty = 2) +
+  geom_smooth(method = "lm", se = F, col = "black") +
+  labs(x = "NDVI", y = "Proportion sims obs > null", col = "Obs. Foraging Guilds") +
+  ggtitle("BBC, no bins")
+ggsave("Figures/BBC_null_mod_percentile.pdf", units = "in", width = 8, height = 6)
+
+ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
+  geom_point() + 
+  geom_hline(yintercept = 0.5, lty = 2) +
+  geom_smooth(method = "lm", se = F, col = "black") +
+  labs(x = "NDVI", y = "Proportion sims obs > null", col = "Obs. Foraging Guilds") +
+  ggtitle("BBC, NDVI bins")
+ggsave("Figures/BBC_null_mod_bins_percentile.pdf", units = "in", width = 8, height = 6)
