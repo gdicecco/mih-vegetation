@@ -94,10 +94,10 @@ for(route in unique(env_bbs$stateroute)) {
   
   subdata = filter(env_bbs, stateroute == route)
 
-  null_pool2 = filter(env_bbs, subdata$bin == bin) %>%
+  null_pool2 = filter(env_bbs, bin == unique(subdata$bin)) %>%
     ungroup() %>%
     filter(!(is.na(Trophic.guild))) %>%
-    distinct(scientific_name, Trophic.guild)
+    distinct(aou, Trophic.guild)
   
   for(r in 1:999){
     ndvi = unique(subdata$ndvi.mean)

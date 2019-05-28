@@ -221,7 +221,7 @@ ggsave("Figures/estS_vs_area.pdf")
 tax_code <- read.csv("data/Bird_Taxonomy.csv", header = TRUE) %>%
   dplyr::select(AOU_OUT, CRC_SCI_NAME) %>%
   unique() %>% na.omit()
-troph_guild <- read.csv("\\\\BioArk\\HurlbertLab\\Databases/Trophic Guilds/Troph_guilds.csv", header = TRUE)
+troph_guild <- read.csv("data/Troph_guilds.csv", header = TRUE)
 
 tax_code1 = tax_code[-grep("/", tax_code$CRC_SCI_NAME),] 
 tax_code2 = tax_code1[-grep("sp.", tax_code1$CRC_SCI_NAME),]
@@ -276,8 +276,10 @@ for(site in unique(bbc_trophic$siteID)) {
   subdata = filter(bbc_trophic, siteID == site)
   
   null_pool2 = filter(bbc_trophic, bin == unique(subdata$bin)) %>%
+    ungroup() %>%
     filter(!(is.na(Trophic.guild))) %>%
     distinct(scientific_name, Trophic.guild)
+  
   for(r in 1:999){
     ndvi = unique(subdata$NDVI)
     print(paste(ndvi, r, Sys.Date()))
