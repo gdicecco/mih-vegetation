@@ -101,6 +101,7 @@ filter(aou %in% occ_calc$aou) # add a filter term to exclude everything in the o
 
 # final abun df: 1135 routes, 360 spp ***want sum across years?
 final.counts <- left_join(final.count.occ, bbs_rich, by = "stateroute") 
+#write.csv(final.counts, "data/final_bbs_subset.csv", row.names = F)
 
 final.abun <- final.counts %>% 
   group_by(stateroute) %>%

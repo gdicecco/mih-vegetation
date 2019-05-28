@@ -1,10 +1,9 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(rdataretriever)
 
 troph_guild <- read.csv("data/Troph_guilds.csv", header = TRUE)
-bbs_sub1 <- read.csv("data/bbs_sub1.csv", header = TRUE)
+bbs_sub1 <- read.csv("data/final_bbs_subset.csv", header = TRUE)
 gimms_ndvi = read.csv("data/gimms_ndvi_bbs_data.csv", header = TRUE)
 tax_code <- read.csv("data/Bird_Taxonomy.csv", header = TRUE) %>%
   dplyr::select(AOU_OUT, CRC_SCI_NAME) %>%
@@ -47,21 +46,22 @@ for(route in unique(env_bbs$stateroute)) {
   subdata = filter(env_bbs, stateroute == route)
 
     for(r in 1:999){
+      stateroute <- unique(subdata$stateroute)
       ndvi = unique(subdata$ndvi.mean)
       FGobs = length(unique((subdata$Trophic.guild)))
       Sobs = length(unique((subdata$aou)))
       Fnull = sample_n(null_pool1, Sobs, replace = FALSE) 
       FGNull = length(unique((Fnull$env_bbs.Trophic.guild)))
-      null_output = rbind(null_output, c(r, ndvi, Sobs, FGobs, FGNull))      
+      null_output = rbind(null_output, c(stateroute, r, ndvi, Sobs, FGobs, FGNull))      
     }
   
   end.time <- Sys.time()
-  print(paste(site, "-", end.time - init.time, "seconds elapsed"))
+  print(paste(route, "-", end.time - init.time, "seconds elapsed"))
   
     } # end r loop
 
 null_output = data.frame(null_output)
-colnames(null_output) = c("iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
+colnames(null_output) = c("stateroute", "iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
 write.csv(null_output, "data/bbs_null_output.csv", row.names = FALSE)
 
 # aggregate by ndvi mean
@@ -83,9 +83,9 @@ ggsave("FG_ndvi.pdf")
 # sample from pool of spp that occur at a given ndvi band - pool in groups of 0.05 (20 groups)
 # what are all the species observed in that bin
 #### null model ####
-init.time = Sys.Date()
-env_bbs$bin <- binsize*floor(env_bbs$ndvi.mean/binsize) + binsize/2
+
 binsize <- 0.05
+env_bbs$bin <- binsize*floor(env_bbs$ndvi.mean/binsize) + binsize/2
 
 null_output_bins = c() 
 for(route in unique(env_bbs$stateroute)) {
@@ -95,25 +95,24 @@ for(route in unique(env_bbs$stateroute)) {
   subdata = filter(env_bbs, stateroute == route)
 
   null_pool2 = filter(env_bbs, bin == unique(subdata$bin)) %>%
-    ungroup() %>%
     filter(!(is.na(Trophic.guild))) %>%
     distinct(aou, Trophic.guild)
   
   for(r in 1:999){
+    stateroute <- unique(subdata$stateroute)
     ndvi = unique(subdata$ndvi.mean)
-    print(paste(ndvi, r, Sys.Date()))
     FGobs = length(unique((subdata$Trophic.guild)))
     Sobs = length(unique((subdata$aou)))
     Fnull = sample_n(null_pool2, Sobs, replace = FALSE) 
     FGNull = length(unique((Fnull$Trophic.guild)))
-    null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
+    null_output_bins = rbind(null_output_bins, c(stateroute, r, ndvi, FGobs, Sobs, FGNull))      
   }
   end.time <- Sys.time()
   print(paste(route, "-", end.time - init.time, "seconds elapsed"))
 } # end r loop
 
 null_output_bins = data.frame(null_output_bins)
-colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
+colnames(null_output_bins) = c("stateroute", "iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
 write.csv(null_output_bins, "data/bbs_null_output_bins.csv", row.names = FALSE)
 
 # aggregate by ndvi mean
