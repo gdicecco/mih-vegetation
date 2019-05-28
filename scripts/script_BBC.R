@@ -221,6 +221,7 @@ ggsave("Figures/estS_vs_area.pdf")
 tax_code <- read.csv("data/Bird_Taxonomy.csv", header = TRUE) %>%
   dplyr::select(AOU_OUT, CRC_SCI_NAME) %>%
   unique() %>% na.omit()
+troph_guild <- read.csv("\\\\BioArk\\HurlbertLab\\Databases/Trophic Guilds/Troph_guilds.csv", header = TRUE)
 
 tax_code1 = tax_code[-grep("/", tax_code$CRC_SCI_NAME),] 
 tax_code2 = tax_code1[-grep("sp.", tax_code1$CRC_SCI_NAME),]
@@ -229,14 +230,17 @@ tax_code2 = tax_code1[-grep("sp.", tax_code1$CRC_SCI_NAME),]
 troph_AOU <- left_join(troph_guild, tax_code2, by = c("Species" = "CRC_SCI_NAME"))
 troph_AOU$Species = gsub('Dendroica','Setophaga', troph_AOU$Species)
 
-binsize <- 0.05
+binsize <- 0.07
 
 bbc_trophic <- bbc %>%
   filter(status == "breeder") %>%
   left_join(bbc_ndvi, by = c("siteID", "year")) %>%
   mutate(scientific_name = paste(genus, species.y)) %>%
   left_join(troph_AOU, by = c("scientific_name" = "Species")) %>%
-  mutate(ndvi_bin = binsize*floor(NDVI/binsize) + binsize/2)
+  mutate(ndvi_bin = binsize*floor(NDVI/binsize) + binsize/2) %>%
+  group_by(ndvi_bin) %>%
+  filter(n_distinct(siteID) > 10) %>%
+  filter(!(is.na(ndvi_bin)))
 
 null_pool1 <- bbc_trophic %>%
   ungroup() %>%
@@ -245,7 +249,8 @@ null_pool1 <- bbc_trophic %>%
 
 #### null model ####
 null_output = c()
-for(site in bbc_trophic$siteID){
+for(site in unique(bbc_trophic$siteID)) {
+  init.time <- Sys.time()
   subdata = filter(bbc_trophic, siteID == site)
   for(r in 1:999){
     ndvi = unique(subdata$NDVI)
@@ -255,6 +260,8 @@ for(site in bbc_trophic$siteID){
     FGNull = length(unique((Fnull$Trophic.guild)))
     null_output = rbind(null_output, c(r, ndvi, Sobs, FGobs, FGNull))      
   }
+  end.time <- Sys.time()
+  print(paste(site, "-", end.time - init.time, "seconds elapsed"))
 } # end r loop
 
 null_output = data.frame(null_output)
@@ -263,13 +270,14 @@ write.csv(null_output,"data/bbc_null_output.csv", row.names = FALSE)
 
 ## Foraging niche null model with bins
 
-Sys.time()
-
 null_output_bins = c() 
-for(site in bbc_trophic$siteID){
+for(site in unique(bbc_trophic$siteID)) {
+  init.time <- Sys.time()
   subdata = filter(bbc_trophic, siteID == site)
   
-  null_pool2 = filter(bbc_trophic, bin == unique(subdata$bin))
+  null_pool2 = filter(bbc_trophic, bin == unique(subdata$bin)) %>%
+    filter(!(is.na(Trophic.guild))) %>%
+    distinct(scientific_name, Trophic.guild)
   for(r in 1:999){
     ndvi = unique(subdata$NDVI)
     print(paste(ndvi, r, Sys.Date()))
@@ -279,13 +287,13 @@ for(site in bbc_trophic$siteID){
     FGNull = length(unique((Fnull$Trophic.guild)))
     null_output_bins = rbind(null_output_bins, c(r, ndvi, FGobs, Sobs, FGNull))      
   }
+  end.time <- Sys.time()
+  print(paste(site, "-", end.time - init.time, "seconds elapsed"))
 } # end r loop
 
 null_output_bins = data.frame(null_output_bins)
 colnames(null_output_bins) = c("iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
 write.csv(null_output_bins, "data/bbc_null_output_bins.csv", row.names = FALSE)
-
-Sys.time()
 
 ## Z score null model plots
 

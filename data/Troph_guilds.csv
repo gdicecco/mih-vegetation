@@ -1,0 +1,859 @@
+Order,Family,Species,Trophic guild
+Tinamiformes,Tinamidae,Tinamus major,Frugivore: ground to lower canopy gleaner
+Tinamiformes,Tinamidae,Crypturellus soui,Frugivore: ground to lower canopy gleaner
+Tinamiformes,Tinamidae,Crypturellus cinnamomeus,Frugivore: ground to lower canopy gleaner
+Tinamiformes,Tinamidae,Crypturellus boucardi,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Ortalis vetula,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Ortalis wagleri,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Ortalis poliocephala,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Ortalis leucogastra,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Penelope purpurascens,Frugivore: upper-canopy gleaner
+Galliformes,Cracidae,Penelopina nigra,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Oreophasis derbianus,Frugivore: ground to lower canopy gleaner
+Galliformes,Cracidae,Crax rubra,Frugivore: ground to lower canopy gleaner
+Galliformes,Odontophoridae,Dendrortyx barbatus,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Dendrortyx macroura,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Dendrortyx leucophrys,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Oreortyx pictus,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Callipepla squamata,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Callipepla douglasii,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Callipepla californica,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Callipepla gambelii,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Philortyx fasciatus,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Colinus virginianus,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Colinus nigrogularis,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Odontophorus guttatus,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Dactylortyx thoracicus,Herbivores: ground forager
+Galliformes,Odontophoridae,Cyrtonyx montezumae,Granivore: ground to undergrowth gleaner
+Galliformes,Odontophoridae,Cyrtonyx ocellatus,Granivore: ground to undergrowth gleaner
+Galliformes,Phasianidae,Bonasa umbellus,Herbivores: ground forager
+Galliformes,Phasianidae,Centrocercus urophasianus,Herbivores: ground forager
+Galliformes,Phasianidae,Falcipennis canadensis,Herbivores: ground forager
+Galliformes,Phasianidae,Lagopus lagopus,Herbivores: ground forager
+Galliformes,Phasianidae,Lagopus muta,Herbivores: ground forager
+Galliformes,Phasianidae,Lagopus leucura,Herbivores: ground forager
+Galliformes,Phasianidae,Dendragapus obscurus,Herbivores: ground forager
+Galliformes,Phasianidae,Tympanuchus phasianellus,Granivore: ground to undergrowth gleaner
+Galliformes,Phasianidae,Tympanuchus cupido,Granivore: ground to undergrowth gleaner
+Galliformes,Phasianidae,Tympanuchus pallidicinctus,Granivore: ground to undergrowth gleaner
+Galliformes,Phasianidae,Meleagris gallopavo,Herbivores: ground forager
+Galliformes,Phasianidae,Meleagris ocellata,Herbivores: ground forager
+Accipitriformes,Cathartidae,Coragyps atratus,Scavengers
+Accipitriformes,Cathartidae,Cathartes aura,Scavengers
+Accipitriformes,Cathartidae,Cathartes burrovianus,Scavengers
+Accipitriformes,Cathartidae,Gymnogyps californianus,Scavengers
+Accipitriformes,Cathartidae,Sarcoramphus papa,Scavengers
+Accipitriformes,Pandionidae,Pandion haliaetus,Carnivore: freshwater-forager
+Accipitriformes,Accipitridae,Leptodon cayanensis,Insectivore: upper canopy foliage gleaner
+Accipitriformes,Accipitridae,Chondrohierax uncinatus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Elanoides forficatus,Insectivore: air hawker above canopy
+Accipitriformes,Accipitridae,Elanus leucurus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Rostrhamus sociabilis,Carnivore: freshwater-forager
+Accipitriformes,Accipitridae,Harpagus bidentatus,Insectivore: upper canopy foliage gleaner
+Accipitriformes,Accipitridae,Ictinia mississippiensis,Insectivore: air hawker above canopy
+Accipitriformes,Accipitridae,Ictinia plumbea,Insectivore: air hawker above canopy
+Accipitriformes,Accipitridae,Haliaeetus leucocephalus,Carnivore: freshwater-forager
+Accipitriformes,Accipitridae,Busarellus nigricollis,Carnivore: freshwater-forager
+Accipitriformes,Accipitridae,Circus cyaneus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Accipiter striatus,Carnivore: air-hawker
+Accipitriformes,Accipitridae,Accipiter cooperii,Carnivore: air-hawker
+Accipitriformes,Accipitridae,Accipiter bicolor,Carnivore: air-hawker
+Accipitriformes,Accipitridae,Accipiter gentilis,Carnivore: arboreal-hawker
+Accipitriformes,Accipitridae,Geranospiza caerulescens,Carnivore: arboreal-hawker
+Accipitriformes,Accipitridae,Leucopternis albicollis,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteogallus anthracinus,Carnivore: freshwater-forager
+Accipitriformes,Accipitridae,Buteogallus urubitinga,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Parabuteo unicinctus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Harpyhaliaetus solitarius,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo magnirostris,Insectivore: ground gleaner
+Accipitriformes,Accipitridae,Buteo lineatus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo platypterus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo nitidus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo brachyurus,Carnivore: arboreal-hawker
+Accipitriformes,Accipitridae,Buteo swainsoni,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo albicaudatus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo albonotatus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo jamaicensis,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo regalis,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Buteo lagopus,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Harpia harpyja,Carnivore: arboreal-hawker
+Accipitriformes,Accipitridae,Aquila chrysaetos,Carnivore: ground-hawker
+Accipitriformes,Accipitridae,Spizaetus tyrannus,Carnivore: arboreal-hawker
+Accipitriformes,Accipitridae,Spizaetus ornatus,Carnivore: arboreal-hawker
+Accipitriformes,Accipitridae,Spizaetus melanoleucus,Carnivore: arboreal-hawker
+Falconiformes,Falconidae,Micrastur ruficollis,Carnivore: ground-hawker
+Falconiformes,Falconidae,Micrastur semitorquatus,Carnivore: ground-hawker
+Falconiformes,Falconidae,Ibycter americanus,Insectivore: upper canopy foliage gleaner
+Falconiformes,Falconidae,Caracara cheriway,Scavengers
+Falconiformes,Falconidae,Herpetotheres cachinnans,Carnivore: ground-hawker
+Falconiformes,Falconidae,Falco sparverius,Insectivore: ground gleaner
+Falconiformes,Falconidae,Falco columbarius,Carnivore: air-hawker
+Falconiformes,Falconidae,Falco femoralis,Carnivore: air-hawker
+Falconiformes,Falconidae,Falco rufigularis,Carnivore: air-hawker
+Falconiformes,Falconidae,Falco deiroleucus,Carnivore: air-hawker
+Falconiformes,Falconidae,Falco rusticolus,Carnivore: air-hawker
+Falconiformes,Falconidae,Falco peregrinus,Carnivore: air-hawker
+Falconiformes,Falconidae,Falco mexicanus,Carnivore: air-hawker
+Columbiformes,Columbidae,Patagioenas cayennensis,Frugivore: upper-canopy gleaner
+Columbiformes,Columbidae,Patagioenas speciosa,Frugivore: upper-canopy gleaner
+Columbiformes,Columbidae,Patagioenas leucocephala,Frugivore: ground to lower canopy gleaner
+Columbiformes,Columbidae,Patagioenas flavirostris,Frugivore: ground to lower canopy gleaner
+Columbiformes,Columbidae,Patagioenas fasciata,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Patagioenas nigrirostris,Frugivore: ground to lower canopy gleaner
+Columbiformes,Columbidae,Zenaida asiatica,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Zenaida macroura,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Ectopistes migratorius,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Columbina inca,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Columbina passerina,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Columbina minuta,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Columbina talpacoti,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Claravis pretiosa,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Claravis mondetoura,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Leptotila verreauxi,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Leptotila plumbeiceps,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Leptotila jamaicensis,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Leptotila cassini,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Geotrygon albifacies,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Geotrygon carrikeri,Granivore: ground to undergrowth gleaner
+Columbiformes,Columbidae,Geotrygon montana,Granivore: ground to undergrowth gleaner
+Psittaciformes,Psittacidae,Conuropsis carolinensis,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Aratinga holochlora,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Aratinga strenua,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Aratinga nana,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Aratinga canicularis,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Ara militaris,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Ara macao,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Rhynchopsitta pachyrhyncha,Granivore: lower to upper canopy gleaner
+Psittaciformes,Psittacidae,Rhynchopsitta terrisi,Granivore: lower to upper canopy gleaner
+Psittaciformes,Psittacidae,Bolborhynchus lineola,Granivore: lower to upper canopy gleaner
+Psittaciformes,Psittacidae,Forpus cyanopygius,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Brotogeris jugularis,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Pyrilia haematotis,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Pionus senilis,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Amazona albifrons,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Amazona xantholora,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Amazona viridigenalis,Granivore: lower to upper canopy gleaner
+Psittaciformes,Psittacidae,Amazona finschi,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Amazona autumnalis,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Amazona farinosa,Frugivore: upper-canopy gleaner
+Psittaciformes,Psittacidae,Amazona oratrix,Granivore: lower to upper canopy gleaner
+Psittaciformes,Psittacidae,Amazona auropalliata,Granivore: lower to upper canopy gleaner
+Cuculiformes,Cuculidae,Piaya cayana,Insectivore: upper canopy foliage gleaner
+Cuculiformes,Cuculidae,Coccyzus americanus,Insectivore: upper canopy foliage gleaner
+Cuculiformes,Cuculidae,Coccyzus minor,Insectivore: upper canopy foliage gleaner
+Cuculiformes,Cuculidae,Coccyzus erythropthalmus,Insectivore: upper canopy foliage gleaner
+Cuculiformes,Cuculidae,Tapera naevia,Insectivore: lower canopy foliage gleaner
+Cuculiformes,Cuculidae,Dromococcyx phasianellus,Insectivore: ground gleaner
+Cuculiformes,Cuculidae,Morococcyx erythropygus,Insectivore: ground gleaner
+Cuculiformes,Cuculidae,Geococcyx velox,Carnivore: ground-hawker
+Cuculiformes,Cuculidae,Geococcyx californianus,Carnivore: ground-hawker
+Cuculiformes,Cuculidae,Crotophaga ani,Insectivore: ground gleaner
+Cuculiformes,Cuculidae,Crotophaga sulcirostris,Insectivore: ground gleaner
+Strigiformes,Tytonidae,Tyto alba,Carnivore-nocturnal
+Strigiformes,Strigidae,Otus flammeolus,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops kennicottii,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops asio,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops seductus,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops cooperi,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops trichopsis,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops barbarus,Insectivore-nocturnal
+Strigiformes,Strigidae,Megascops guatemalae,Insectivore-nocturnal
+Strigiformes,Strigidae,Lophostrix cristata,Insectivore-nocturnal
+Strigiformes,Strigidae,Pulsatrix perspicillata,Carnivore-nocturnal
+Strigiformes,Strigidae,Bubo virginianus,Carnivore-nocturnal
+Strigiformes,Strigidae,Bubo scandiacus,Carnivore: ground-hawker
+Strigiformes,Strigidae,Surnia ulula,Carnivore: ground-hawker
+Strigiformes,Strigidae,Glaucidium gnoma,Carnivore: ground-hawker
+Strigiformes,Strigidae,Glaucidium griseiceps,Insectivore-nocturnal
+Strigiformes,Strigidae,Glaucidium sanchezi,Carnivore-nocturnal
+Strigiformes,Strigidae,Glaucidium palmarum,Carnivore-nocturnal
+Strigiformes,Strigidae,Glaucidium brasilianum,Insectivore: lower canopy foliage gleaner
+Strigiformes,Strigidae,Micrathene whitneyi,Insectivore: lower canopy foliage gleaner
+Strigiformes,Strigidae,Athene cunicularia,Insectivore: ground gleaner
+Strigiformes,Strigidae,Ciccaba virgata,Carnivore-nocturnal
+Strigiformes,Strigidae,Ciccaba nigrolineata,Carnivore-nocturnal
+Strigiformes,Strigidae,Strix occidentalis,Carnivore-nocturnal
+Strigiformes,Strigidae,Strix varia,Carnivore-nocturnal
+Strigiformes,Strigidae,Strix fulvescens,Carnivore-nocturnal
+Strigiformes,Strigidae,Strix nebulosa,Carnivore-nocturnal
+Strigiformes,Strigidae,Asio otus,Carnivore-nocturnal
+Strigiformes,Strigidae,Asio stygius,Carnivore-nocturnal
+Strigiformes,Strigidae,Asio flammeus,Carnivore: ground-hawker
+Strigiformes,Strigidae,Pseudoscops clamator,Carnivore-nocturnal
+Strigiformes,Strigidae,Aegolius funereus,Carnivore-nocturnal
+Strigiformes,Strigidae,Aegolius acadicus,Carnivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Lurocalis semitorquatus,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Chordeiles acutipennis,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Chordeiles minor,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Nyctidromus albicollis,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Phalaenoptilus nuttallii,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Nyctiphrynus mcleodii,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Nyctiphrynus yucatanicus,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Caprimulgus carolinensis,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Caprimulgus salvini,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Caprimulgus badius,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Caprimulgus ridgwayi,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Caprimulgus vociferus,Insectivore-nocturnal
+Caprimulgiformes,Caprimulgidae,Caprimulgus maculicaudus,Insectivore-nocturnal
+Caprimulgiformes,Nyctibiidae,Nyctibius grandis,Insectivore-nocturnal
+Caprimulgiformes,Nyctibiidae,Nyctibius jamaicensis,Insectivore-nocturnal
+Apodiformes,Apodidae,Cypseloides niger,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Cypseloides storeri,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Streptoprocne rutila,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Streptoprocne zonaris,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Streptoprocne semicollaris,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Chaetura pelagica,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Chaetura vauxi,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Aeronautes saxatalis,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Panyptila cayennensis,Insectivore: air hawker above canopy
+Apodiformes,Apodidae,Panyptila sanctihieronymi,Insectivore: air hawker above canopy
+Apodiformes,Trochilidae,Phaethornis longirostris,Nectarivore
+Apodiformes,Trochilidae,Phaethornis striigularis,Nectarivore
+Apodiformes,Trochilidae,Campylopterus curvipennis,Nectarivore
+Apodiformes,Trochilidae,Campylopterus excellens,Nectarivore
+Apodiformes,Trochilidae,Campylopterus rufus,Nectarivore
+Apodiformes,Trochilidae,Campylopterus hemileucurus,Nectarivore
+Apodiformes,Trochilidae,Florisuga mellivora,Nectarivore
+Apodiformes,Trochilidae,Colibri thalassinus,Nectarivore
+Apodiformes,Trochilidae,Anthracothorax prevostii,Nectarivore
+Apodiformes,Trochilidae,Abeillia abeillei,Nectarivore
+Apodiformes,Trochilidae,Lophornis brachylophus,Nectarivore
+Apodiformes,Trochilidae,Lophornis helenae,Nectarivore
+Apodiformes,Trochilidae,Chlorostilbon auriceps,Nectarivore
+Apodiformes,Trochilidae,Chlorostilbon canivetii,Nectarivore
+Apodiformes,Trochilidae,Cynanthus sordidus,Nectarivore
+Apodiformes,Trochilidae,Cynanthus latirostris,Nectarivore
+Apodiformes,Trochilidae,Thalurania ridgwayi,Nectarivore
+Apodiformes,Trochilidae,Hylocharis eliciae,Nectarivore
+Apodiformes,Trochilidae,Hylocharis leucotis,Nectarivore
+Apodiformes,Trochilidae,Hylocharis xantusii,Nectarivore
+Apodiformes,Trochilidae,Amazilia candida,Nectarivore
+Apodiformes,Trochilidae,Amazilia cyanocephala,Nectarivore
+Apodiformes,Trochilidae,Amazilia beryllina,Nectarivore
+Apodiformes,Trochilidae,Amazilia cyanura,Nectarivore
+Apodiformes,Trochilidae,Amazilia tzacatl,Nectarivore
+Apodiformes,Trochilidae,Amazilia yucatanensis,Nectarivore
+Apodiformes,Trochilidae,Amazilia rutila,Nectarivore
+Apodiformes,Trochilidae,Amazilia violiceps,Nectarivore
+Apodiformes,Trochilidae,Amazilia viridifrons,Nectarivore
+Apodiformes,Trochilidae,Eupherusa eximia,Nectarivore
+Apodiformes,Trochilidae,Eupherusa cyanophrys,Nectarivore
+Apodiformes,Trochilidae,Eupherusa poliocerca,Nectarivore
+Apodiformes,Trochilidae,Lampornis viridipallens,Nectarivore
+Apodiformes,Trochilidae,Lampornis amethystinus,Nectarivore
+Apodiformes,Trochilidae,Lampornis clemenciae,Nectarivore
+Apodiformes,Trochilidae,Lamprolaima rhami,Nectarivore
+Apodiformes,Trochilidae,Eugenes fulgens,Nectarivore
+Apodiformes,Trochilidae,Heliothryx barroti,Nectarivore
+Apodiformes,Trochilidae,Heliomaster longirostris,Nectarivore
+Apodiformes,Trochilidae,Heliomaster constantii,Nectarivore
+Apodiformes,Trochilidae,Doricha enicura,Nectarivore
+Apodiformes,Trochilidae,Doricha eliza,Nectarivore
+Apodiformes,Trochilidae,Tilmatura dupontii,Nectarivore
+Apodiformes,Trochilidae,Calothorax lucifer,Nectarivore
+Apodiformes,Trochilidae,Calothorax pulcher,Nectarivore
+Apodiformes,Trochilidae,Archilochus colubris,Nectarivore
+Apodiformes,Trochilidae,Archilochus alexandri,Nectarivore
+Apodiformes,Trochilidae,Calypte anna,Nectarivore
+Apodiformes,Trochilidae,Calypte costae,Nectarivore
+Apodiformes,Trochilidae,Stellula calliope,Nectarivore
+Apodiformes,Trochilidae,Atthis heloisa,Nectarivore
+Apodiformes,Trochilidae,Atthis ellioti,Nectarivore
+Apodiformes,Trochilidae,Selasphorus platycercus,Nectarivore
+Apodiformes,Trochilidae,Selasphorus rufus,Nectarivore
+Apodiformes,Trochilidae,Selasphorus sasin,Nectarivore
+Trogoniformes,Trogonidae,Trogon massena,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Trogon melanocephalus,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Trogon citreolus,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Trogon violaceus,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Trogon elegans,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Trogon mexicanus,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Trogon collaris,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Euptilotis neoxenus,Frugivore: upper-canopy gleaner
+Trogoniformes,Trogonidae,Pharomachrus mocinno,Frugivore: upper-canopy gleaner
+Coraciiformes,Momotidae,Hylomanes momotula,Insectivore: air hawker under canopy
+Coraciiformes,Momotidae,Aspatha gularis,Insectivore: air hawker under canopy
+Coraciiformes,Momotidae,Momotus mexicanus,Insectivore: air hawker under canopy
+Coraciiformes,Momotidae,Momotus momota,Insectivore: air hawker under canopy
+Coraciiformes,Momotidae,Electron carinatum,Insectivore: lower canopy foliage gleaner
+Coraciiformes,Momotidae,Eumomota superciliosa,Insectivore: ground gleaner
+Coraciiformes,Alcedinidae,Megaceryle torquata,Carnivore: freshwater-forager
+Coraciiformes,Alcedinidae,Megaceryle alcyon,Carnivore: freshwater-forager
+Coraciiformes,Alcedinidae,Chloroceryle amazona,Carnivore: freshwater-forager
+Coraciiformes,Alcedinidae,Chloroceryle americana,Carnivore: freshwater-forager
+Coraciiformes,Alcedinidae,Chloroceryle aenea,Carnivore: freshwater-forager
+Piciformes,Bucconidae,Notharchus hyperrhynchus,Insectivore: upper canopy foliage gleaner
+Piciformes,Bucconidae,Malacoptila panamensis,Insectivore: lower canopy foliage gleaner
+Piciformes,Galbulidae,Galbula ruficauda,Insectivore: air hawker under canopy
+Piciformes,Ramphastidae,Aulacorhynchus prasinus,Frugivore: upper-canopy gleaner
+Piciformes,Ramphastidae,Pteroglossus torquatus,Frugivore: upper-canopy gleaner
+Piciformes,Ramphastidae,Ramphastos sulfuratus,Frugivore: upper-canopy gleaner
+Piciformes,Picidae,Melanerpes lewis,Insectivore: air hawker under canopy
+Piciformes,Picidae,Melanerpes erythrocephalus,Insectivore: air hawker under canopy
+Piciformes,Picidae,Melanerpes formicivorus,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes pucherani,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes chrysogenys,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes hypopolius,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes pygmaeus,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes uropygialis,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes aurifrons,Insectivore: bark excavator
+Piciformes,Picidae,Melanerpes carolinus,Insectivore: bark excavator
+Piciformes,Picidae,Sphyrapicus thyroideus,Insectivore: bark excavator
+Piciformes,Picidae,Sphyrapicus varius,Insectivore: bark excavator
+Piciformes,Picidae,Sphyrapicus nuchalis,Insectivore: bark excavator
+Piciformes,Picidae,Sphyrapicus ruber,Insectivore: bark excavator
+Piciformes,Picidae,Picoides scalaris,Insectivore: bark excavator
+Piciformes,Picidae,Picoides nuttallii,Insectivore: bark excavator
+Piciformes,Picidae,Picoides pubescens,Insectivore: bark excavator
+Piciformes,Picidae,Picoides villosus,Insectivore: bark excavator
+Piciformes,Picidae,Picoides arizonae,Insectivore: bark excavator
+Piciformes,Picidae,Picoides stricklandi,Insectivore: bark excavator
+Piciformes,Picidae,Picoides borealis,Insectivore: bark excavator
+Piciformes,Picidae,Picoides albolarvatus,Insectivore: bark excavator
+Piciformes,Picidae,Picoides dorsalis,Insectivore: bark excavator
+Piciformes,Picidae,Picoides arcticus,Insectivore: bark excavator
+Piciformes,Picidae,Veniliornis fumigatus,Insectivore: bark excavator
+Piciformes,Picidae,Colaptes rubiginosus,Insectivore: bark excavator
+Piciformes,Picidae,Colaptes auricularis,Insectivore: bark excavator
+Piciformes,Picidae,Colaptes auratus,Insectivore: ground gleaner
+Piciformes,Picidae,Colaptes chrysoides,Insectivore: ground gleaner
+Piciformes,Picidae,Celeus castaneus,Insectivore: bark excavator
+Piciformes,Picidae,Dryocopus lineatus,Insectivore: bark excavator
+Piciformes,Picidae,Dryocopus pileatus,Insectivore: bark excavator
+Piciformes,Picidae,Campephilus guatemalensis,Insectivore: bark excavator
+Piciformes,Picidae,Campephilus principalis,Insectivore: bark excavator
+Piciformes,Picidae,Campephilus imperialis,Insectivore: bark excavator
+Passeriformes,Furnariidae,Sclerurus mexicanus,Insectivore: ground gleaner
+Passeriformes,Furnariidae,Sclerurus guatemalensis,Insectivore: ground gleaner
+Passeriformes,Furnariidae,Synallaxis erythrothorax,Insectivore: lower canopy foliage gleaner
+Passeriformes,Furnariidae,Anabacerthia variegaticeps,Insectivore: lower canopy foliage gleaner
+Passeriformes,Furnariidae,Automolus ochrolaemus,Insectivore: ground gleaner
+Passeriformes,Furnariidae,Automolus rubiginosus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Furnariidae,Xenops minutus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Furnariidae,Dendrocincla anabatina,Insectivore: ground gleaner
+Passeriformes,Furnariidae,Dendrocincla homochroa,Insectivore: ground gleaner
+Passeriformes,Furnariidae,Sittasomus griseicapillus,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Glyphorynchus spirurus,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Xiphocolaptes promeropirhynchus,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Dendrocolaptes sanctithomae,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Dendrocolaptes picumnus,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Xiphorhynchus flavigaster,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Xiphorhynchus erythropygius,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Lepidocolaptes leucogaster,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Lepidocolaptes souleyetii,Insectivore: bark gleaner
+Passeriformes,Furnariidae,Lepidocolaptes affinis,Insectivore: bark gleaner
+Passeriformes,Thamnophilidae,Taraba major,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thamnophilidae,Thamnophilus doliatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thamnophilidae,Thamnistes anabatinus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Thamnophilidae,Dysithamnus mentalis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thamnophilidae,Myrmotherula schisticolor,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thamnophilidae,Microrhopias quixensis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thamnophilidae,Cercomacra tyrannina,Insectivore: ground gleaner
+Passeriformes,Formicariidae,Formicarius analis,Insectivore: ground gleaner
+Passeriformes,Grallariidae,Grallaria guatemalensis,Insectivore: ground gleaner
+Passeriformes,Tyrannidae,Ornithion semiflavum,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Camptostoma imberbe,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiopagis viridicata,Insectivore: upper canopy foliage gleaner
+Passeriformes,Tyrannidae,Elaenia martinica,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Elaenia flavogaster,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Mionectes oleagineus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Leptopogon amaurocephalus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Zimmerius vilissimus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Oncostoma cinereigulare,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Poecilotriccus sylvia,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Todirostrum cinereum,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Rhynchocyclus brevirostris,Insectivore: upper canopy foliage gleaner
+Passeriformes,Tyrannidae,Tolmomyias sulphurescens,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Platyrinchus cancrominus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Onychorhynchus coronatus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiobius sulphureipygius,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Xenotriccus callizonus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Xenotriccus mexicanus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Mitrephanes phaeocercus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Contopus cooperi,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Contopus pertinax,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Contopus sordidulus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Contopus virens,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Contopus cinereus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax flaviventris,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax virescens,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax alnorum,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax traillii,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax albigularis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax minimus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax hammondii,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax wrightii,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax oberholseri,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax affinis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax difficilis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax occidentalis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax flavescens,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Empidonax fulvifrons,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Sayornis nigricans,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Sayornis phoebe,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Sayornis saya,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Pyrocephalus rubinus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Attila spadiceus,Insectivore: ground gleaner
+Passeriformes,Tyrannidae,Rhytipterna holerythra,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Myiarchus yucatanensis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiarchus tuberculifer,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiarchus cinerascens,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiarchus nuttingi,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiarchus crinitus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiarchus tyrannulus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Deltarhynchus flammulatus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Pitangus sulphuratus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Tyrannidae,Megarynchus pitangua,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiozetetes similis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiodynastes maculatus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Myiodynastes luteiventris,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Legatus leucophaius,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus melancholicus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus couchii,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus vociferans,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus crassirostris,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus verticalis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus tyrannus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus dominicensis,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus forficatus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tyrannus savana,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Schiffornis turdina,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Laniocera rufescens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Tyrannidae,Pachyramphus cinnamomeus,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Pachyramphus major,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Pachyramphus aglaiae,Insectivore: air hawker under canopy
+Passeriformes,Tyrannidae,Tityra semifasciata,Insectivore: upper canopy foliage gleaner
+Passeriformes,Tyrannidae,Tityra inquisitor,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cotingidae,Cotinga amabilis,Frugivore: upper-canopy gleaner
+Passeriformes,Cotingidae,Lipaugus unirufus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Pipridae,Manacus candei,Frugivore: upper-canopy gleaner
+Passeriformes,Pipridae,Chiroxiphia linearis,Frugivore: upper-canopy gleaner
+Passeriformes,Pipridae,Pipra mentalis,Frugivore: upper-canopy gleaner
+Passeriformes,Laniidae,Lanius ludovicianus,Insectivore: ground gleaner
+Passeriformes,Laniidae,Lanius excubitor,Insectivore: ground gleaner
+Passeriformes,Vireonidae,Vireo brevipennis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo griseus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo pallens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo bellii,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo atricapilla,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo nelsoni,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo vicinior,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo flavifrons,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo plumbeus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo cassinii,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo solitarius,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo huttoni,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo hypochryseus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo gilvus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo leucophrys,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo philadelphicus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo olivaceus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo flavoviridis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireo magister,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Hylophilus ochraceiceps,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Hylophilus decurtatus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Vireonidae,Vireolanius melitophrys,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Vireolanius pulchellus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Vireonidae,Cyclarhis gujanensis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Corvidae,Perisoreus canadensis,Omnivore: ground forager
+Passeriformes,Corvidae,Cyanolyca mirabilis,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanolyca nana,Insectivore: upper canopy foliage gleaner
+Passeriformes,Corvidae,Cyanolyca pumilo,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanolyca cucullata,Omnivore: arboreal forager
+Passeriformes,Corvidae,Calocitta colliei,Omnivore: arboreal forager
+Passeriformes,Corvidae,Calocitta formosa,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocorax morio,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocorax dickeyi,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocorax yncas,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocorax sanblasianus,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocorax yucatanicus,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocorax beecheii,Omnivore: arboreal forager
+Passeriformes,Corvidae,Cyanocitta stelleri,Omnivore: ground forager
+Passeriformes,Corvidae,Cyanocitta cristata,Omnivore: ground forager
+Passeriformes,Corvidae,Aphelocoma coerulescens,Omnivore: ground forager
+Passeriformes,Corvidae,Aphelocoma californica,Omnivore: ground forager
+Passeriformes,Corvidae,Aphelocoma ultramarina,Omnivore: ground forager
+Passeriformes,Corvidae,Aphelocoma unicolor,Omnivore: ground forager
+Passeriformes,Corvidae,Gymnorhinus cyanocephalus,Omnivore: ground forager
+Passeriformes,Corvidae,Nucifraga columbiana,Granivore: lower to upper canopy gleaner
+Passeriformes,Corvidae,Pica hudsonia,Omnivore: ground forager
+Passeriformes,Corvidae,Pica nuttalli,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus brachyrhynchos,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus caurinus,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus imparatus,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus sinaloae,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus ossifragus,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus cryptoleucus,Omnivore: ground forager
+Passeriformes,Corvidae,Corvus corax,Omnivore: ground forager
+Passeriformes,Alaudidae,Eremophila alpestris,Granivore: ground to undergrowth gleaner
+Passeriformes,Hirundinidae,Progne subis,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Progne sinaloae,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Progne chalybea,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Tachycineta bicolor,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Tachycineta albilinea,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Tachycineta thalassina,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Notiochelidon pileata,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Stelgidopteryx serripennis,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Riparia riparia,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Petrochelidon pyrrhonota,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Petrochelidon fulva,Insectivore: air hawker above canopy
+Passeriformes,Hirundinidae,Hirundo rustica,Insectivore: air hawker above canopy
+Passeriformes,Paridae,Poecile carolinensis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Poecile atricapillus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Poecile gambeli,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Poecile sclateri,Insectivore: upper canopy foliage gleaner
+Passeriformes,Paridae,Poecile rufescens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Poecile hudsonicus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Poecile cinctus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Baeolophus wollweberi,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Baeolophus inornatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Baeolophus ridgwayi,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Baeolophus bicolor,Insectivore: lower canopy foliage gleaner
+Passeriformes,Paridae,Baeolophus atricristatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Remizidae,Auriparus flaviceps,Insectivore: lower canopy foliage gleaner
+Passeriformes,Aegithalidae,Psaltriparus minimus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Sittidae,Sitta canadensis,Insectivore: bark gleaner
+Passeriformes,Sittidae,Sitta carolinensis,Insectivore: bark gleaner
+Passeriformes,Sittidae,Sitta pygmaea,Insectivore: bark gleaner
+Passeriformes,Sittidae,Sitta pusilla,Insectivore: bark gleaner
+Passeriformes,Certhiidae,Certhia americana,Insectivore: bark gleaner
+Passeriformes,Troglodytidae,Campylorhynchus zonatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Campylorhynchus megalopterus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Campylorhynchus chiapensis,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Campylorhynchus rufinucha,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Campylorhynchus gularis,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Campylorhynchus jocosus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Campylorhynchus yucatanicus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Campylorhynchus brunneicapillus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Salpinctes obsoletus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Catherpes mexicanus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Hylorchilus sumichrasti,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Hylorchilus navai,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Thryothorus maculipectus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Thryothorus rufalbus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Thryothorus sinaloa,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Thryothorus pleurostictus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Thryothorus ludovicianus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Thryothorus felix,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Thryothorus modestus,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Thryomanes bewickii,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Troglodytes aedon,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Troglodytes rufociliatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Troglodytes hiemalis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Cistothorus platensis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Cistothorus palustris,Insectivore: lower canopy foliage gleaner
+Passeriformes,Troglodytidae,Uropsila leucogastra,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Henicorhina leucosticta,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Henicorhina leucophrys,Insectivore: ground gleaner
+Passeriformes,Troglodytidae,Microcerculus philomela,Insectivore: ground gleaner
+Passeriformes,Polioptilidae,Ramphocaenus melanurus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Polioptilidae,Polioptila caerulea,Insectivore: lower canopy foliage gleaner
+Passeriformes,Polioptilidae,Polioptila californica,Insectivore: lower canopy foliage gleaner
+Passeriformes,Polioptilidae,Polioptila melanura,Insectivore: upper canopy foliage gleaner
+Passeriformes,Polioptilidae,Polioptila nigriceps,Insectivore: lower canopy foliage gleaner
+Passeriformes,Polioptilidae,Polioptila albiloris,Insectivore: lower canopy foliage gleaner
+Passeriformes,Polioptilidae,Polioptila plumbea,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cinclidae,Cinclus mexicanus,Carnivore: freshwater-forager
+Passeriformes,Regulidae,Regulus satrapa,Insectivore: lower canopy foliage gleaner
+Passeriformes,Regulidae,Regulus calendula,Insectivore: lower canopy foliage gleaner
+Passeriformes,Phylloscopidae,Phylloscopus borealis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Sylviidae,Chamaea fasciata,Insectivore: lower canopy foliage gleaner
+Passeriformes,Turdidae,Oenanthe oenanthe,Insectivore: ground gleaner
+Passeriformes,Turdidae,Sialia sialis,Insectivore: ground gleaner
+Passeriformes,Turdidae,Sialia mexicana,Insectivore: air hawker under canopy
+Passeriformes,Turdidae,Sialia currucoides,Insectivore: air hawker under canopy
+Passeriformes,Turdidae,Myadestes townsendi,Insectivore: air hawker under canopy
+Passeriformes,Turdidae,Myadestes occidentalis,Insectivore: air hawker under canopy
+Passeriformes,Turdidae,Myadestes unicolor,Insectivore: air hawker under canopy
+Passeriformes,Turdidae,Catharus aurantiirostris,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus occidentalis,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus frantzii,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus mexicanus,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus dryas,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus fuscescens,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus minimus,Insectivore: ground gleaner
+Passeriformes,Turdidae,Catharus ustulatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Turdidae,Catharus guttatus,Insectivore: ground gleaner
+Passeriformes,Turdidae,Hylocichla mustelina,Insectivore: ground gleaner
+Passeriformes,Turdidae,Turdus infuscatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Turdidae,Turdus plebejus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Turdidae,Turdus grayi,Insectivore: ground gleaner
+Passeriformes,Turdidae,Turdus assimilis,Insectivore: ground gleaner
+Passeriformes,Turdidae,Turdus rufopalliatus,Insectivore: ground gleaner
+Passeriformes,Turdidae,Turdus rufitorques,Insectivore: ground gleaner
+Passeriformes,Turdidae,Turdus migratorius,Insectivore: ground gleaner
+Passeriformes,Turdidae,Ixoreus naevius,Insectivore: ground gleaner
+Passeriformes,Turdidae,Ridgwayia pinicola,Insectivore: lower canopy foliage gleaner
+Passeriformes,Mimidae,Dumetella carolinensis,Insectivore: ground gleaner
+Passeriformes,Mimidae,Melanoptila glabrirostris,Insectivore: ground gleaner
+Passeriformes,Mimidae,Mimus polyglottos,Insectivore: ground gleaner
+Passeriformes,Mimidae,Mimus gilvus,Insectivore: ground gleaner
+Passeriformes,Mimidae,Oreoscoptes montanus,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma rufum,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma longirostre,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma cinereum,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma bendirei,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma ocellatum,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma curvirostre,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma redivivum,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma crissale,Insectivore: ground gleaner
+Passeriformes,Mimidae,Toxostoma lecontei,Insectivore: ground gleaner
+Passeriformes,Mimidae,Melanotis caerulescens,Insectivore: ground gleaner
+Passeriformes,Mimidae,Melanotis hypoleucus,Insectivore: ground gleaner
+Passeriformes,Motacillidae,Motacilla flava,Insectivore: ground gleaner
+Passeriformes,Motacillidae,Anthus cervinus,Insectivore: ground gleaner
+Passeriformes,Motacillidae,Anthus rubescens,Insectivore: ground gleaner
+Passeriformes,Motacillidae,Anthus spragueii,Insectivore: ground gleaner
+Passeriformes,Bombycillidae,Bombycilla garrulus,Frugivore: upper-canopy gleaner
+Passeriformes,Bombycillidae,Bombycilla cedrorum,Frugivore: upper-canopy gleaner
+Passeriformes,Ptilogonatidae,Ptilogonys cinereus,Insectivore: air hawker above canopy
+Passeriformes,Ptilogonatidae,Phainopepla nitens,Insectivore: air hawker under canopy
+Passeriformes,Peucedramidae,Peucedramus taeniatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Calcariidae,Calcarius lapponicus,Granivore: ground to undergrowth gleaner
+Passeriformes,Calcariidae,Calcarius ornatus,Granivore: ground to undergrowth gleaner
+Passeriformes,Calcariidae,Calcarius pictus,Granivore: ground to undergrowth gleaner
+Passeriformes,Calcariidae,Rhynchophanes mccownii,Granivore: ground to undergrowth gleaner
+Passeriformes,Calcariidae,Plectrophenax nivalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Parulidae,Vermivora bachmanii,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Vermivora cyanoptera,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Vermivora chrysoptera,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis peregrina,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis celata,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis ruficapilla,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis virginiae,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis crissalis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis luciae,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oreothlypis superciliosa,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Parula americana,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Parula pitiayumi,Insectivore: upper canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica petechia,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica pensylvanica,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica magnolia,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica tigrina,Insectivore: upper canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica caerulescens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica coronata,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica nigrescens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica chrysoparia,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica virens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica townsendi,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica occidentalis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica fusca,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica dominica,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica graciae,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica pinus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica kirtlandii,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica discolor,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica palmarum,Insectivore: ground gleaner
+Passeriformes,Parulidae,Dendroica castanea,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica striata,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Dendroica cerulea,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Mniotilta varia,Insectivore: bark gleaner
+Passeriformes,Parulidae,Setophaga ruticilla,Insectivore: air hawker under canopy
+Passeriformes,Parulidae,Protonotaria citrea,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Helmitheros vermivorum,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Limnothlypis swainsonii,Insectivore: ground gleaner
+Passeriformes,Parulidae,Seiurus aurocapilla,Insectivore: ground gleaner
+Passeriformes,Parulidae,Parkesia noveboracensis,Insectivore: ground gleaner
+Passeriformes,Parulidae,Parkesia motacilla,Insectivore: ground gleaner
+Passeriformes,Parulidae,Oporornis formosus,Insectivore: ground gleaner
+Passeriformes,Parulidae,Oporornis agilis,Insectivore: ground gleaner
+Passeriformes,Parulidae,Oporornis philadelphia,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Oporornis tolmiei,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Geothlypis trichas,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Geothlypis beldingi,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Geothlypis flavovelata,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Geothlypis speciosa,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Geothlypis nelsoni,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Geothlypis poliocephala,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Wilsonia citrina,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Wilsonia pusilla,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Wilsonia canadensis,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Cardellina rubrifrons,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Ergaticus ruber,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Ergaticus versicolor,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Myioborus pictus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Myioborus miniatus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Parulidae,Euthlypis lachrymosa,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Basileuterus culicivorus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Basileuterus rufifrons,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Basileuterus belli,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Icteria virens,Insectivore: lower canopy foliage gleaner
+Passeriformes,Parulidae,Coereba flaveola,Nectarivore
+Passeriformes,Thraupidae,Chlorospingus ophthalmicus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thraupidae,Rhodinocichla rosea,Insectivore: ground gleaner
+Passeriformes,Thraupidae,Eucometis penicillata,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thraupidae,Lanio aurantius,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thraupidae,Ramphocelus sanguinolentus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Thraupidae,Ramphocelus passerinii,Frugivore: upper-canopy gleaner
+Passeriformes,Thraupidae,Thraupis episcopus,Frugivore: upper-canopy gleaner
+Passeriformes,Thraupidae,Thraupis abbas,Frugivore: upper-canopy gleaner
+Passeriformes,Thraupidae,Tangara cabanisi,Frugivore: upper-canopy gleaner
+Passeriformes,Thraupidae,Tangara larvata,Frugivore: upper-canopy gleaner
+Passeriformes,Thraupidae,Chlorophanes spiza,Frugivore: upper-canopy gleaner
+Passeriformes,Thraupidae,Cyanerpes lucidus,Nectarivore
+Passeriformes,Thraupidae,Cyanerpes cyaneus,Nectarivore
+Passeriformes,Emberizidae,Volatinia jacarina,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Sporophila torqueola,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Sporophila minuta,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Oryzoborus funereus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Tiaris olivaceus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Haplospiza rustica,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Diglossa baritula,Nectarivore
+Passeriformes,Emberizidae,Sicalis luteola,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Arremon aurantiirostris,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Arremon brunneinucha,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Arremon virenticeps,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Arremonops rufivirgatus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Arremonops chloronotus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Atlapetes albinucha,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Atlapetes pileatus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Pipilo ocai,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Pipilo chlorurus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Pipilo maculatus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Pipilo erythrophthalmus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Aimophila rufescens,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Aimophila ruficeps,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Aimophila notosticta,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melozone leucotis,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Melozone biarcuata,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melozone kieneri,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melozone fusca,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melozone albicollis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melozone crissalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melozone aberti,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Peucaea sumichrasti,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Peucaea carpalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Peucaea ruficauda,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Peucaea humeralis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Peucaea mystacalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Peucaea botterii,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Peucaea cassinii,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Peucaea aestivalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Oriturus superciliosus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella arborea,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella passerina,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella pallida,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella breweri,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella pusilla,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella wortheni,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Spizella atrogularis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Pooecetes gramineus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Chondestes grammacus,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Amphispiza quinquestriata,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Amphispiza bilineata,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Amphispiza belli,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Calamospiza melanocorys,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Passerculus sandwichensis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Ammodramus savannarum,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Ammodramus bairdii,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Ammodramus henslowii,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Ammodramus leconteii,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Ammodramus nelsoni,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Ammodramus caudacutus,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Ammodramus maritimus,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Xenospiza baileyi,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Passerella iliaca,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melospiza melodia,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melospiza lincolnii,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Melospiza georgiana,Insectivore: ground gleaner
+Passeriformes,Emberizidae,Zonotrichia capensis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Zonotrichia albicollis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Zonotrichia querula,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Zonotrichia leucophrys,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Zonotrichia atricapilla,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Junco hyemalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Emberizidae,Junco phaeonotus,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Piranga roseogularis,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga flava,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga rubra,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga olivacea,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga ludoviciana,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga bidentata,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga leucoptera,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Piranga erythrocephala,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Habia rubica,Insectivore: lower canopy foliage gleaner
+Passeriformes,Cardinalidae,Habia fuscicauda,Insectivore: lower canopy foliage gleaner
+Passeriformes,Cardinalidae,Caryothraustes poliogaster,Insectivore: lower canopy foliage gleaner
+Passeriformes,Cardinalidae,Rhodothraupis celaeno,Granivore: lower to upper canopy gleaner
+Passeriformes,Cardinalidae,Cardinalis cardinalis,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Cardinalis sinuatus,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Pheucticus chrysopeplus,Granivore: lower to upper canopy gleaner
+Passeriformes,Cardinalidae,Pheucticus ludovicianus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Cardinalidae,Pheucticus melanocephalus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Cardinalidae,Granatellus venustus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Cardinalidae,Granatellus sallaei,Insectivore: lower canopy foliage gleaner
+Passeriformes,Cardinalidae,Amaurospiza concolor,Granivore: lower to upper canopy gleaner
+Passeriformes,Cardinalidae,Cyanocompsa cyanoides,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Cyanocompsa parellina,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Passerina caerulea,Insectivore: ground gleaner
+Passeriformes,Cardinalidae,Passerina amoena,Insectivore: ground gleaner
+Passeriformes,Cardinalidae,Passerina cyanea,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Passerina rositae,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Passerina leclancherii,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Passerina versicolor,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Passerina ciris,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Spiza americana,Granivore: ground to undergrowth gleaner
+Passeriformes,Cardinalidae,Saltator coerulescens,Frugivore: ground to lower canopy gleaner
+Passeriformes,Cardinalidae,Saltator maximus,Frugivore: ground to lower canopy gleaner
+Passeriformes,Cardinalidae,Saltator atriceps,Frugivore: ground to lower canopy gleaner
+Passeriformes,Icteridae,Dolichonyx oryzivorus,Granivore: ground to undergrowth gleaner
+Passeriformes,Icteridae,Agelaius phoeniceus,Insectivore: ground gleaner
+Passeriformes,Icteridae,Agelaius tricolor,Insectivore: ground gleaner
+Passeriformes,Icteridae,Sturnella magna,Insectivore: ground gleaner
+Passeriformes,Icteridae,Sturnella neglecta,Insectivore: ground gleaner
+Passeriformes,Icteridae,Xanthocephalus xanthocephalus,Granivore: ground to undergrowth gleaner
+Passeriformes,Icteridae,Dives dives,Insectivore: ground gleaner
+Passeriformes,Icteridae,Euphagus carolinus,Insectivore: ground gleaner
+Passeriformes,Icteridae,Euphagus cyanocephalus,Insectivore: ground gleaner
+Passeriformes,Icteridae,Quiscalus quiscula,Omnivore: ground forager
+Passeriformes,Icteridae,Quiscalus major,Omnivore: ground forager
+Passeriformes,Icteridae,Quiscalus mexicanus,Omnivore: ground forager
+Passeriformes,Icteridae,Quiscalus palustris,Omnivore: ground forager
+Passeriformes,Icteridae,Molothrus aeneus,Granivore: ground to undergrowth gleaner
+Passeriformes,Icteridae,Molothrus ater,Granivore: ground to undergrowth gleaner
+Passeriformes,Icteridae,Molothrus oryzivorus,Granivore: ground to undergrowth gleaner
+Passeriformes,Icteridae,Icterus wagleri,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus maculialatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus prosthemelas,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus spurius,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Icterus cucullatus,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Icterus chrysater,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus mesomelas,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus pustulatus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus bullockii,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus auratus,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus pectoralis,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Icterus gularis,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Icterus graduacauda,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Icterus galbula,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Icterus abeillei,Insectivore: lower canopy foliage gleaner
+Passeriformes,Icteridae,Icterus parisorum,Insectivore: upper canopy foliage gleaner
+Passeriformes,Icteridae,Amblycercus holosericeus,Omnivore: arboreal forager
+Passeriformes,Icteridae,Cacicus melanicterus,Omnivore: arboreal forager
+Passeriformes,Icteridae,Psarocolius wagleri,Frugivore: upper-canopy gleaner
+Passeriformes,Icteridae,Psarocolius montezuma,Frugivore: upper-canopy gleaner
+Passeriformes,Fringillidae,Euphonia affinis,Frugivore: ground to lower canopy gleaner
+Passeriformes,Fringillidae,Euphonia hirundinacea,Frugivore: ground to lower canopy gleaner
+Passeriformes,Fringillidae,Euphonia elegantissima,Frugivore: ground to lower canopy gleaner
+Passeriformes,Fringillidae,Euphonia gouldi,Frugivore: ground to lower canopy gleaner
+Passeriformes,Fringillidae,Euphonia minuta,Frugivore: ground to lower canopy gleaner
+Passeriformes,Fringillidae,Chlorophonia occipitalis,Frugivore: upper-canopy gleaner
+Passeriformes,Fringillidae,Leucosticte tephrocotis,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Leucosticte atrata,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Leucosticte australis,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Pinicola enucleator,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Carpodacus purpureus,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Carpodacus cassinii,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Carpodacus mexicanus,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Loxia curvirostra,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Loxia leucoptera,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Acanthis flammea,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Acanthis hornemanni,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Spinus pinus,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Spinus atriceps,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Spinus notatus,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Spinus psaltria,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Spinus lawrencei,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Spinus tristis,Granivore: lower to upper canopy gleaner
+Passeriformes,Fringillidae,Coccothraustes abeillei,Granivore: ground to undergrowth gleaner
+Passeriformes,Fringillidae,Coccothraustes vespertinus,Granivore: ground to undergrowth gleaner
