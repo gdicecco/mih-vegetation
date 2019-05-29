@@ -300,6 +300,9 @@ write.csv(null_output_bins, "data/bbc_null_output_bins.csv", row.names = FALSE)
 
 ## Null model results
 
+null_output <- read.csv("data/bbc_null_output.csv")
+null_output_bins <- read.csv("data/bbc_null_output_bins.csv")
+
 null_output_z <- null_output %>%
   group_by(siteID) %>%
   summarize(FGnull_mean = mean(FGNull),
@@ -307,7 +310,7 @@ null_output_z <- null_output %>%
             FGObs = mean(FGObs),
             ndvi.mean = mean(ndvi.mean),
             Sobs = mean(Sobs),
-            FGnull_pct = sum(FGObs > FGNull)/1000) %>%
+            FGnull_pct = sum(FGObs < FGNull)/1000) %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
 
 null_output_bins_z <- null_output_bins %>%
@@ -317,7 +320,7 @@ null_output_bins_z <- null_output_bins %>%
             FGObs = mean(FGObs),
             ndvi.mean = mean(ndvi.mean),
             Sobs = mean(Sobs),
-            FGnull_pct = sum(FGObs > FGNull)/1000) %>%
+            FGnull_pct = sum(FGObs < FGNull)/1000) %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
 
 ## Z score null model plots
@@ -344,7 +347,7 @@ ggplot(null_output_z, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
   geom_point() + 
   geom_hline(yintercept = 0.5, lty = 2) +
   geom_smooth(method = "lm", se = F, col = "black") +
-  labs(x = "NDVI", y = "Proportion sims obs > null", col = "Obs. Foraging Guilds") +
+  labs(x = "NDVI", y = "Proportion sims obs < null", col = "Obs. Foraging Guilds") +
   ggtitle("BBC, no bins")
 ggsave("Figures/BBC_null_mod_percentile.pdf", units = "in", width = 8, height = 6)
 
@@ -352,6 +355,6 @@ ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
   geom_point() + 
   geom_hline(yintercept = 0.5, lty = 2) +
   geom_smooth(method = "lm", se = F, col = "black") +
-  labs(x = "NDVI", y = "Proportion sims obs > null", col = "Obs. Foraging Guilds") +
+  labs(x = "NDVI", y = "Proportion sims obs < null", col = "Obs. Foraging Guilds") +
   ggtitle("BBC, NDVI bins")
 ggsave("Figures/BBC_null_mod_bins_percentile.pdf", units = "in", width = 8, height = 6)
