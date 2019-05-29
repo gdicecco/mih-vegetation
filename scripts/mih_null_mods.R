@@ -124,6 +124,31 @@ null_output_bins_agg$z_score <- (null_output_bins_agg$FGObs - null_output_bins_a
 
 hist(null_output_bins_agg$z_score)
 
+
+null_output <- read.csv("data/bbs_null_output.csv", header = TRUE)
+null_output_bins <- read.csv("data/bbs_null_output_bins.csv", header = TRUE)
+
+null_output_agg <- null_output %>%
+  group_by(stateroute) %>%
+  summarize(FGnull_mean = mean(FGNull),
+            FGnull_sd = sd(FGNull),
+            FGObs = mean(FGObs),
+            ndvi.mean = mean(ndvi.mean),
+            Sobs = mean(Sobs),
+            FGnull_pct = sum(FGObs < FGNull)/1000) %>%
+  mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+null_output_bins_agg <- null_output_bins %>%
+  group_by(stateroute) %>%
+  summarize(FGnull_mean = mean(FGNull),
+            FGnull_sd = sd(FGNull),
+            FGObs = mean(FGObs),
+            ndvi.mean = mean(ndvi.mean),
+            Sobs = mean(Sobs),
+            FGnull_pct = sum(FGObs < FGNull)/1000) %>%
+  mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+
 ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = z_score)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 0, col = "black", lwd = 1.5, lty = "dashed") + geom_smooth(method = "lm", se = F, color = "red") +xlab("Mean NDVI")+ ylab("Number of Guilds z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 ggsave("Figures/FG_ndvi_binz.pdf")
 
@@ -134,5 +159,20 @@ null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:mean_FGNull
 ggplot(null_long_bins, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 ggsave("FG_ndvi_binned.pdf")
 
+ggplot(null_output_agg, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
+  geom_point() + theme_classic() +
+  geom_hline(yintercept = 0.5, lty = 2) +
+  geom_smooth(method = "lm", se = F, col = "black") +
+  labs(x = "NDVI", y = "Proportion sims obs < null", col = "Obs. Foraging Guilds") +
+  ggtitle("BBS, no bins")
+ggsave("Figures/BBS_null_mod_percentile.pdf", units = "in", width = 8, height = 6)
+
+ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
+  geom_point() + theme_classic() + 
+  geom_hline(yintercept = 0.5, lty = 2) +
+  geom_smooth(method = "lm", se = F, col = "black") +
+  labs(x = "NDVI", y = "Proportion sims obs < null", col = "Obs. Foraging Guilds") +
+  ggtitle("BBS, NDVI bins")
+ggsave("Figures/BBS_null_mod_bins_percentile.pdf", units = "in", width = 8, height = 6)
 
 
