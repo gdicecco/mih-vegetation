@@ -41,9 +41,9 @@ null_pool1 <- data.frame(env_bbs$aou, env_bbs$Trophic.guild) %>%
 
 #### null model ####
 null_output = c()
-for(route in unique(env_bbs$stateroute)) {
+for(rt in unique(env_bbs$stateroute)) {
   init.time <- Sys.time()
-  subdata = filter(env_bbs, stateroute == route)
+  subdata = filter(env_bbs, stateroute == rt)
 
     for(r in 1:999){
       stateroute <- unique(subdata$stateroute)
@@ -56,7 +56,7 @@ for(route in unique(env_bbs$stateroute)) {
     }
   
   end.time <- Sys.time()
-  print(paste(route, "-", end.time - init.time, "seconds elapsed"))
+  print(paste(rt, "-", end.time - init.time, "seconds elapsed"))
   
     } # end r loop
 
@@ -88,11 +88,11 @@ binsize <- 0.05
 env_bbs$bin <- binsize*floor(env_bbs$ndvi.mean/binsize) + binsize/2
 
 null_output_bins = c() 
-for(route in unique(env_bbs$stateroute)) {
+for(rt in unique(env_bbs$stateroute)) {
   
   init.time <- Sys.time()
   
-  subdata = filter(env_bbs, stateroute == route)
+  subdata = filter(env_bbs, stateroute == rt)
 
   null_pool2 = filter(env_bbs, bin == unique(subdata$bin)) %>%
     filter(!(is.na(Trophic.guild))) %>%
@@ -108,7 +108,7 @@ for(route in unique(env_bbs$stateroute)) {
     null_output_bins = rbind(null_output_bins, c(stateroute, r, ndvi, FGobs, Sobs, FGNull))      
   }
   end.time <- Sys.time()
-  print(paste(route, "-", end.time - init.time, "seconds elapsed"))
+  print(paste(rt, "-", end.time - init.time, "seconds elapsed"))
 } # end r loop
 
 null_output_bins = data.frame(null_output_bins)
