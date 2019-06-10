@@ -195,12 +195,12 @@ nindiv <- bbc %>%
 
 rarefaction <- ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
   geom_line(lwd = 1.5) +
-  scale_color_viridis_c()+ 
-  labs(x = "Observed number of individuals", y = "E(S)") +
+  scale_color_viridis_c(guide = guide_colorbar(barheight = 10))+ 
+  labs(x = "Observed number of individuals", y = "E(S)", color = "Mean NDVI") +
   geom_vline(xintercept = 175, lty = 2) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 28)) 
+  theme(legend.title = element_text(size = 28), legend.text=element_text(size = 28))
 ggsave("Figures/rarefaction_curves_BBC.pdf")
 
 ## E(S) vs. NDVI 
@@ -240,8 +240,8 @@ grid_effects <- plot_grid(rarefaction + theme(legend.position="none"),
                           labels = c("A", "B", "C"),
                           label_size = 28,
                           nrow = 1) 
-final_fig<- plot_grid(grid_effects, legend, rel_widths = c(2, 0.8))
-ggsave("Figures/cowplot_BBC.pdf", width = 30, height = 20)
+final_fig<- plot_grid(grid_effects, legend, rel_widths = c(2, 0.2))
+ggsave("Figures/cowplot_BBC.pdf", width = 30, height = 8)
 
 
 
