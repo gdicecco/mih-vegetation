@@ -121,7 +121,7 @@ gimms_df <- data.frame(file_name = gimms_files[-1], year = as.numeric(substr(gim
 
 bbc_ndvi <- data.frame(siteID = c(), year = c(), NDVI = c())
 
-setwd("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
+# setwd("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
 for(yr in bbc_years) {
   files <- filter(gimms_df, year == yr)
   
@@ -139,7 +139,9 @@ for(yr in bbc_years) {
                     data.frame(siteID = sites$siteID, year = yr, NDVI = c(ndvi.means)))
 }
 
-write.csv(bbc_ndvi, "data/bbc_sites_ndvi.csv", row.names = F)
+# write.csv(bbc_ndvi, "data/bbc_sites_ndvi.csv", row.names = F)
+
+
 bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F)
 
 # Spp Rich vs NDVI - breeders and visitors
@@ -147,12 +149,15 @@ bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F)
 sppRich <- bbc %>%
   left_join(bbc_ndvi, by = c("siteID", "year")) %>%
   group_by(siteID, NDVI, status) %>%
-  summarize(nSpp = n_distinct(new_species))
+  summarize(nSpp = n_distinct(new_species)) %>%
+  filter(status == "breeder")
 
-ggplot(sppRich, aes(x = NDVI, y = nSpp, col = status)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F) +
-  labs(y = "S")
+ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
+  geom_point(size = 2, col = "black") +
+  labs(y = "Number of Species") +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
 ggsave("Figures/spp_rich_ndvi.pdf")
 
 # For each species, population density (count/area - breeding pairs/hectare) vs. NDVI
@@ -164,9 +169,12 @@ bbc_popdens <- bbc %>%
   summarize(NDVI = mean(NDVI),
             CommDens = sum(nTerritory)/mean(as.numeric(area)))
 
-ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 2) +
+popdens <- ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 2) +
   geom_smooth(method = "lm", se = F) +
-  labs(x = "Mean NDVI", y = "Community territory density")
+  labs(x = "Mean NDVI", y = "Community territory density") +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
 ggsave("Figures/community_density_vs_NDVI.pdf")
 
 ### Rarefaction curves for BBC sites
@@ -185,11 +193,14 @@ nindiv <- bbc %>%
   group_by(siteID) %>%
   mutate(obsIndiv = row_number())
 
-ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
-  geom_line() +
+rarefaction <- ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
+  geom_line(lwd = 1.5) +
   scale_color_viridis_c()+ 
   labs(x = "Observed number of individuals", y = "E(S)") +
-  geom_vline(xintercept = 175, lty = 2)
+  geom_vline(xintercept = 175, lty = 2) +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  theme(legend.title=element_blank(), legend.text=element_text(size = 28)) 
 ggsave("Figures/rarefaction_curves_BBC.pdf")
 
 ## E(S) vs. NDVI 
@@ -205,15 +216,36 @@ raref_ndvi <- nindiv %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T)) %>%
   left_join(siteArea, by = "siteID")
 
-ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
-  geom_smooth(method = "lm", color = "black", se = F) +
+raref_points <- ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
+  geom_smooth(method = "lm", color = "blue", se = F) +
   geom_point() +
-  labs(x = "NDVI", y = "E(S)")
+  labs(x = "NDVI", y = "E(S)") +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
 ggsave("Figures/estS_ndvi_bbc.pdf")
 
 ggplot(raref_ndvi, aes(x = area, y = rarefy)) + geom_point() + geom_smooth(method = "lm", se = F) +
   labs(x = "Site area (ha)", y = "E(S)")
 ggsave("Figures/estS_vs_area.pdf")
+
+
+#### cowplot ####
+legend <- get_legend(rarefaction) 
+# theme_set(theme_cowplot(font_size=20,font_family = "URWHelvetica"))
+grid_effects <- plot_grid(rarefaction + theme(legend.position="none"),
+                          raref_points + theme(legend.position="none"),
+                          popdens + theme(legend.position="none"),
+                          align = 'hv',
+                          labels = c("A", "B", "C"),
+                          label_size = 28,
+                          nrow = 1) 
+final_fig<- plot_grid(grid_effects, legend, rel_widths = c(2, 0.8))
+ggsave("Figures/cowplot_BBC.pdf", width = 30, height = 20)
+
+
+
+
 
 ## Foraging niche null model
 
@@ -334,11 +366,14 @@ ggplot(null_output_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
 ggsave("Figures/BBC_null_mod_z.pdf", units = "in", width = 8, height = 6)
 
 ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
-  geom_point() +
+  geom_point(size = 2) +
   geom_hline(yintercept = 0, lty = 2) +
   geom_smooth(method = "lm", se = F, col = "black") +
   labs(x = "NDVI", y = "Foraging guild Z-score", col = "Obs. Foraging Guilds") +
-  ggtitle("BBC, NDVI bins")
+  ggtitle("BBC, NDVI bins") + theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) +
+  theme(plot.title = element_text(size=32)) 
 ggsave("Figures/BBC_null_mod_bins_z.pdf", units = "in", width = 8, height = 6)
 
 ## Percentile null model plots
