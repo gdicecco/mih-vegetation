@@ -151,7 +151,7 @@ sppRich <- bbc %>%
   group_by(siteID, NDVI, status) %>%
   summarize(nSpp = n_distinct(new_species)) %>%
   filter(status == "breeder")
-
+# write.csv(sppRich,"data/env_bbc_rich.csv", row.names =FALSE)
 ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   geom_point(size = 2, col = "black") +
   labs(y = "Number of Species") +

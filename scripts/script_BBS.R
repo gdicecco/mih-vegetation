@@ -116,8 +116,9 @@ ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
 
 # ndvi rich
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
-ni_r = ggplot(env_bbs_rich, aes(x = ndvi.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) +ylim(0,2)
-ggsave("Figures/rich_ndvi.png", height = 8, width = 12)
+# write.csv(env_bbs_rich, "data/env_bbs_rich.csv", row.names = FALSE)
+ni_r = ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("Species Richness")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
+ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
 # nbcd abun
 nd_a = ggplot(env_bbs_abun, aes(x = nbcd.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
