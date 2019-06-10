@@ -207,11 +207,28 @@ bbs_niches <- env_bbs %>%
          "spp_ndvi_max" = "NDVI.max")
 
 ### NDVI range vs. mean NDVI
-bbs_niches %>%
-  distinct(aou, Trophic.guild, spp_ndvi_mean, spp_ndvi_max, spp_ndvi_min) %>%
-  ggplot(aes(x = spp_ndvi_mean, y = spp_ndvi_max - spp_ndvi_min)) + geom_point() +
-    labs(x = "Mean NDVI", y = "NDVI Range")
+col_scale <- c("darkgoldenrod2",
+                        "palevioletred", "lightpink",
+                        "purple2", "mediumorchid1",
+                        "seagreen4", 
+                        "navy","dodgerblue4", "dodgerblue2", 
+                        "deepskyblue3", "cornflowerblue", 
+                        "cyan3", "lightskyblue2",
+                        "violetred3", 
+                         "springgreen3", "palegreen1") 
 
+ndvi_range <- bbs_niches %>%
+  distinct(aou, Trophic.guild, spp_ndvi_mean, spp_ndvi_max, spp_ndvi_min) %>%
+  ggplot(aes(x = spp_ndvi_mean, y = spp_ndvi_max - spp_ndvi_min)) + 
+  geom_point(aes(size = 2)) + 
+  scale_color_manual(values = col_scale) + 
+    labs(x = "Mean NDVI", y = "NDVI Range") +
+  theme_classic() +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  guides(colour = guide_legend(override.aes = list(shape = 15))) +
+  theme(legend.title=element_blank(), legend.text=element_blank(), legend.key.width=unit(2, "lines")) +
+  theme(legend.position = "none")
 ggsave("Figures/species_ndvi_range_vs_meanNDVI.pdf", units = "in", height = 6, width = 8)
 
 ### avg NDVI range vs. NDVI bin
@@ -220,37 +237,42 @@ binsize <- 0.05
 
 bbs_niches$ndvi_bin <- binsize*floor(bbs_niches$route_ndvi/binsize) + binsize/2
 
-bbs_niches %>%
+# need to add error bars
+range_bins <- bbs_niches %>%
   group_by(ndvi_bin) %>%
-  summarize(avg_range = mean(spp_ndvi_max - spp_ndvi_min, na.rm = T)) %>%
-  ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 2) +
-  labs(x = "NDVI bin", y = "Average NDVI range")
+  distinct(aou, spp_ndvi_max, spp_ndvi_min) %>%
+  summarize(avg_range = mean(spp_ndvi_max - spp_ndvi_min, na.rm = T),
+            lower = sd(spp_ndvi_max - spp_ndvi_min), 
+            upper = sd(spp_ndvi_max - spp_ndvi_min)) %>%
+  ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 6, shape = 15) +
+  labs(x = "NDVI bin", y = "Average NDVI range") +
+  geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper))) +
+  theme_classic() +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  guides(colour = guide_legend(override.aes = list(shape = 15))) +
+  theme(legend.title=element_blank(), legend.text=element_blank(), legend.key.width=unit(2, "lines")) +
+  theme(legend.position = "none")
 ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
 
 ### NDVI range for spp in each foraging guild
-
+# redo labels
 trophic_abbv <- bbs_niches %>%
   ungroup() %>%
   distinct(Trophic.guild) %>%
-  mutate(abbv = abbreviate(Trophic.guild, minlength = 3)) %>%
+  mutate(manual_abb <- c("G:gu","I:uc","I:be",    
+                         "I:ac","N",
+                         "I:gc","O:gf",
+                         "I:gg","I:lc", 
+                         "I:bg","F:uc",
+                         "H:gf","C:gh",  
+                         "G:lc","F:lc","O:af")) %>%
   arrange(Trophic.guild)
-trophic_abbv$color <- c("deeppink", 
-                        "palevioletred", "lightpink",
-                        "mediumorchid", "mediumorchid1",
-                        "green3",
-                        "dodgerblue4", "dodgerblue2", 
-                        "deepskyblue3", 
-                        "steelblue", "steelblue3", "steelblue2", "steelblue1", 
-                        "violetred3", 
-                        "seagreen3", "seagreen2") 
+trophic_abbv$color <- col_scale
+trophic_abbv <- data.frame(trophic_abbv)
+names(trophic_abbv) <- c("Trophic.guild", "manual_abb", "color")
 
-trophic_colors <- trophic_abbv$color
-names(trophic_colors) <- trophic_abbv$Trophic.guild
-
-trophic_labels <- trophic_abbv$abbv
-names(trophic_labels) <- trophic_abbv$Trophic.guild
-
-bbs_niches %>%
+trophic_boxplot <- bbs_niches %>%
   ungroup() %>%
   distinct(aou, Trophic.guild, spp_ndvi_min, spp_ndvi_max, spp_ndvi_mean) %>%
   na.omit(.) %>%
@@ -263,8 +285,14 @@ bbs_niches %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title.x = element_blank()) +
   ylim(0, 1) +
   labs(y = "NDVI range", fill = "Trophic guild") +
-  scale_fill_manual(values = trophic_colors) +
-  scale_x_discrete(labels = trophic_labels)
+  xlab("") +
+  scale_fill_manual(values = trophic_abbv$color) +
+  scale_x_discrete(labels = trophic_abbv$manual_abb) +
+  theme_classic() +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  guides(colour = guide_legend(override.aes = list(shape = 15))) +
+  theme(legend.title=element_blank(), legend.text=element_blank(), legend.key.width=unit(2, "lines")) 
 ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
 
 ### Spp by foraging guild in each NDVI bin
@@ -273,9 +301,28 @@ foraging_rich <- bbs_niches %>%
   group_by(ndvi_bin) %>%
   distinct(aou, Trophic.guild) %>%
   group_by(ndvi_bin, Trophic.guild) %>%
-  summarize(nSpp = n_distinct(aou))
+  summarize(nSpp = n_distinct(aou)) %>%
+  left_join(trophic_abbv, by = "Trophic.guild")
 
-ggplot(foraging_rich, aes(x = ndvi_bin, y = nSpp, fill = Trophic.guild)) +
-  geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_colors) +
-  labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild")
+forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = nSpp, fill = Trophic.guild)) +
+  geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color) +
+  labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild") +
+  theme_classic() +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  guides(colour = guide_legend(override.aes = list(shape = 15))) +
+  theme(legend.title=element_blank(), legend.text=element_text(28), legend.key.width=unit(2, "lines")) 
 ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
+
+#### cowplot ####
+theme_set(theme_cowplot(font_size=20,font_family = "URWHelvetica"))
+plot_grid(ndvi_range + theme(legend.position="none"),
+          range_bins + theme(legend.position="none"),
+          trophic_boxplot + theme(legend.position="none"),
+          forage_plot + theme(legend.position="none"),
+          align = 'hv',
+          # labels = c("a","b", "c", "d"),
+          label_size = 20,
+          nrow = 2) 
+ggsave("Figures/cowplot_BBS.pdf", width = 30, height = 20)
+
