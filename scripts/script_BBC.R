@@ -219,7 +219,7 @@ raref_ndvi <- nindiv %>%
 raref_points <- ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
   geom_smooth(method = "lm", color = "blue", se = F) +
   geom_point() +
-  labs(x = "NDVI", y = "E(S)") +
+  labs(x = "Mean NDVI", y = "E(S)") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
