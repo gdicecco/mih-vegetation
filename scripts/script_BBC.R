@@ -169,6 +169,8 @@ bbc_popdens <- bbc %>%
   summarize(NDVI = mean(NDVI),
             CommDens = sum(nTerritory)/mean(as.numeric(area)))
 
+summary(lm(CommDens ~ NDVI, data = bbc_popdens))
+
 popdens <- ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 2) +
   geom_smooth(method = "lm", se = F) +
   labs(x = "Mean NDVI", y = "Community territory density") +
@@ -215,6 +217,8 @@ raref_ndvi <- nindiv %>%
   group_by(siteID, rarefy) %>%
   summarize(meanNDVI = mean(NDVI, na.rm = T)) %>%
   left_join(siteArea, by = "siteID")
+
+summary(lm(rarefy ~ meanNDVI, data = raref_ndvi))
 
 raref_points <- ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
   geom_smooth(method = "lm", color = "blue", se = F) +
@@ -354,6 +358,8 @@ null_output_bins_z <- null_output_bins %>%
             Sobs = mean(Sobs),
             FGnull_pct = sum(FGObs < FGNull)/1000) %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+summary(lm(FG_z ~ ndvi.mean, data = null_output_bins_z))
 
 ## Z score null model plots
 

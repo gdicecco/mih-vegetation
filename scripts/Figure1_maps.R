@@ -96,6 +96,8 @@ bbs <- ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) + geom_point() + geo
   theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
 ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
+summary(lm(spRich ~ ndvi.mean, data = env_bbs_rich))
+
 sppRich <- read.csv("data/env_bbc_rich.csv", header = TRUE)
 bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   geom_point(size = 2, col = "black") +
@@ -106,6 +108,7 @@ bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
 ggsave("Figures/spp_rich_ndvi.pdf")
 
+summary(lm(nSpp ~ NDVI, data = sppRich))
 
 plot_grid(bbs + theme(legend.position="none"),
           bbc + theme(legend.position="none"),

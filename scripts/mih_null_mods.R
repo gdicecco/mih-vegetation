@@ -148,6 +148,7 @@ null_output_bins_agg <- null_output_bins %>%
             FGnull_pct = sum(FGObs < FGNull)/1000) %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
 
+summary(lm(FG_z ~ ndvi.mean, data = null_output_bins_agg))
 
 ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 
