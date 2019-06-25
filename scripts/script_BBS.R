@@ -222,7 +222,7 @@ ndvi_range <- bbs_niches %>%
   ggplot(aes(x = spp_ndvi_mean, y = spp_ndvi_max - spp_ndvi_min)) + 
   geom_point(aes(size = 2)) + 
   scale_color_manual(values = col_scale) + 
-    labs(x = "Mean NDVI", y = "NDVI Range") +
+    labs(x = "Mean NDVI", y = "NDVI range") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_blank(), legend.key.width=unit(2, "lines")) +
@@ -255,7 +255,7 @@ ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width 
 trophic_abbv <- bbs_niches %>%
   ungroup() %>%
   distinct(Trophic.guild) %>%
-  mutate(manual_abb <- c("G:gu","I:uc","I:be",    
+  mutate(manual_abb = c("G:gu","I:uc","I:be",    
                          "I:ac","N",
                          "I:gc","O:gf",
                          "I:gg","I:lc", 
@@ -264,8 +264,6 @@ trophic_abbv <- bbs_niches %>%
                          "G:lc","F:lc","O:af")) %>%
   arrange(Trophic.guild)
 trophic_abbv$color <- col_scale
-trophic_abbv <- data.frame(trophic_abbv)
-names(trophic_abbv) <- c("Trophic.guild", "manual_abb", "color")
 
 trophic_boxplot <- bbs_niches %>%
   ungroup() %>%
@@ -274,6 +272,7 @@ trophic_boxplot <- bbs_niches %>%
   group_by(Trophic.guild) %>%
   mutate(ndvi_range = spp_ndvi_max - spp_ndvi_min,
          median_range = median(ndvi_range)) %>%
+  left_join(trophic_abbv, by = "Trophic.guild") %>%
   ggplot(aes(x = fct_reorder(Trophic.guild, median_range), y = ndvi_range, fill = Trophic.guild)) + 
   geom_boxplot() + 
   geom_jitter(height = 0, width = 0.1, show.legend = F) + 
@@ -281,8 +280,14 @@ trophic_boxplot <- bbs_niches %>%
   ylim(0, 1) +
   labs(y = "NDVI range", fill = "Trophic guild") +
   xlab("") +
-  scale_fill_manual(values = trophic_abbv$color) +
-  scale_x_discrete(labels = trophic_abbv$manual_abb) +
+  scale_fill_manual(values = color) +
+  scale_x_discrete(labels = c("F:lc","O:af","I:be",
+                              "I:uc","I:lc", 
+                              "H:gf","N",
+                              "O:gf","I:gg",
+                              "F:uc","G:lc",
+                              "I:gc","G:gu",
+                              "I:bg","C:gh","I:ac")) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
 ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
