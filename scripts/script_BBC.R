@@ -171,9 +171,8 @@ bbc_popdens <- bbc %>%
 
 summary(lm(CommDens ~ NDVI, data = bbc_popdens))
 
-popdens <- ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 2) +
-  geom_smooth(method = "lm", se = F) +
-  labs(x = "Mean NDVI", y = "Community territory density") +
+popdens <- ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 6) +
+  labs(x = "Mean NDVI", y = "Community territory density \n (territories/ha)") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
@@ -199,7 +198,7 @@ rarefaction <- ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteI
   geom_line(lwd = 1.5) +
   scale_color_viridis_c(guide = guide_colorbar(barheight = 10))+ 
   labs(x = "Observed number of individuals", y = "E(S)", color = "Mean NDVI") +
-  geom_vline(xintercept = 175, lty = 2) +
+  geom_vline(xintercept = 175, lty = 2, lwd = 2.25) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title = element_text(size = 28), legend.text=element_text(size = 28))
@@ -221,9 +220,9 @@ raref_ndvi <- nindiv %>%
 summary(lm(rarefy ~ meanNDVI, data = raref_ndvi))
 
 raref_points <- ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
-  geom_smooth(method = "lm", color = "blue", se = F) +
-  geom_point() +
-  labs(x = "Mean NDVI", y = "E(S)") +
+  geom_smooth(method = "lm", color = "blue", se = F, lwd = 2) +
+  geom_point(size = 6) +
+  labs(x = "Mean NDVI", y = "E(Species)") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
@@ -244,7 +243,7 @@ grid_effects <- plot_grid(rarefaction + theme(legend.position="none"),
                           labels = c("A", "B", "C"),
                           label_size = 28,
                           nrow = 1) 
-final_fig<- plot_grid(grid_effects, legend, rel_widths = c(2, 0.2))
+final_fig<- plot_grid(legend, grid_effects, rel_widths = c(0.2, 2))
 ggsave("Figures/cowplot_BBC.pdf", width = 30, height = 8)
 
 
