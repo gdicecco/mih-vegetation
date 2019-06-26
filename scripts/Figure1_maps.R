@@ -121,7 +121,7 @@ plot_grid(bbs + theme(legend.position="none"),
           bbc + theme(legend.position="none"),
           nrow = 2,
           align = 'v',
-          labels = c("A","B"),
+          labels = c("B","C"),
           label_size = 28,
           hjust = -4.5)
 ggsave("Figures/cowplot_Figure1.pdf", width = 8, height = 10)
