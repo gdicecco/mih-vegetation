@@ -318,7 +318,8 @@ grid_effects <- plot_grid(ndvi_range + theme(legend.position="none"),
           forage_plot + theme(legend.position="none"),
           align = 'hv',
           labels = c("A", "B", "C", "D"),
-          label_size = 28,
+          label_size = 40,
+          hjust = .02,
           nrow = 2) 
 final_fig<- plot_grid(grid_effects, legend, rel_widths = c(2, 0.8))
 ggsave("Figures/cowplot_BBS.pdf", width = 30, height = 20)

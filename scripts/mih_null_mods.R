@@ -62,7 +62,7 @@ for(rt in unique(env_bbs$stateroute)) {
 
 null_output = data.frame(null_output)
 colnames(null_output) = c("stateroute", "iteration", "ndvi.mean","Sobs", "FGObs", "FGNull")
-write.csv(null_output, "data/bbs_null_output.csv", row.names = FALSE)
+# write.csv(null_output, "data/bbs_null_output.csv", row.names = FALSE)
 
 # aggregate by ndvi mean
 null_output_agg <- null_output %>% group_by(ndvi.mean) %>%
@@ -113,7 +113,8 @@ for(rt in unique(env_bbs$stateroute)) {
 
 null_output_bins = data.frame(null_output_bins)
 colnames(null_output_bins) = c("stateroute", "iteration", "ndvi.mean", "FGObs", "Sobs","FGNull")
-write.csv(null_output_bins, "data/bbs_null_output_bins.csv", row.names = FALSE)
+# write.csv(null_output_bins, "data/bbs_null_output_bins.csv", row.names = FALSE)
+
 
 # aggregate by ndvi mean
 null_output_bins_agg <- null_output_bins %>% group_by(ndvi.mean) %>%
@@ -124,7 +125,7 @@ null_output_bins_agg$z_score <- (null_output_bins_agg$FGObs - null_output_bins_a
 
 hist(null_output_bins_agg$z_score)
 
-
+##### start her for fig plots ####
 null_output <- read.csv("data/bbs_null_output.csv", header = TRUE)
 null_output_bins <- read.csv("data/bbs_null_output_bins.csv", header = TRUE)
 
@@ -150,11 +151,11 @@ null_output_bins_agg <- null_output_bins %>%
 
 summary(lm(FG_z ~ ndvi.mean, data = null_output_bins_agg))
 
-ggplot(null_output_bins_agg, aes(x = FGObs, y = mean_FGNull)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+ggplot(null_output_bins_agg, aes(x = FGObs, y = FGnull_mean)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 
 
-null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:mean_FGNull)
-ggplot(null_long_bins, aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:FGnull_mean) %>%
+ggplot(., aes(x = ndvi.mean, y = Num)) + theme_classic() + geom_point(aes(col = Troph), size = 2) + geom_abline() + xlab("Mean NDVI")+ ylab("Number of Guilds") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 ggsave("FG_ndvi_binned.pdf")
 
 ggplot(null_output_agg, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
@@ -175,12 +176,13 @@ ggsave("Figures/BBS_null_mod_bins_percentile.pdf", units = "in", width = 8, heig
 
 
 
-null_bbs_z <- ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = z_score)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 0, col = "black", lwd = 1.5, lty = "dashed") + geom_smooth(method = "lm", se = F, color = "red") +xlab("Mean NDVI")+ ylab("Number of Guilds z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +
-  ggtitle("BBS") +
+null_bbs_z <- ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = FG_z)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") + geom_smooth(method = "lm", se = F, color = "red", lwd = 1.25) +xlab("Mean NDVI")+ ylab("Foraging guild z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) +
-  theme(plot.title = element_text(size=32)) 
+  theme(legend.title=element_blank(), legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
+        legend.key.width = unit(4, "line"), legend.position = "top") +
+  scale_color_continuous(breaks = c(4,6,8,10,12,14)) 
+
 ggsave("Figures/FG_ndvi_binz.pdf")
 
 
@@ -197,17 +199,33 @@ null_output_bins_z <- null_output_bins %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
 null_bbc_z <- ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
   geom_point(size = 2) +
-  geom_hline(yintercept = 0, lty = 2) +
-  geom_smooth(method = "lm", se = F, col = "black") +
-  labs(x = "NDVI", y = "Foraging guild Z-score", col = "Obs. Foraging Guilds") +
-  ggtitle("BBC") + theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") +
+  geom_smooth(method = "lm", se = F, col = "red", lwd = 1.25) +
+  labs(x = "Mean NDVI", y = "Foraging guild z-score", col = "Obs. Foraging Guilds") +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) +
-  theme(plot.title = element_text(size=32)) 
+  theme(legend.title=element_blank(), legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
+       legend.key.width = unit(4, "line"), legend.position = "top") +
+  scale_color_continuous(breaks = c(2,4,6,8,10,12,14)) 
 ggsave("Figures/BBC_null_mod_bins_z.pdf", units = "in", width = 8, height = 6)
 
-grid_effects <- plot_grid(null_bbs_z + theme(legend.position="top"),
-                          null_bbc_z + theme(legend.position="top"),
+
+foura <- plot_grid(null_bbs_z + theme(legend.position="top"),
+          labels = c("A"),
+          label_size = 28,
+          hjust = -1.75)
+
+fourb <- plot_grid(null_bbc_z + theme(legend.position="top"),
+           labels = c("B"),
+           label_size = 28,
+           hjust = -1.75)
+
+grid_effects <- plot_grid(foura,
+                          fourb,
                           align = 'hv',
-                          labels = c("A", "B"),
-                          label_size = 28) 
+                          labels = c("BBS", "BBC"),
+                          label_size = 28,
+                          vjust = 5,
+                          hjust = -1.25) 
+
+ggsave("Figures/null_mod_plots.pdf", units = "in", width = 14, height = 8)
