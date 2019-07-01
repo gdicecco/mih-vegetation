@@ -53,7 +53,8 @@ n_habs <- frags %>%
 
 n_layers <- nbcd %>%
   group_by(stateroute) %>%
-  summarize(nbcd.mean = mean(nbcd.mean)) %>%
+  summarize(nbcd.mean = mean(nbcd.mean),
+            nbcd.var = mean(nbcd.var)) %>%
   mutate(can_height = nbcd.mean/10) %>%
   mutate(n_layers = case_when(can_height == 0 ~ 0,
                               can_height > 0 & can_height <= 5 ~ 1,
@@ -122,3 +123,25 @@ summary(layer_g_mod)$r.squared
 summary(ndvi_g_mod)$r.squared
 summary(layer_ndvi_g_mod)$r.squared
 
+### PCA of routes
+
+route_env <- forest_ed %>%
+  left_join(n_layers) %>%
+  left_join(dplyr::select(ndvi_nbcd, stateroute, ndvi.mean)) %>%
+  dplyr::select(-year, -edge, -n_layers, -can_height) %>%
+  filter(propForest > 0.2) %>%
+  na.omit()
+
+routes <- read.csv("\\\\Bioark.bio.unc.edu\\hurlbertlab\\Databases\\BBS\\2017\\bbs_routes_20170712.csv")
+bcrs <- read_sf("\\\\Bioark.bio.unc.edu\\HurlbertLab\\DiCecco\\bcr_terrestrial_shape\\BCR_Terrestrial_master.shp")
+
+ecoregions <- data.frame(bcr = bcrs$BCR, ecoregion = bcrs$BCRNAME) %>%
+  distinct()
+
+route_ecoregions <- route_env %>%
+  left_join(mutate(routes, stateroute = statenum*1000+route)) %>%
+  left_join(ecoregions)
+
+route_pca <- prcomp(route_env[, c(2, 3, 5, 6)], center = T, scale = T)
+ggbiplot(route_pca, alpha = 0.4, obs.scale = 2, var.scale = 0.5,
+         groups = route_ecoregions$ecoregion)
