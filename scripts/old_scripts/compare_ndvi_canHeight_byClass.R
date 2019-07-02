@@ -48,15 +48,17 @@ ggsave("Figures/ndvi_canHeight_by_class_p25.pdf", units = 'in', height = 8, widt
 ## Max proportion landscape > 0.5
 nlcd_50 <- nlcd2001 %>%
   left_join(ndvi_nbcd) %>%
-  filter(prop.landscape > 0.5)
+  filter(prop.landscape > 0.5, legend != "Open water", legend != "Barren") %>%
+  group_by(legend) %>%
+  mutate(med_ndvi = median(ndvi.mean, na.rm = T))
 
-ndvi50 <- ggplot(nlcd_50, aes(x = legend, y = ndvi.mean)) + 
+ndvi50 <- ggplot(nlcd_50, aes(x = fct_reorder(legend, med_ndvi), y = ndvi.mean)) + 
   geom_jitter(color = "black", height = 0, width = 0.1, alpha= 0.3) +
   geom_violin(aes(color = legend), alpha = 0.5, fill = NA, cex = 2, draw_quantiles = c(0.5)) + 
   theme(legend.position = "none") +
   labs(x = "Class of max proportion of landscape", y = "Mean NDVI")
 
-nbcd50 <- ggplot(nlcd_50, aes(x = legend, y = nbcd.mean)) + 
+nbcd50 <- ggplot(nlcd_50, aes(x = fct_reorder(legend, med_ndvi), y = nbcd.mean)) + 
   geom_jitter(color = "black", height = 0, width = 0.1, alpha= 0.3) +
   geom_violin(aes(color = legend), alpha = 0.5, fill = NA, cex = 2, draw_quantiles = c(0.5)) + 
   theme(legend.position = "none") +
@@ -66,8 +68,8 @@ p <- plot_grid(ndvi50, nbcd50)
 
 title <- ggdraw() + draw_label("Max proportion of landscape > 0.50", fontface='bold')
 
-plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
-ggsave("Figures/ndvi_canHeight_by_class_p50.pdf", units = 'in', height = 8, width = 16)
+grid <- plot_grid(title, p, ncol=1, rel_heights=c(0.1, 1))
+ggsave("Figures/ndvi_canHeight_by_class_p50.pdf", plot = p, units = 'in', height = 6, width = 16)
 
 ## Max proportion landscape > 0.75
 nlcd_75 <- nlcd2001 %>%

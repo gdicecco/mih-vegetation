@@ -57,6 +57,8 @@ bbc <- bbc_counts %>%
   left_join(bbc_censuses, by = c("siteID", "year")) %>%
   left_join(sites_distinct, by = c("siteID", "sitename")) %>%
   right_join(site_census, by = c("siteID", "year")) %>%
+  mutate_at(.vars = c("area"), .funs = ~{case_when(area >= 100 ~ area/10,
+                                                   TRUE ~ area)}) %>%
   mutate(count_sub = as.numeric(count),
          count_repl = replace_na(count_sub, 0.25),
          nTerritory = as.numeric(count_repl)*4)
@@ -148,8 +150,9 @@ bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F)
 
 sppRich <- bbc %>%
   left_join(bbc_ndvi, by = c("siteID", "year")) %>%
-  group_by(siteID, NDVI, status) %>%
-  summarize(nSpp = n_distinct(new_species)) %>%
+  group_by(siteID, NDVI, status, area) %>%
+  summarize(nSpp = n_distinct(new_species),
+            territories = sum(nTerritory)) %>%
   filter(status == "breeder")
 # write.csv(sppRich,"data/env_bbc_rich.csv", row.names =FALSE)
 ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
@@ -159,6 +162,44 @@ ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
 ggsave("Figures/spp_rich_ndvi.pdf")
+
+# Spp Rich vs. Area
+
+ggplot(sppRich, aes(x = area, y = nSpp)) +
+  geom_point(size = 2, col = "black") +
+  labs(y = "Number of Species", x = "Area (ha)") +
+  geom_smooth(method = "lm", se = F) + 
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+ggsave("Figures/bbc_richness_area.pdf")
+
+# Area vs. NDVI
+
+ggplot(sppRich, aes(y = area, x = NDVI)) +
+  geom_point(size = 2, col = "black") +
+  labs(x = "NDVI", y = "Area (ha)") +
+  geom_smooth(method = "lm", se = F) + 
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+ggsave("Figures/bbc_area_ndvi.pdf")
+
+ggplot(sppRich, aes(x = NDVI, y = nSpp, col = area)) +
+  geom_point(size = 2) +
+  labs(x = "NDVI", y = "Species", col = "Area (ha)") +
+  geom_smooth(method = "lm", se = F) + 
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2),
+        legend.text = element_text(size = 20),  legend.title = element_text(size = 20))
+ggsave("Figures/bbc_spp_rich_ndvi_area.pdf")
+
+# Territories vs. spp
+
+ggplot(sppRich, aes(x = territories, y = nSpp)) +
+  geom_point(size = 2) + 
+  labs(x = "Territories", y = "Species") +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+ggsave("Figures/bbc_spp_territories.pdf")
 
 # For each species, population density (count/area - breeding pairs/hectare) vs. NDVI
 
