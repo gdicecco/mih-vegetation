@@ -10,10 +10,16 @@ newcode <- data.frame(code = seq(1,9),
                       legend = c("Open water", "Urban", "Barren", "Forest", "Shrubland", 
                                  "Agricultural", "Grasslands", "Wetlands", "Perennial ice, snow"))
 
+forestcode <- data.frame(code = seq(41,43),
+                         legend = c("deciduous", "evergreen", "mixed"))
+
 frags <- read.csv("data/fragmentation_indices_nlcd_simplified.csv", stringsAsFactors = F) %>%
   filter(year == 2001) %>%
-  left_join(newcode, by = c("class" = "code"))
+  left_join(newcode, by = c('class' = 'code'))
 
+frags_all <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
+  filter(class == 41 | class == 42 | class == 43) %>%
+  left_join(forestcode, by = c("class" = "code"))
 
 troph_guild <- read.csv("data/Troph_guilds.csv", header = TRUE)
 bbs_sub1 <- read.csv("data/final_bbs_subset.csv", header = TRUE)
@@ -43,6 +49,10 @@ forest_ed <- frags %>%
             meanPatchArea = mean.patch.area) %>%
   mutate(edge = ifelse(ED >= 0.1 & propForest >= 0.1, 1, 0))
 
+forest_type <- frags_all %>%
+  dplyr::select(stateroute, prop.landscape, legend) %>%
+  spread(legend, prop.landscape)
+
 n_habs <- frags %>%
   group_by(stateroute, year, legend) %>%
   summarize(sum.area = sum(total.area)) %>%
@@ -55,32 +65,39 @@ n_layers <- nbcd %>%
   group_by(stateroute) %>%
   summarize(nbcd.mean = mean(nbcd.mean),
             nbcd.var = mean(nbcd.var)) %>%
-  mutate(can_height = nbcd.mean/10) %>%
+  mutate(can_height = nbcd.mean/10,
+         can_var = nbcd.var/10,
+         can_sd = sqrt(can_var)) %>%
   mutate(n_layers = case_when(can_height == 0 ~ 0,
                               can_height > 0 & can_height <= 5 ~ 1,
                               can_height >5 & can_height <= 15 ~ 2,
                               can_height > 15 ~ 3))
 
-niche_complex <- forest_ed %>%
+niche_complex <- n_layers %>%
   left_join(n_habs, by = "stateroute") %>%
-  left_join(n_layers, by = "stateroute") %>%
-  filter(!is.na(can_height), !is.na(n_habs)) %>%
-  mutate(n_niche = sum(edge, n_habs, n_layers))
+  left_join(forest_ed, by = "stateroute") %>%
+  left_join(forest_type, by = "stateroute") %>%
+  filter(!is.na(n_habs)) %>%
+  mutate(n_niche = edge + n_layers + n_habs) %>%
+  replace_na(list(ED = 0, propForest = 0, deciduous = 0, evergreen = 0, mixed = 0, edge = 0))
 
 ### Niche complexity vs. number foraging guilds, number spp
 
 nSpp <- bbs_troph %>%
+  filter(stateroute %in% niche_complex$stateroute) %>%
   group_by(stateroute) %>%
   summarize(nSpp = n_distinct(aou),
             nGuilds = n_distinct(Trophic.guild)) %>%
   left_join(niche_complex, by = "stateroute") %>%
-  left_join(nbcd, by = "stateroute") %>%
-  filter(!is.na(year))
+  left_join(nbcd, by = "stateroute")
 
 theme_set(theme_classic())
 ggplot(nSpp, aes(x = n_niche, y = nSpp)) +
   geom_point() + labs(x = "Niche complexity", y = "Species")
 ggsave("Figures/richness_niche_complexity.pdf")
+
+ggplot(nSpp, aes(x = n_niche, y = nSpp, group = n_niche)) +
+  geom_violin(draw_quantiles = c(0.5)) + labs(x = "Niche complexity", y = "Species")
 
 niche_mod <- lm(nSpp ~ n_niche, data = nSpp)
 ndvi_mod <- lm(nSpp ~ ndvi.mean, data = nSpp)
@@ -97,6 +114,10 @@ ggplot(nSpp, aes(x = n_niche, y = nGuilds)) + geom_point(alpha = 0.1) +
 ggsave("Figures/guilds_niche_complexity.pdf")
 
 ggplot(nSpp, aes(x = ndvi.mean, y = nGuilds)) + geom_point(alpha = 0.1)
+
+ggplot(nSpp, aes(x = n_niche, y = nGuilds, group = n_niche)) +
+  geom_violin(draw_quantiles = c(0.5)) + labs(x = "Niche complexity", y = "Foraging guilds")
+
 
 ## NDVI and presence of forest edge explain 53% variation in species richness
 
@@ -123,25 +144,20 @@ summary(layer_g_mod)$r.squared
 summary(ndvi_g_mod)$r.squared
 summary(layer_ndvi_g_mod)$r.squared
 
-### PCA of routes
+### Model selection - models including habitat structure and complexity have higher R2 and lower AIC than NDVI only models
 
-route_env <- forest_ed %>%
-  left_join(n_layers) %>%
-  left_join(dplyr::select(ndvi_nbcd, stateroute, ndvi.mean)) %>%
-  dplyr::select(-year, -edge, -n_layers, -can_height) %>%
-  filter(propForest > 0.2) %>%
-  na.omit()
+mod <- lm(nSpp ~ can_height + can_var + ED + evergreen + deciduous + mixed + n_habs, data = nSpp)
 
-routes <- read.csv("\\\\Bioark.bio.unc.edu\\hurlbertlab\\Databases\\BBS\\2017\\bbs_routes_20170712.csv")
-bcrs <- read_sf("\\\\Bioark.bio.unc.edu\\HurlbertLab\\DiCecco\\bcr_terrestrial_shape\\BCR_Terrestrial_master.shp")
+mod2 <- lm(nSpp ~ ndvi.mean, data = nSpp)
 
-ecoregions <- data.frame(bcr = bcrs$BCR, ecoregion = bcrs$BCRNAME) %>%
-  distinct()
+AIC(mod, mod2)
+summary(mod)$r.squared
+summary(mod2)$r.squared
 
-route_ecoregions <- route_env %>%
-  left_join(mutate(routes, stateroute = statenum*1000+route)) %>%
-  left_join(ecoregions)
+mod3 <- lm(nGuilds ~ can_height + can_var + ED + evergreen + deciduous + mixed + n_habs, data = nSpp)
 
-route_pca <- prcomp(route_env[, c(2, 3, 5, 6)], center = T, scale = T)
-ggbiplot(route_pca, alpha = 0.4, obs.scale = 2, var.scale = 0.5,
-         groups = route_ecoregions$ecoregion)
+mod4 <- lm(nGuilds ~ ndvi.mean, data = nSpp)
+
+AIC(mod3, mod4)
+summary(mod3)$r.squared
+summary(mod4)$r.squared
