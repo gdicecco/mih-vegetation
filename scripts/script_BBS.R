@@ -217,7 +217,7 @@ col_scale <- c("darkgoldenrod2",
                         "violetred3", 
                          "springgreen3", "palegreen1") 
 
-ndvi_range <- bbs_niches %>%
+ndvi_range_pts <- bbs_niches %>%
   distinct(aou, Trophic.guild, spp_ndvi_mean, spp_ndvi_max, spp_ndvi_min) %>%
   ggplot(aes(x = spp_ndvi_mean, y = spp_ndvi_max - spp_ndvi_min)) + 
   geom_point(aes(size = 2)) + 
@@ -280,7 +280,7 @@ trophic_boxplot <- bbs_niches %>%
   ylim(0, 1) +
   labs(y = "NDVI range", fill = "Trophic guild") +
   xlab("") +
-  scale_fill_manual(values = color) +
+  scale_fill_manual(values = col_scale) +
   scale_x_discrete(labels = c("F:lc","O:af","I:be",
                               "I:uc","I:lc", 
                               "H:gf","N",
@@ -295,13 +295,15 @@ ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
 ### Spp by foraging guild in each NDVI bin
 
 foraging_rich <- bbs_niches %>%
-  group_by(ndvi_bin) %>%
-  distinct(aou, Trophic.guild) %>%
-  group_by(ndvi_bin, Trophic.guild) %>%
+  group_by(ndvi_bin, Trophic.guild, stateroute) %>%
+  distinct(aou, Trophic.guild, stateroute) %>%
+  # mean per trophic guild at each route
   summarize(nSpp = n_distinct(aou)) %>%
+  group_by(ndvi_bin, Trophic.guild) %>%
+  summarize(mean_nSpp = mean(nSpp)) %>%
   left_join(trophic_abbv, by = "Trophic.guild")
 
-forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = nSpp, fill = Trophic.guild)) +
+forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Trophic.guild)) +
   geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
@@ -312,7 +314,7 @@ ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 #### cowplot ####
 legend <- get_legend(forage_plot) 
 # theme_set(theme_cowplot(font_size=20,font_family = "URWHelvetica"))
-grid_effects <- plot_grid(ndvi_range + theme(legend.position="none"),
+grid_effects <- plot_grid(ndvi_range_pts + theme(legend.position="none"),
           range_bins + theme(legend.position="none"),
           trophic_boxplot + theme(legend.position="none"),
           forage_plot + theme(legend.position="none"),

@@ -1,4 +1,5 @@
 # Script to create Figure 1 maps #
+# have to run BBC script first #
 library(tidyverse)
 library(ggplot2)
 library(cowplot)
@@ -8,11 +9,9 @@ library(rgdal)
 library(raster)
 
 
-setwd("Z:/Databases/BBS/GPS_stoplocations/")
-us_routes <- read_sf("bbsrte_2012_alb/bbsrte_2012_alb.shp")
-us <- tm_shape(us_states) + tm_borders() + tm_fill(col = "light gray")
+us_routes <- read_sf("Z:/Databases/BBS/GPS_stoplocations/bbsrte_2012_alb/bbsrte_2012_alb.shp")
+us <- tm_shape(us_routes) + tm_borders() + tm_fill(col = "light gray")
 
-setwd("C:/git/mih-vegetation")
 # Read in BBS
 final.counts <- read.csv("data/final_bbs_subset.csv", header = TRUE) 
 bbs_plot_rtes <- filter(us_routes, rteno %in% final.counts$stateroute)
@@ -84,9 +83,9 @@ us <- tm_shape(eNA) + tm_borders() + tm_fill(col = "#d9d9d9")
 bbc_map <- us + tm_shape(bbc_sf) + 
   tm_dots(col = "nCensus", alpha = 1, size = 1, palette = "GnBu", title = "Number of Censuses")
 
-point_map <- us + tm_shape(bbs_plot_rtes) + tm_lines(lwd = 2, col = "black") + tm_shape(bbc_sf) + tm_dots(col = "#525252", size =0.2)+ 
+point_map <- us + tm_shape(bbs_plot_rtes) + tm_lines(lwd = 2, col = "black") + tm_shape(bbc_sf) + tm_dots(col = "#0c2c84", size =0.2)+ 
   tm_add_legend(type = c("line"), labels = c("BBS"),lwd = 2, size = 42, col = "black") +
-  tm_add_legend(type = c("symbol"), labels = c(" BBC"), shape = 16,col = "#525252", size = 42)
+  tm_add_legend(type = c("symbol"), labels = c(" BBC"), shape = 16,col = "#0c2c84", size = 42)
 tmap_save(point_map, "Figures/Figure1.pdf")
 
 
