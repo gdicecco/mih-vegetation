@@ -169,6 +169,8 @@ routes$stateroute <- routes$statenum*1000 + routes$route
 
 nSpp_latlon <- nSpp %>%
   left_join(routes, by = c("stateroute")) %>%
-  st_as_sf(coords = c("longitude", "latitude"))
+  sf::st_as_sf(coords = c("longitude", "latitude")) %>%
+  dplyr::select(stateroute, nSpp, nGuilds)
+sf::write_sf(nSpp_latlon, "data/niche_complexity_mod_routes.shp")
 
 plot(nSpp_latlon)
