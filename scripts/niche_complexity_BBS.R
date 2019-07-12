@@ -161,3 +161,14 @@ mod4 <- lm(nGuilds ~ ndvi.mean, data = nSpp)
 AIC(mod3, mod4)
 summary(mod3)$r.squared
 summary(mod4)$r.squared
+
+### Where routes are
+
+routes <- read.csv("\\\\Bioark.bio.unc.edu\\hurlbertlab\\Databases\\BBS\\2017\\bbs_routes_20170712.csv")
+routes$stateroute <- routes$statenum*1000 + routes$route
+
+nSpp_latlon <- nSpp %>%
+  left_join(routes, by = c("stateroute")) %>%
+  st_as_sf(coords = c("longitude", "latitude"))
+
+plot(nSpp_latlon)
