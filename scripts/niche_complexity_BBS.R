@@ -162,6 +162,12 @@ AIC(mod3, mod4)
 summary(mod3)$r.squared
 summary(mod4)$r.squared
 
+cor_matrix <- nSpp %>%
+  dplyr::select(can_height, can_var, ED, evergreen, deciduous, mixed, n_habs, ndvi.mean) %>%
+  as.matrix()
+
+cor(cor_matrix)
+
 ### Where routes are
 
 routes <- read.csv("\\\\Bioark.bio.unc.edu\\hurlbertlab\\Databases\\BBS\\2017\\bbs_routes_20170712.csv")
