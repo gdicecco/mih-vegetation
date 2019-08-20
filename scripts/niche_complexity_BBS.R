@@ -17,6 +17,7 @@ frags <- read.csv("data/fragmentation_indices_nlcd_simplified.csv", stringsAsFac
   filter(year == 2001) %>%
   left_join(newcode, by = c('class' = 'code'))
 
+### Make sure this is 1 km buffer data !!
 frags_all <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
   filter(class == 41 | class == 42 | class == 43) %>%
   left_join(forestcode, by = c("class" = "code"))
@@ -36,6 +37,26 @@ troph_AOU$Species = gsub('Dendroica','Setophaga', troph_AOU$Species)
 
 bbs_sub2 <- filter(bbs_sub1, aou %in% tax_code2$AOU_OUT)
 bbs_troph <- left_join(bbs_sub2, troph_AOU, by = c("aou" = "AOU_OUT"))
+
+### Shannon-diversity for land cover classes
+
+landcover <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
+  filter(year == 2001) %>%
+  dplyr::select(stateroute, class, prop.landscape) %>%
+  group_by(stateroute) %>%
+  summarize(shannonH = -sum(prop.landscape*log(prop.landscape)))
+
+sppRich_H <- bbs_troph %>%
+  ungroup() %>%
+  dplyr::select(stateroute, spRich) %>%
+  distinct() %>%
+  left_join(nbcd) %>%
+  dplyr::select(stateroute, spRich, ndvi.mean) %>%
+  left_join(landcover)
+
+mod_h <- lm(spRich ~ shannonH, data = sppRich_H) # r2 = 0.136
+mod_ndvi <- lm(spRich ~ ndvi.mean, data = sppRich_H) # r2 = 0.452
+mod_both <- lm(spRich ~ shannonH + ndvi.mean, data = sppRich_H) # r2 = 0.507
   
 ### Measure of niche complexity for each BBS route
 
