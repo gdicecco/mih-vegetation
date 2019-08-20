@@ -78,14 +78,17 @@ box <- c(xmin = -150, xmax = -65, ymin = 25, ymax = 50)
 
 northAM <- read_sf("Z:/Snell/MIH/ne_50m_admin_1_states_provinces_lakes.shp")
 eNA <- st_crop(northAM, box)
+niche_compx_routes <- read_sf("data/niche_complexity_mod_routes.shp")
+  
 #### Fig 1 map ####
 us <- tm_shape(eNA) + tm_borders() + tm_fill(col = "#d9d9d9")
 bbc_map <- us + tm_shape(bbc_sf) + 
   tm_dots(col = "nCensus", alpha = 1, size = 1, palette = "GnBu", title = "Number of Censuses")
 
-point_map <- us + tm_shape(bbs_plot_rtes) + tm_lines(lwd = 2, col = "black") + tm_shape(bbc_sf) + tm_dots(col = "#0c2c84", size =0.2)+ 
+point_map <- us + tm_shape(bbs_plot_rtes) + tm_lines(lwd = 2, col = "black") + tm_shape(niche_compx_routes) + tm_dots(col = "red", size = 0.1) + tm_shape(bbc_sf) + tm_dots(col = "#0c2c84", size =0.2)+ 
   tm_add_legend(type = c("line"), labels = c("BBS"),lwd = 2, size = 42, col = "black") +
-  tm_add_legend(type = c("symbol"), labels = c(" BBC"), shape = 16,col = "#0c2c84", size = 42)
+  tm_add_legend(type = c("symbol"), labels = c(" BBC"), shape = 16,col = "#0c2c84", size = 42) +
+  tm_add_legend(type = c("symbol"), labels = c(" Niche Complexity"), shape = 16,col = "red", size = 42)
 tmap_save(point_map, "Figures/Figure1.pdf")
 
 

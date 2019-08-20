@@ -80,7 +80,7 @@ n_habs <- frags %>%
   group_by(stateroute, year, legend) %>%
   summarize(sum.area = sum(total.area)) %>%
   filter(sum.area > 10000) %>%
-  filter(legend != "Open water", legend != "Barren", legend != "Perennial ice, snow", legend != "Wetlands") %>%
+  filter(legend != "Open water", legend != "Barren", legend != "Perennial ice, snow") %>%
   group_by(stateroute) %>%
   summarize(n_habs = n_distinct(legend))
 
@@ -170,6 +170,8 @@ summary(layer_ndvi_g_mod)$r.squared
 ### Model selection - models including habitat structure and complexity have higher R2 and lower AIC than NDVI only models
 
 mod <- lm(nSpp ~ can_height + can_var + ED + evergreen + deciduous + mixed + n_habs, data = nSpp)
+moda <- lm(nSpp ~ can_height + can_var + ED + deciduous + n_habs, data = nSpp)
+modb <- lm(nSpp ~ can_height + can_var + ED + ndvi.mean + n_habs, data = nSpp)
 
 mod2 <- lm(nSpp ~ ndvi.mean, data = nSpp)
 
