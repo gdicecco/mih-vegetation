@@ -57,6 +57,8 @@ sppRich_H <- bbs_troph %>%
 mod_h <- lm(spRich ~ shannonH, data = sppRich_H) # r2 = 0.136
 mod_ndvi <- lm(spRich ~ ndvi.mean, data = sppRich_H) # r2 = 0.452
 mod_both <- lm(spRich ~ shannonH + ndvi.mean, data = sppRich_H) # r2 = 0.507
+
+### Do shannon diversity with different classes for forest edge and forest interior??
   
 ### Measure of niche complexity for each BBS route
 
