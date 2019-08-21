@@ -17,7 +17,7 @@ frags <- read.csv("data/fragmentation_indices_nlcd_simplified.csv", stringsAsFac
   filter(year == 2001) %>%
   left_join(newcode, by = c('class' = 'code'))
 
-### Make sure this is 1 km buffer data !!
+### 1 km buffered data
 frags_all <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
   filter(class == 41 | class == 42 | class == 43) %>%
   left_join(forestcode, by = c("class" = "code"))
@@ -46,19 +46,40 @@ landcover <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFacto
   group_by(stateroute) %>%
   summarize(shannonH = -sum(prop.landscape*log(prop.landscape)))
 
+### Do shannon diversity with different classes for forest edge and forest interior??
+## Use prop.landscape.core to make separate classes for forest edge and forest interior
+
+landcover_nonforest <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
+  filter(year == 2001, !(class %in% c(41:43))) %>%
+  dplyr::select(stateroute, class, prop.landscape) %>%
+  mutate(class = as.character(class))
+
+landcover_forest <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
+  filter(year == 2001, class %in% c(41:43)) %>%
+  dplyr::select(stateroute, class, prop.landscape, prop.landscape.core) %>%
+  mutate(prop.landscape.edge = prop.landscape - prop.landscape.core) %>%
+  dplyr::select(-prop.landscape) %>%
+  gather(landscape, prop.landscape, 3:4) %>%
+  mutate(land = word(landscape, 3, sep = fixed("."))) %>%
+  mutate(class = paste(class, land, sep = "_")) %>%
+  dplyr::select(-landscape, -land)
+
+landcover_edges <- bind_rows(landcover_nonforest, landcover_forest) %>%
+  group_by(stateroute) %>%
+  summarize(shannonH = -sum(prop.landscape*log(prop.landscape)))
+
 sppRich_H <- bbs_troph %>%
   ungroup() %>%
   dplyr::select(stateroute, spRich) %>%
   distinct() %>%
   left_join(nbcd) %>%
   dplyr::select(stateroute, spRich, ndvi.mean) %>%
-  left_join(landcover)
+  left_join(landcover_edges)
 
-mod_h <- lm(spRich ~ shannonH, data = sppRich_H) # r2 = 0.136
+mod_h <- lm(spRich ~ shannonH, data = sppRich_H) # r2 = 0.246
 mod_ndvi <- lm(spRich ~ ndvi.mean, data = sppRich_H) # r2 = 0.452
-mod_both <- lm(spRich ~ shannonH + ndvi.mean, data = sppRich_H) # r2 = 0.507
+mod_both <- lm(spRich ~ shannonH + ndvi.mean, data = sppRich_H) # r2 = 0.519
 
-### Do shannon diversity with different classes for forest edge and forest interior??
   
 ### Measure of niche complexity for each BBS route
 
