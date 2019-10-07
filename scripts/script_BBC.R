@@ -93,7 +93,8 @@ bbc_sf <- bbc_censuses %>%
                        min(year) < 1990 & max(year) < 2000 ~ "1980s-1990s",
                        min(year) < 1990 & max(year) > 1999 ~ "1980s-2000s",
                        min(year) > 1989 & max(year) > 2000 ~ "1990s-2000s"
-                       ))
+                       ),
+    nDecades = (max(year) - min(year))/10)
 
 us_states
 
@@ -109,6 +110,14 @@ bbc_year <- us + tm_shape(bbc_sf) +
 
 bbc_panels <- tmap_arrange(bbc_map, bbc_length, bbc_year)
 tmap_save(bbc_panels, "Figures/BBC_locations.pdf")
+
+bbc_nDecades <- us + tm_shape(filter(bbc_sf, nDecades >= 1)) +
+  tm_dots(col = "nDecades", size = 1, palette = "GnBu", title = "Number of decades of sampling")
+tmap_save(bbc_nDecades, "Figures/BBC_site_decades.pdf")
+
+bbc_nDecades <- us + tm_shape(filter(bbc_sf, nDecades >= 2)) +
+  tm_dots(col = "nDecades", size = 1, palette = "GnBu", title = "Number of decades of sampling")
+tmap_save(bbc_nDecades, "Figures/BBC_site_2decades.pdf")
 
 # Get mean breeding season NDVI for each site/year
 
