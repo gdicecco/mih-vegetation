@@ -39,14 +39,6 @@ bbs_sub2 <- filter(bbs_sub1, aou %in% tax_code2$AOU_OUT)
 bbs_troph <- left_join(bbs_sub2, troph_AOU, by = c("aou" = "AOU_OUT"))
 
 ### Shannon-diversity for land cover classes
-
-landcover <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
-  filter(year == 2001) %>%
-  dplyr::select(stateroute, class, prop.landscape) %>%
-  group_by(stateroute) %>%
-  summarize(shannonH = -sum(prop.landscape*log(prop.landscape)))
-
-### Do shannon diversity with different classes for forest edge and forest interior??
 ## Use prop.landscape.core to make separate classes for forest edge and forest interior
 
 landcover_nonforest <- read.csv('data/fragmentation_indices_nlcd_2001.csv', stringsAsFactors = F) %>%
@@ -226,3 +218,9 @@ nSpp_latlon <- nSpp %>%
 sf::write_sf(nSpp_latlon, "data/niche_complexity_mod_routes.shp")
 
 plot(nSpp_latlon)
+
+### Env variability model: ShannonH, variance in NDVI, elevational heterogeneity
+
+# Elevation data 
+elev <- raster("\\\\BioArk\\HurlbertLab\\GIS\\DEM\\USA1_msk_alt.grd")
+# punch out 1 km buffer paths, variance(elevation)
