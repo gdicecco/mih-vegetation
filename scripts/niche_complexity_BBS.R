@@ -1,6 +1,9 @@
 ## Niche complexity measure for BBS routes
 
 library(tidyverse)
+library(raster)
+library(sf)
+library(gimms)
 
 bbs_subset <- read.csv("data/final_bbs_subset.csv", stringsAsFactors = F)
 
@@ -221,6 +224,60 @@ plot(nSpp_latlon)
 
 ### Env variability model: ShannonH, variance in NDVI, elevational heterogeneity
 
+# 1 km route paths
+bbs_route_paths <- read_sf("data/bbsroutes_1km_buffer.shp")
+
+# ShannonH + birds
+sppRich_H
+
 # Elevation data 
 elev <- raster("\\\\BioArk\\HurlbertLab\\GIS\\DEM\\USA1_msk_alt.grd")
 # punch out 1 km buffer paths, variance(elevation)
+
+bbs_sf_transf <- st_transform(bbs_route_paths, st_crs(elev))
+bbs_elev <- extract(elev, bbs_sf_transf, fun = var, na.rm = T, df = T)
+bbs_elev_df <- cbind(bbs_elev, stateroute = bbs_sf_transf$rteno) %>%
+  rename(elev.var = "USA1_msk_alt")
+
+# Get variance in breeding season NDVI for each site/year
+# bbs_years <- c(2000:2004)
+# 
+# gimms_files <- list.files("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
+# 
+# gimms_df <- data.frame(file_name = gimms_files[-1], year = as.numeric(substr(gimms_files[-1], 15, 18)))
+# 
+# bbs_ndvi <- data.frame(siteID = c(), year = c(), NDVI = c())
+# 
+# setwd("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
+# for(yr in bbs_years) {
+#   files <- filter(gimms_df, year == yr)
+#   
+#   gimms_jan <- rasterizeGimms(as.character(files$file_name)[1])
+#   gimms_jul <- rasterizeGimms(as.character(files$file_name)[2])
+#   
+#   gimms_breeding <- stack(c(gimms_jan[[11:12]], gimms_jul[[1]]))
+#   
+#   bbs_transf <- st_transform(bbs_sf_transf, st_crs(gimms_jan))
+#   
+#   ndvi <- extract(gimms_breeding, bbs_sf_transf, fun = var, na.rm = T)
+#   ndvi.vars <- rowMeans(ndvi)
+#   
+#   bbs_ndvi <- rbind(bbs_ndvi, 
+#                     data.frame(stateroute = bbs_transf$rteno, year = yr, NDVI = c(ndvi.vars)))
+# }
+# setwd("C:/Users/gdicecco/Desktop/git/mih-vegetation")
+# write.csv(bbs_ndvi, "data/bbs_sites_ndvi_var.csv", row.names = F)
+
+bbs_ndvi <- read.csv("data/bbs_sites_ndvi_var.csv", stringsAsFactors = F) %>%
+  group_by(stateroute) %>%
+  summarize(ndvi.var = mean(NDVI, na.rm = T))
+
+# ENV heterogeneity model
+
+bbs_env_het <- sppRich_H %>%
+  left_join(bbs_ndvi) %>%
+  left_join(bbs_elev_df)
+
+env_het_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var, data = bbs_env_het)
+ndvi_mod <- lm(spRich ~ ndvi.mean, data = bbs_env_het)
+all_env_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var + ndvi.mean, data = bbs_env_het)
