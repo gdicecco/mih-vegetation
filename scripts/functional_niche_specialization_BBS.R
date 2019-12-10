@@ -13,6 +13,7 @@ species_list <- read.csv("data/species_list.csv", stringsAsFactors = F)
 # EltonTraits 1.0
 
 birdfunc <- read.table("\\\\BioArk//HurlbertLab//Databases//Elton Traits//BirdFuncDat.txt", sep = "\t", header = T, quote = "\"", stringsAsFactors = F)
+birdfunc <- read.table("/Volumes/HurlbertLab/Databases/Elton Traits/BirdFuncDat.txt", sep = "\t", header = T, quote = "\"", stringsAsFactors = F)
 
 # BBS species traits with AOUs
 
@@ -109,6 +110,9 @@ bbs_wide[is.na(bbs_wide)] <- 0
 bbs_traits_subs <- bbs_traits %>%
   filter(aou %in% spp_list$aou) %>%
   arrange(aou)
+
+# Use this to group Diet and Forage traits, use disp function in this package
+# bbs_fuzzy_prep <- prep.fuzzy(bbs_fuzzy, c(10, 7), labels = c("diet", "forage"))
 
 row.names(bbs_traits_subs) <- bbs_traits_subs$aou
 
