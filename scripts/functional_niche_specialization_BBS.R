@@ -51,28 +51,56 @@ bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv", stringsAsFactors 
 
 ## Functional niche measurement analysis
 
+# Restructure BBS: rows= site, cols = mean abund of species
+
+spp_list <- bbs_subs %>%
+  filter(aou %in% bbs_func$aou) %>%
+  dplyr::select(aou) %>%
+  distinct()
+
+bbs_wide <- bbs_subs %>%
+  filter(aou %in% bbs_func$aou) %>%
+  group_by(stateroute, aou) %>%
+  summarize(meanAbund = mean(speciestotal)) %>%
+  dplyr::select(stateroute, aou, meanAbund) %>%
+  spread(key = aou, value = meanAbund)
+
+bbs_wide[is.na(bbs_wide)] <- 0
+
 # Species distance matrix
 # Keep diet composition, foraging height, diurnality, body size
 bbs_traits <- bbs_func %>%
+  filter(aou %in% spp_list$aou) %>%
+  arrange(aou) %>%
   dplyr::select(aou, Diet.Inv, Diet.Vend, Diet.Vect, Diet.Vfish, Diet.Vunk, Diet.Scav, Diet.Fruit, Diet.Nect, Diet.Seed, Diet.PlantO,
                 ForStrat.watbelowsurf, ForStrat.wataroundsurf, ForStrat.ground, ForStrat.understory, ForStrat.midhigh, ForStrat.canopy,
                 ForStrat.aerial, Nocturnal, BodyMass.Value) %>%
-  distinct()
+  distinct() %>%
+  mutate_at(.fun = log10, .vars = "BodyMass.Value")
 
 row.names(bbs_traits) <- bbs_traits$aou
 
-# Euclidean
-bbs_dist <- quasieuclid(as.dist(bbs_traits[, -1]))
-pcoa <- dudi.pco(bbs_dist, scannf = F, nf = 3)
+# Gower distances matrix
 
-# Gower distances
-dist_mat <- compute_dist_matrix(bbs_traits[, -1])
-
-# Breadth of niches (diet and foraging strata are fuzzy: proportions of categories)
 bbs_fuzzy <- bbs_traits %>%
   dplyr::select(-Nocturnal, -BodyMass.Value, -aou)
 
-# bbs_fuzzy_prep <- prep.fuzzy(bbs_fuzzy, c(10, 7), labels = c("diet", "forage"))
+bbs_fuzzy_df <- prep.fuzzy(bbs_fuzzy, c(10, 7), labels = c("diet", "forage"))
+
+bbs_nominal <- bbs_traits %>%
+  dplyr::select(Nocturnal)
+
+bbs_quant <- bbs_traits %>%
+  dplyr::select(BodyMass.Value)
+
+bbs_trait_list <- list(bbs_fuzzy_df, bbs_nominal, bbs_quant)
+
+bbs_ktab <- ktab.list.df(bbs_trait_list)
+
+bbs_dist <- dist.ktab(bbs_ktab, type = c("F", "D", "Q"))
+bbs_dist_mat <- as.matrix(bbs_dist)
+
+# Breadth of niches (diet and foraging strata are fuzzy: proportions of categories)
 
 fuzzy_niche_breadth <- bbs_traits %>%
   dplyr::select(-Nocturnal, -BodyMass.Value) %>%
@@ -87,38 +115,12 @@ niche_breadth_plot <- fuzzy_niche_breadth %>%
   spread(key = category, value = nTraits)
 
 ggplot(niche_breadth_plot, aes(x = Diet, y = ForStrat)) + geom_bin2d() + scale_fill_viridis_c()
+ggsave("Figures/fuzzy_traits.pdf")
 
 # Niche packing, mean functional distance from centroid, FDisp (FD package)
 # fdisp(gower, site x species)
 
-# Restructure BBS: rows= site, cols = mean abund of species
-
-spp_list <- bbs_subs %>%
-  filter(aou %in% bbs_traits$aou) %>%
-  dplyr::select(aou) %>%
-  distinct()
-
-bbs_wide <- bbs_subs %>%
-  filter(aou %in% bbs_traits$aou) %>%
-  group_by(stateroute, aou) %>%
-  summarize(meanAbund = mean(speciestotal)) %>%
-  dplyr::select(stateroute, aou, meanAbund) %>%
-  spread(key = aou, value = meanAbund)
-
-bbs_wide[is.na(bbs_wide)] <- 0
-
-bbs_traits_subs <- bbs_traits %>%
-  filter(aou %in% spp_list$aou) %>%
-  arrange(aou)
-
-# Use this to group Diet and Forage traits, use disp function in this package
-# bbs_fuzzy_prep <- prep.fuzzy(bbs_fuzzy, c(10, 7), labels = c("diet", "forage"))
-
-row.names(bbs_traits_subs) <- bbs_traits_subs$aou
-
-gow_bbs <- gowdis(bbs_traits_subs[, -1])
-
-bbs_fdisp <- fdisp(gow_bbs, as.matrix(bbs_wide[, -1]))
+bbs_fdisp <- fdisp(bbs_dist, as.matrix(bbs_wide[, -1]))
 
 # How does niche packing change with NDVI?
 
@@ -127,16 +129,15 @@ sppRich <- bbs_subs %>%
   group_by(stateroute) %>%
   summarize(nSpp = n_distinct(aou))
 
-bbs_wide$FDis <- bbs_fdisp$FDis
-
-bbs_niche_pack <- bbs_wide %>%
+bbs_niche_pack <- bind_cols(bbs_wide, FDis = bbs_fdisp$FDis) %>%
   dplyr::select(stateroute, FDis) %>%
   left_join(sppRich) %>%
   left_join(ndvi_nbcd)
 
 ggplot(bbs_niche_pack, aes(x = ndvi.mean, y = FDis)) + geom_point() + geom_smooth(method = "lm")
+ggsave("Figures/functional_niche_specialization.pdf")
 
-# Community specialization, max pairwise functional distance, funrar
+# Community specialization, max pairwise functional distance
 # At a given site, max pairwise functional distance of gower distances matrix
 # Steps would be: get trait distance matrix for species at a site, what is max value in matrix
 
@@ -148,14 +149,12 @@ bbs_niche_special <- bbs_subs %>%
   nest() %>%
   mutate(maxPWD = map_dbl(data, ~{
     df <- .
-    spp <- df$aou
+    spp <- as.character(df$aou)
     
-    traits <- bbs_traits_subs %>%
-      filter(aou %in% spp)
+    mat <- bbs_dist_mat[spp, spp]
     
-    gow_matrix <- compute_dist_matrix(traits[, -1])
+    max(mat)
     
-    max(gow_matrix)
   })) %>%
   dplyr::select(-data) %>%
   left_join(sppRich) %>%
@@ -165,8 +164,22 @@ bbs_niche_special <- bbs_subs %>%
 # How does niche specialization change with NDVI?
 
 ggplot(bbs_niche_special, aes(x = ndvi.mean, y = maxPWD)) + geom_point() + geom_smooth(method = "lm")
+ggsave("Figures/functional_niche_maxPWD.pdf")
+
 ggplot(bbs_niche_special, aes(x = nbcd.mean, y = maxPWD)) + geom_point() + geom_smooth(method = "lm")
 
 summary(lm(maxPWD ~ shannonH + ndvi.var + elev.var, data = bbs_niche_special))
+summary(lm(maxPWD ~ ndvi.mean, data = bbs_niche_special))
 
-# Use niche specialization and niche packing for null model instead of number of forgaging guilds
+# Community niche breadth - convex hull
+
+bbs_FD <- dbFD(bbs_dist, as.matrix(bbs_wide[, -1]), m = 8)
+
+bbs_niche_breadth <- bind_cols(bbs_wide, FRic = bbs_FD$FRic) %>%
+  dplyr::select(stateroute, FRic) %>%
+  left_join(sppRich) %>%
+  left_join(ndvi_nbcd) %>%
+  mutate(FRic_scaled = FRic/nSpp)
+
+ggplot(bbs_niche_breadth, aes(x = ndvi.mean, y = FRic_scaled)) + geom_point() + geom_smooth(method = "lm")
+ggsave("Figures/functional_niche_breadth.pdf")
