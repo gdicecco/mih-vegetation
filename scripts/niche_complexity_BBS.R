@@ -279,6 +279,8 @@ bbs_env_het <- sppRich_H %>%
   left_join(bbs_elev_df)
 # write.csv(bbs_env_het, "data/bbs_site_env_heterogeneity.csv", row.names = F)
 
+bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
+
 env_het_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var, data = bbs_env_het)
 ndvi_mod <- lm(spRich ~ ndvi.mean, data = bbs_env_het)
 all_env_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var + ndvi.mean, data = bbs_env_het)

@@ -39,6 +39,16 @@ common_name_matches <- binomial_join %>%
 bbs_func <- binomial_matches %>%
   bind_rows(common_name_matches)
 
+# EltonTraits summaries
+
+diet_summaries <- bbs_func %>%
+  group_by(BLFamilyLatin) %>%
+  count(Diet.5Cat)
+
+ggplot(diet_summaries, aes(x = BLFamilyLatin, y = n, fill = Diet.5Cat)) + 
+  geom_col(position = "stack") + coord_flip() + scale_fill_viridis_d() + labs(x = "", y = "Species")
+ggsave("Figures/diet5cat_summary.pdf", height = 6, width = 8, units = "in")
+
 # Read in BBS subset
 
 bbs_subs <- read.csv("data/final_bbs_subset.csv", stringsAsFactors = F)
@@ -116,6 +126,25 @@ niche_breadth_plot <- fuzzy_niche_breadth %>%
 
 ggplot(niche_breadth_plot, aes(x = Diet, y = ForStrat)) + geom_bin2d() + scale_fill_viridis_c()
 ggsave("Figures/fuzzy_traits.pdf")
+
+niche_summaries <- niche_breadth_plot %>%
+  group_by(family) %>%
+  summarize(nSpp = n_distinct(aou), 
+            meanForage = mean(ForStrat),
+            sdForage = sd(ForStrat, na.rm = T),
+            sdDiet = sd(Diet, na.rm = T),
+            meanDiet = mean(Diet))
+
+ggplot(niche_summaries, aes(x = family, y = meanForage, col = nSpp)) + geom_point(size = 2) + 
+  geom_errorbar(aes(ymin = meanForage - 1.96*sdForage, ymax = meanForage + 1.96*sdForage), cex = 1) + coord_flip() +
+  labs(x = "", y = "ForStrat", col = "Species")
+ggsave("Figures/forstrat_families.pdf", height = 6, width = 8, units = "in")
+
+ggplot(niche_summaries, aes(x = family, y = meanDiet, col = nSpp)) + geom_point(size = 2) + 
+  geom_errorbar(aes(ymin = meanDiet - 1.96*sdDiet, ymax = meanDiet + 1.96*sdDiet), cex = 1) + coord_flip() +
+  labs(x = "", y = "Diet", col = "Species")
+ggsave("Figures/diet_families.pdf", height = 6, width = 8, units = "in")
+
 
 # Niche packing, mean functional distance from centroid, FDisp (FD package)
 # fdisp(gower, site x species)
