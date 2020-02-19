@@ -284,3 +284,9 @@ bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
 env_het_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var, data = bbs_env_het)
 ndvi_mod <- lm(spRich ~ ndvi.mean, data = bbs_env_het)
 all_env_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var + ndvi.mean, data = bbs_env_het)
+
+ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) + 
+  geom_point() + geom_smooth(method = "lm", se = F) + 
+  theme_classic(base_size = 15) + labs(x = "NDVI", y = "Landscape diversity (H)")
+
+summary(lm(shannonH ~ ndvi.mean, data = bbs_env_het)) # r2 = .44
