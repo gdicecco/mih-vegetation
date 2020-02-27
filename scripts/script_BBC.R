@@ -122,9 +122,10 @@ tmap_save(bbc_nDecades, "Figures/BBC_site_2decades.pdf")
 # Get mean breeding season NDVI for each site/year
 
 bbc_sf_transf <- st_transform(bbc_sf, "+proj=utm +zone=42N +datum=WGS84 +units=km")
-buffers <- (bbc_sf$area/100)/2
+buffers <- sqrt(bbc_sf$area/(200*pi)) # area is in hectares: find radius in KM if we assume area is a circle and lat/lon is center
 bbc_buffers <- st_buffer(bbc_sf_transf, dist = buffers)
 bbc_years <- unique(bbc_sf$censusYear)
+# write_sf(bbc_buffers, "data/bbc_site_areas.shp")
 
 gimms_files <- list.files("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
 
@@ -133,25 +134,24 @@ gimms_df <- data.frame(file_name = gimms_files[-1], year = as.numeric(substr(gim
 bbc_ndvi <- data.frame(siteID = c(), year = c(), NDVI = c())
 
 # setwd("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
-for(yr in bbc_years) {
-  files <- filter(gimms_df, year == yr)
-  
-  gimms_jan <- rasterizeGimms(as.character(files$file_name)[1])
-  gimms_jul <- rasterizeGimms(as.character(files$file_name)[2])
-  
-  gimms_breeding <- stack(c(gimms_jan[[9:12]], gimms_jul[[1:2]]))
-  
-  sites <- filter(bbc_buffers, censusYear == yr)
-  
-  ndvi <- extract(gimms_breeding, sites, fun = mean, na.rm = T)
-  ndvi.means <- rowMeans(ndvi)
-  
-  bbc_ndvi <- rbind(bbc_ndvi, 
-                    data.frame(siteID = sites$siteID, year = yr, NDVI = c(ndvi.means)))
-}
+# for(yr in bbc_years) {
+#   files <- filter(gimms_df, year == yr)
+#   
+#   gimms_jan <- rasterizeGimms(as.character(files$file_name)[1])
+#   gimms_jul <- rasterizeGimms(as.character(files$file_name)[2])
+#   
+#   gimms_breeding <- stack(c(gimms_jan[[9:12]], gimms_jul[[1:2]]))
+#   
+#   sites <- filter(bbc_buffers, censusYear == yr)
+#   
+#   ndvi <- extract(gimms_breeding, sites, fun = mean, na.rm = T)
+#   ndvi.means <- rowMeans(ndvi)
+#   
+#   bbc_ndvi <- rbind(bbc_ndvi, 
+#                     data.frame(siteID = sites$siteID, year = yr, NDVI = c(ndvi.means)))
+# }
 
 # write.csv(bbc_ndvi, "data/bbc_sites_ndvi.csv", row.names = F)
-
 
 bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F)
 

@@ -61,7 +61,7 @@ landcover_forest <- read.csv('data/fragmentation_indices_nlcd_2001.csv', strings
 
 landcover_edges <- bind_rows(landcover_nonforest, landcover_forest) %>%
   group_by(stateroute) %>%
-  summarize(shannonH = -sum(prop.landscape*log(prop.landscape)))
+  summarize(shannonH = -sum(prop.landscape*log(prop.landscape), na.rm = T))
 
 sppRich_H <- bbs_troph %>%
   ungroup() %>%
@@ -287,6 +287,6 @@ all_env_mod <- lm(spRich ~ shannonH + ndvi.var + elev.var + ndvi.mean, data = bb
 
 ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) + 
   geom_point() + geom_smooth(method = "lm", se = F) + 
-  theme_classic(base_size = 15) + labs(x = "NDVI", y = "Landscape diversity (H)")
+  theme_classic(base_size = 15) + labs(x = "NDVI", y = "Landscape diversity (H)", title = "BBS")
 
-summary(lm(shannonH ~ ndvi.mean, data = bbs_env_het)) # r2 = .44
+summary(lm(shannonH ~ ndvi.mean, data = bbs_env_het)) # r2 = .45
