@@ -151,7 +151,11 @@ null_output_bins_agg <- null_output_bins %>%
 
 summary(lm(FG_z ~ ndvi.mean, data = null_output_bins_agg))
 
-ggplot(null_output_bins_agg, aes(x = FGObs, y = FGnull_mean)) + theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
+ggplot(null_output_bins_agg, aes(x = FGObs, y = FGnull_mean)) + 
+  theme_classic() + geom_point(aes(col = ndvi.mean), size = 2) + 
+  geom_abline(intercept = 0, slope = 1, col = "black", lwd = 1.5) + 
+  xlab("Number of Guilds Observed")+ ylab("Number of Guilds Null") + 
+  theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30))
 
 
 null_long_bins <- gather(null_output_bins_agg, "Troph", "Num", FGObs:FGnull_mean) %>%
@@ -176,12 +180,15 @@ ggsave("Figures/BBS_null_mod_bins_percentile.pdf", units = "in", width = 8, heig
 
 
 
-null_bbs_z <- ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = FG_z)) + theme_classic() + geom_point(aes(col = FGObs), size = 2) + geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") + geom_smooth(method = "lm", se = F, color = "red", lwd = 1.25) +xlab("Mean NDVI")+ ylab("Foraging guild z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +
+null_bbs_z <- ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = FG_z)) + theme_classic() + 
+  geom_point(aes(col = FGObs), size = 2) + 
+  geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") + 
+  geom_smooth(method = "lm", se = F, color = "blue", lwd = 1.25) +xlab("Mean NDVI")+ ylab("Foraging guild z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
         legend.key.width = unit(4, "line"), legend.position = "top") +
-  scale_color_continuous(breaks = c(4,6,8,10,12,14)) 
+  scale_color_continuous(breaks = c(4,6,8,10,12,14), type = "viridis") 
 
 ggsave("Figures/FG_ndvi_binz.pdf")
 
@@ -199,14 +206,15 @@ null_output_bins_z <- null_output_bins %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
 null_bbc_z <- ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
   geom_point(size = 2) +
+  theme_classic() + 
   geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") +
-  geom_smooth(method = "lm", se = F, col = "red", lwd = 1.25) +
+  geom_smooth(method = "lm", se = F, col = "blue", lwd = 1.25) +
   labs(x = "Mean NDVI", y = "Foraging guild z-score", col = "Obs. Foraging Guilds") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
   theme(legend.title=element_blank(), legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
        legend.key.width = unit(4, "line"), legend.position = "top") +
-  scale_color_continuous(breaks = c(2,4,6,8,10,12,14)) 
+  scale_color_continuous(breaks = c(2,4,6,8,10,12,14), type = "viridis") 
 ggsave("Figures/BBC_null_mod_bins_z.pdf", units = "in", width = 8, height = 6)
 
 

@@ -117,7 +117,7 @@ point_map <- us + tm_shape(bbs_plot_rtes) + tm_lines(lwd = 2, col = "black") +
   tm_add_legend(type = c("symbol"), labels = c(" Niche Complexity"), shape = 16,col = "red", size = 42)
 tmap_save(point_map, "Figures/Figure1.pdf")
 
-
+## species richness
 
 theme_set(theme_classic())
 
@@ -125,10 +125,10 @@ env_bbs_rich <- read.csv("data/env_bbs_rich.csv", header = TRUE)
 bbs <- ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) + 
   geom_point(col = "black", shape=16, size = 2) + 
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .16, y = 89, label = "BBS", size =11) +
-  theme_classic() + xlab("Mean NDVI")+ ylab("Species richness") +
+  annotate("text", x = .16, y = 100, label = "BBS", size =11) +
+  theme_classic() + xlab(" ")+ ylab("Species richness") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32))
 ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
 summary(lm(spRich ~ ndvi.mean, data = env_bbs_rich))
@@ -136,20 +136,70 @@ summary(lm(spRich ~ ndvi.mean, data = env_bbs_rich))
 sppRich <- read.csv("data/env_bbc_rich.csv", header = TRUE)
 bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   geom_point(size = 2, col = "black") +
-  labs(x = "Mean NDVI", y = "Species richness") +
+  labs(x = " ", y = " ") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .12, y = 45, label = "BBC", size =11) +
+  annotate("text", x = .12, y = 50, label = "BBC", size =11) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) 
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32)) 
 ggsave("Figures/spp_rich_ndvi.pdf")
 
 summary(lm(nSpp ~ NDVI, data = sppRich))
 
+## landscape diversity
+
+#BBS
+bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
+
+bbs_land <- ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) + 
+  geom_point(size = 2) + 
+  labs(x = "Mean NDVI", y = "Landscape diversity (H)") +
+  geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
+  annotate("text", x = .17, y = 2.5, label = "BBS", size =11) +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32)) 
+
+#BBC
+landcover_nonforest <- read.csv('data/bbc_fragstats.csv', stringsAsFactors = F) %>%
+  filter(!(class %in% c(41:43))) %>%
+  dplyr::select(siteID, class, prop.landscape) %>%
+  mutate(class = as.character(class))
+
+landcover_forest <- read.csv('data/bbc_fragstats.csv', stringsAsFactors = F) %>%
+  filter(class %in% c(41:43)) %>%
+  dplyr::select(siteID, class, prop.landscape, prop.landscape.core) %>%
+  mutate(prop.landscape.edge = prop.landscape - prop.landscape.core) %>%
+  dplyr::select(-prop.landscape) %>%
+  gather(landscape, prop.landscape, 3:4) %>%
+  mutate(land = word(landscape, 3, sep = fixed("."))) %>%
+  mutate(class = paste(class, land, sep = "_")) %>%
+  dplyr::select(-landscape, -land)
+
+landcover_edges <- bind_rows(landcover_nonforest, landcover_forest) %>%
+  group_by(siteID) %>%
+  summarize(shannonH = -sum(prop.landscape*log(prop.landscape), na.rm = T))
+
+bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F) %>%
+  group_by(siteID) %>%
+  summarize(meanNDVI = mean(NDVI))
+
+bbc_plot <- landcover_edges %>%
+  left_join(bbc_ndvi, by = "siteID")
+
+bbc_land <- ggplot(bbc_plot, aes(x = meanNDVI, y = shannonH)) + 
+  geom_point(size = 2) + 
+  labs(x = "Mean NDVI", y = " ") +
+  geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
+  annotate("text", x = .12, y = 2, label = "BBC", size =11) +
+  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
+  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32))
+
+## cowplot 
 plot_grid(bbs + theme(legend.position="none"),
           bbc + theme(legend.position="none"),
+          bbs_land + theme(legend.position = "none"),
+          bbc_land + theme(legend.position = "none"),
           nrow = 2,
           align = 'v',
-          labels = c("B","C"),
-          label_size = 28,
-          hjust = -4.5)
-ggsave("Figures/cowplot_Figure1.pdf", width = 8, height = 10)
+          labels = c("B","C", "D", "E"),
+          label_size = 28)
+ggsave("Figures/cowplot_Figure1.pdf", width = 15, height = 15)
