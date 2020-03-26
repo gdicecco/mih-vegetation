@@ -150,6 +150,10 @@ summary(lm(nSpp ~ NDVI, data = sppRich))
 #BBS
 bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
 
+summary(lm(spRich ~ ndvi.mean, data = bbs_env_het)) # pos sig pred, r2 = 0.44
+summary(lm(spRich ~ shannonH, data = bbs_env_het)) # pos sig pred, r2 = 0.26
+summary(lm(spRich ~ ndvi.mean + shannonH, data = bbs_env_het)) # pos sig pred, r2 = 0.48
+
 bbs_land <- ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) + 
   geom_point(size = 2) + 
   labs(x = "Mean NDVI", y = "Landscape diversity (H)") +
@@ -181,6 +185,13 @@ landcover_edges <- bind_rows(landcover_nonforest, landcover_forest) %>%
 bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F) %>%
   group_by(siteID) %>%
   summarize(meanNDVI = mean(NDVI))
+
+bbc_sppRich <- sppRich %>%
+  left_join(landcover_edges)
+
+summary(lm(nSpp ~ NDVI, data = bbc_sppRich)) # positive sig pred, r2 = 0.02
+summary(lm(nSpp ~ shannonH + NDVI, data = bbc_sppRich)) # positive sig pred, r2 = 0.045
+summary(lm(nSpp ~ shannonH + NDVI, data = bbc_sppRich)) # positive sig pred, r2 = 0.039
 
 bbc_plot <- landcover_edges %>%
   left_join(bbc_ndvi, by = "siteID")
