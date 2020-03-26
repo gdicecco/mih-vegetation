@@ -13,6 +13,9 @@ library(gimms)
 library(mobr)
 library(broom)
 
+## GGplot theme
+theme_set(theme_classic(base_size = 40))
+
 # Get species list - diurnal land birds
 species_list <- read.csv("data/species_list.csv", stringsAsFactors = F)
 
@@ -177,9 +180,7 @@ ggsave("Figures/spp_rich_ndvi.pdf")
 ggplot(sppRich, aes(x = area, y = nSpp)) +
   geom_point(size = 2, col = "black") +
   labs(y = "Number of Species", x = "Area (ha)") +
-  geom_smooth(method = "lm", se = F) + 
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+  geom_smooth(method = "lm", se = F)
 ggsave("Figures/bbc_richness_area.pdf")
 
 # Area vs. NDVI
@@ -187,18 +188,13 @@ ggsave("Figures/bbc_richness_area.pdf")
 ggplot(sppRich, aes(y = area, x = NDVI)) +
   geom_point(size = 2, col = "black") +
   labs(x = "NDVI", y = "Area (ha)") +
-  geom_smooth(method = "lm", se = F) + 
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+  geom_smooth(method = "lm", se = F)
 ggsave("Figures/bbc_area_ndvi.pdf")
 
 ggplot(sppRich, aes(x = NDVI, y = nSpp, col = area)) +
   geom_point(size = 2) +
   labs(x = "NDVI", y = "Species", col = "Area (ha)") +
-  geom_smooth(method = "lm", se = F) + 
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2),
-        legend.text = element_text(size = 20),  legend.title = element_text(size = 20))
+  geom_smooth(method = "lm", se = F)
 ggsave("Figures/bbc_spp_rich_ndvi_area.pdf")
 
 # Territories vs. spp
@@ -222,10 +218,7 @@ bbc_popdens <- bbc %>%
 summary(lm(CommDens ~ NDVI, data = bbc_popdens))
 
 popdens <- ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 6, alpha = 0.7) +
-  labs(x = "Mean NDVI", y = "Community territory density \n (territories/ha)") +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
+  labs(x = "Mean NDVI", y = "Territory density \n (territories/ha)")
 ggsave("Figures/community_density_vs_NDVI.pdf")
 
 ### Rarefaction curves for BBC sites
@@ -243,16 +236,15 @@ nindiv <- bbc %>%
   unnest() %>%
   group_by(siteID) %>%
   mutate(obsIndiv = row_number())
-write.csv(nindiv, "data/bbc_rarefaction_results.csv", row.names = F)
+# write.csv(nindiv, "data/bbc_rarefaction_results.csv", row.names = F)
+
+nindiv <- read.csv("data/bbc_rarefaction_results.csv", stringsAsFactors = F)
 
 rarefaction <- ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
   geom_line(lwd = 1.5) +
   scale_color_viridis_c(guide = guide_colorbar(barheight = 10))+ 
-  labs(x = "Observed number of individuals", y = "Expected species", color = "Mean NDVI") +
-  geom_vline(xintercept = 175, lty = 2, lwd = 2.25) +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title = element_text(size = 28), legend.text=element_text(size = 28))
+  labs(x = "Observed individuals", y = "Expected species", color = "Mean NDVI") +
+  geom_vline(xintercept = 175, lty = 2, lwd = 2.25)
 ggsave("Figures/rarefaction_curves_BBC.pdf")
 
 ## E(S) vs. NDVI 
@@ -273,10 +265,7 @@ summary(lm(rarefy ~ meanNDVI, data = raref_ndvi))
 raref_points <- ggplot(raref_ndvi, aes(x = meanNDVI, y = rarefy)) +
   geom_point(size = 6 , alpha = 0.7) +
   geom_smooth(method = "lm", color = "blue", se = F, lwd = 2) +
-  labs(x = "Mean NDVI", y = "Expected species") +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
+  labs(x = "Mean NDVI", y = "Expected species")
 ggsave("Figures/estS_ndvi_bbc.pdf")
 
 ggplot(raref_ndvi, aes(x = area, y = rarefy)) + geom_point() + geom_smooth(method = "lm", se = F) +
@@ -286,16 +275,15 @@ ggsave("Figures/estS_vs_area.pdf")
 
 #### cowplot ####
 legend <- get_legend(rarefaction) 
-# theme_set(theme_cowplot(font_size=20,font_family = "URWHelvetica"))
 grid_effects <- plot_grid(rarefaction + theme(legend.position="none"),
                           raref_points + theme(legend.position="none"),
                           popdens + theme(legend.position="none"),
                           align = 'hv',
                           labels = c("A", "B", "C"),
-                          label_size = 28,
+                          label_size = 50,
                           nrow = 1) 
 final_fig<- plot_grid(legend, grid_effects, rel_widths = c(0.2, 2))
-ggsave("Figures/cowplot_BBC.pdf", width = 30, height = 8)
+ggsave("Figures/cowplot_BBC.pdf", width = 32, height = 9)
 
 
 

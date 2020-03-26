@@ -6,7 +6,7 @@ library(ggplot2)
 library(cowplot)
 
 ### Read in data
-theme_set(theme_classic())
+theme_set(theme_classic(base_size = 30))
 # Environmental data
 
 # ndvi data #
@@ -103,6 +103,12 @@ filter(aou %in% occ_calc$aou) # add a filter term to exclude everything in the o
 final.counts <- left_join(final.count.occ, bbs_rich, by = "stateroute") 
 #write.csv(final.counts, "data/final_bbs_subset.csv", row.names = F)
 
+final.counts <- read.csv("data/final_bbs_subset.csv", stringsAsFactors = F)
+bbs_rich <- final.counts %>% 
+  group_by(stateroute) %>%
+  dplyr::summarise(spRich = n_distinct(aou))
+
+
 final.abun <- final.counts %>% 
   group_by(stateroute) %>%
   dplyr::summarise(sum = sum(speciestotal)) 
@@ -184,7 +190,7 @@ bbs_troph <- left_join(final.counts, troph_AOU, by = c("aou" = "AOU_OUT"))
 
 test <- filter(bbs_troph, is.na(Species) == TRUE)
 tcode <- left_join(test, tax_code2, by = c("aou"="AOU_OUT")) %>%
-  select(aou, Species)
+  dplyr::select(aou, Species)
 sp_nocodes <- unique(tcode)
 # tax_code$CRC_SCI_NAME[tax_code$CRC_SCI_NAME == "Dendragapus obscurus/fuliginosus"] <- "Dendragapus obscurus"
 
@@ -223,10 +229,7 @@ ndvi_range_pts <- bbs_niches %>%
   geom_point(aes(size = 2)) + 
   scale_color_manual(values = col_scale) + 
     labs(x = "Mean NDVI", y = "NDVI range") +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_blank(), legend.key.width=unit(2, "lines")) +
-  theme(legend.position = "none")
+   theme(legend.position = "none")
 ggsave("Figures/species_ndvi_range_vs_meanNDVI.pdf", units = "in", height = 6, width = 8)
 
 ### avg NDVI range vs. NDVI bin
@@ -244,9 +247,7 @@ range_bins <- bbs_niches %>%
             upper = sd(spp_ndvi_max - spp_ndvi_min)) %>%
   ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 6, shape = 15) +
   labs(x = "NDVI bin", y = "Average NDVI range") +
-  geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper))) +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
+  geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper)))
   theme(legend.position = "none")
 ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
 
@@ -287,9 +288,7 @@ trophic_boxplot <- bbs_niches %>%
                               "O:gf","I:gg",
                               "F:uc","G:lc",
                               "I:gc","G:gu",
-                              "I:bg","C:gh","I:ac")) +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2))
+                              "I:bg","C:gh","I:ac"))
 ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
 
 ### Spp by foraging guild in each NDVI bin
@@ -306,23 +305,21 @@ foraging_rich <- bbs_niches %>%
 forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Trophic.guild)) +
   geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild") +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 28), legend.key.height=unit(2, "lines")) 
+  theme(legend.text = element_text(size = 38))
 ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 
 #### cowplot ####
 legend <- get_legend(forage_plot) 
-# theme_set(theme_cowplot(font_size=20,font_family = "URWHelvetica"))
+theme_set(theme_classic(base_size = 40))
 grid_effects <- plot_grid(ndvi_range_pts + theme(legend.position="none"),
           range_bins + theme(legend.position="none"),
           trophic_boxplot + theme(legend.position="none"),
           forage_plot + theme(legend.position="none"),
           align = 'hv',
           labels = c("A", "B", "C", "D"),
-          label_size = 40,
+          label_size = 45,
           hjust = .02,
           nrow = 2) 
-final_fig<- plot_grid(grid_effects, legend, rel_widths = c(2, 0.8))
-ggsave("Figures/cowplot_BBS.pdf", width = 30, height = 20)
+final_fig<- plot_grid(grid_effects, legend, rel_widths = c(1.9, 1.1))
+ggsave("Figures/cowplot_BBS.pdf", width = 35, height = 20)
 

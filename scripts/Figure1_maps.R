@@ -110,25 +110,22 @@ bbc_map <- us + tm_shape(bbc_sf) +
   tm_dots(col = "nCensus", alpha = 1, size = 1, palette = "GnBu", title = "Number of Censuses")
 
 point_map <- us + tm_shape(bbs_plot_rtes) + tm_lines(lwd = 2, col = "black") + 
-  tm_shape(bbc_sf) + tm_dots(col = "springgreen3", size = 0.2)+ 
+  tm_shape(bbc_sf) + tm_dots(col = "springgreen3", size = 0.4)+ 
   tm_add_legend(type = c("line"), labels = c("BBS"),lwd = 2, size = 42, col = "black") +
   tm_add_legend(type = c("symbol"), labels = c(" BBC"), shape = 16, col = "springgreen3", size = 42) +
-  tm_shape(niche_compx_routes) + tm_dots(col = "red", size = 0.1) +
-  tm_add_legend(type = c("symbol"), labels = c(" Niche Complexity"), shape = 16,col = "red", size = 42)
-tmap_save(point_map, "Figures/Figure1.pdf")
+  tm_layout(legend.text.size = 2)
+tmap_save(point_map, "Figures/Figure1.pdf", height= 7.5, width = 15, units = "in")
 
 ## species richness
 
-theme_set(theme_classic())
+theme_set(theme_classic(base_size = 30))
 
 env_bbs_rich <- read.csv("data/env_bbs_rich.csv", header = TRUE)
 bbs <- ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) + 
   geom_point(col = "black", shape=16, size = 2) + 
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
   annotate("text", x = .16, y = 100, label = "BBS", size =11) +
-  theme_classic() + xlab(" ")+ ylab("Species richness") +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32))
+  xlab(" ")+ ylab("Species richness")
 ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
 summary(lm(spRich ~ ndvi.mean, data = env_bbs_rich))
@@ -138,9 +135,7 @@ bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   geom_point(size = 2, col = "black") +
   labs(x = " ", y = " ") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .12, y = 50, label = "BBC", size =11) +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32)) 
+  annotate("text", x = .12, y = 50, label = "BBC", size =11)
 ggsave("Figures/spp_rich_ndvi.pdf")
 
 summary(lm(nSpp ~ NDVI, data = sppRich))
@@ -158,9 +153,7 @@ bbs_land <- ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) +
   geom_point(size = 2) + 
   labs(x = "Mean NDVI", y = "Landscape diversity (H)") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .17, y = 2.5, label = "BBS", size =11) +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32)) 
+  annotate("text", x = .17, y = 2.5, label = "BBS", size =11)
 
 #BBC
 landcover_nonforest <- read.csv('data/bbc_fragstats.csv', stringsAsFactors = F) %>%
@@ -200,9 +193,7 @@ bbc_land <- ggplot(bbc_plot, aes(x = meanNDVI, y = shannonH)) +
   geom_point(size = 2) + 
   labs(x = "Mean NDVI", y = " ") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .12, y = 2, label = "BBC", size =11) +
-  theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
-  theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32))
+  annotate("text", x = .12, y = 2, label = "BBC", size =11)
 
 ## cowplot 
 plot_grid(bbs + theme(legend.position="none"),
@@ -212,5 +203,5 @@ plot_grid(bbs + theme(legend.position="none"),
           nrow = 2,
           align = 'v',
           labels = c("B","C", "D", "E"),
-          label_size = 28)
+          label_size = 35)
 ggsave("Figures/cowplot_Figure1.pdf", width = 15, height = 15)
