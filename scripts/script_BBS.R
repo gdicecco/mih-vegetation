@@ -118,21 +118,21 @@ final.abun <- final.counts %>%
 # ndvi abun
 env_bbs_abun = left_join(final.abun, ndvi_nbcd, by = "stateroute")
 ni_a = ggplot(env_bbs_abun, aes(x = ndvi.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
+# ggsave("Figures/abun_ndvi.png", height = 8, width = 12)
 
 # ndvi rich
 env_bbs_rich = left_join(bbs_rich, ndvi_nbcd, by = "stateroute")
 # write.csv(env_bbs_rich, "data/env_bbs_rich.csv", row.names = FALSE)
 ni_r = ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("Species Richness")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
+# ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
 # nbcd abun
 nd_a = ggplot(env_bbs_abun, aes(x = nbcd.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-ggsave("Figures/abun_nbcd.png", height = 8, width = 12)
+# ggsave("Figures/abun_nbcd.png", height = 8, width = 12)
 
 # nbcd rich
 nd_r = ggplot(env_bbs_rich, aes(x = nbcd.mean, y = log10(spRich))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NBCD")+ ylab("log(Richness)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
-ggsave("Figures/rich_nbcd.png", height = 8, width = 12)
+# ggsave("Figures/rich_nbcd.png", height = 8, width = 12)
 
 z <- plot_grid(ni_a + theme(legend.position="top"),
                ni_r + theme(legend.position="none"),
@@ -143,7 +143,7 @@ z <- plot_grid(ni_a + theme(legend.position="top"),
                labels = c("A","B", "C", "D"),
                label_size = 24, 
                hjust = -3)
-ggsave("Figures/cowplot_NDVI_NBCD.pdf", height = 8, width = 12)
+# ggsave("Figures/cowplot_NDVI_NBCD.pdf", height = 8, width = 12)
 
 ### Figure 2 ###
 ndvi.plot = left_join(final.counts, ndvi_nbcd, by = "stateroute")
@@ -230,7 +230,7 @@ ndvi_range_pts <- bbs_niches %>%
   scale_color_manual(values = col_scale) + 
     labs(x = "Mean NDVI", y = "NDVI range") +
    theme(legend.position = "none")
-ggsave("Figures/species_ndvi_range_vs_meanNDVI.pdf", units = "in", height = 6, width = 8)
+# ggsave("Figures/species_ndvi_range_vs_meanNDVI.pdf", units = "in", height = 6, width = 8)
 
 ### avg NDVI range vs. NDVI bin
 
@@ -249,22 +249,25 @@ range_bins <- bbs_niches %>%
   labs(x = "NDVI bin", y = "Average NDVI range") +
   geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper)))
   theme(legend.position = "none")
-ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
+# ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
 
 ### NDVI range for spp in each foraging guild
 # redo labels
 trophic_abbv <- bbs_niches %>%
   ungroup() %>%
   distinct(Trophic.guild) %>%
-  mutate(manual_abb = c("G:gu","I:uc","I:be",    
+  mutate(manual_abb = c("G:gu","I:uf","I:be",    
                          "I:ac","N",
-                         "I:gc","O:gf",
-                         "I:gg","I:lc", 
+                         "I:uc","O:gf",
+                         "I:gg","I:lf", 
                          "I:bg","F:uc",
                          "H:gf","C:gh",  
                          "G:lc","F:lc","O:af")) %>%
   arrange(Trophic.guild)
 trophic_abbv$color <- col_scale
+
+abbv_labels <- c(trophic_abbv$manual_abb)
+names(abbv_labels) <- trophic_abbv$Trophic.guild
 
 trophic_boxplot <- bbs_niches %>%
   ungroup() %>%
@@ -276,20 +279,14 @@ trophic_boxplot <- bbs_niches %>%
   left_join(trophic_abbv, by = "Trophic.guild") %>%
   ggplot(aes(x = fct_reorder(Trophic.guild, median_range), y = ndvi_range, fill = Trophic.guild)) + 
   geom_boxplot() + 
-  geom_jitter(height = 0, width = 0.1, show.legend = F) + 
+  geom_jitter(size = 4, height = 0, width = 0.1, show.legend = F) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), axis.title.x = element_blank()) +
   ylim(0, 1) +
-  labs(y = "NDVI range", fill = "Trophic guild") +
+  labs(y = "NDVI range", fill = "Foraging niche") +
   xlab("") +
   scale_fill_manual(values = col_scale) +
-  scale_x_discrete(labels = c("F:lc","O:af","I:be",
-                              "I:uc","I:lc", 
-                              "H:gf","N",
-                              "O:gf","I:gg",
-                              "F:uc","G:lc",
-                              "I:gc","G:gu",
-                              "I:bg","C:gh","I:ac"))
-ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
+  scale_x_discrete(labels = abbv_labels)
+# ggsave("Figures/ndvi_range_by_trophicGuild.pdf")
 
 ### Spp by foraging guild in each NDVI bin
 
@@ -321,5 +318,5 @@ grid_effects <- plot_grid(ndvi_range_pts + theme(legend.position="none"),
           hjust = .02,
           nrow = 2) 
 final_fig<- plot_grid(grid_effects, legend, rel_widths = c(1.9, 1.1))
-ggsave("Figures/cowplot_BBS.pdf", width = 35, height = 20)
+ggsave("Figures/cowplot_BBS.pdf", units = "in", width = 35, height = 20)
 

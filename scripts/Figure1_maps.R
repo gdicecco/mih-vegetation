@@ -126,7 +126,7 @@ bbs <- ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
   annotate("text", x = .16, y = 100, label = "BBS", size =11) +
   xlab(" ")+ ylab("Species richness")
-ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
+# ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
 summary(lm(spRich ~ ndvi.mean, data = env_bbs_rich))
 
@@ -138,7 +138,7 @@ bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   annotate("text", x = .12, y = 50, label = "BBC", size =11)
 ggsave("Figures/spp_rich_ndvi.pdf")
 
-summary(lm(nSpp ~ NDVI, data = sppRich))
+# summary(lm(nSpp ~ NDVI, data = sppRich))
 
 ## landscape diversity
 
@@ -202,6 +202,6 @@ plot_grid(bbs + theme(legend.position="none"),
           bbc_land + theme(legend.position = "none"),
           nrow = 2,
           align = 'v',
-          labels = c("B","C", "D", "E"),
+          labels = c("A","B", "C", "D"),
           label_size = 35)
-ggsave("Figures/cowplot_Figure1.pdf", width = 15, height = 15)
+ggsave("Figures/cowplot_sppRich.pdf", units = "in", width = 15, height = 15)
