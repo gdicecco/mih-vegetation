@@ -246,7 +246,7 @@ range_bins <- bbs_niches %>%
             lower = sd(spp_ndvi_max - spp_ndvi_min), 
             upper = sd(spp_ndvi_max - spp_ndvi_min)) %>%
   ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 6, shape = 15) +
-  labs(x = "NDVI bin", y = "Average NDVI range") +
+  labs(x = "NDVI bin", y = "NDVI range") +
   geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper)))
   theme(legend.position = "none")
 # ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
@@ -302,7 +302,7 @@ foraging_rich <- bbs_niches %>%
 forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Trophic.guild)) +
   geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild") +
-  theme(legend.text = element_text(size = 38))
+  theme(legend.text = element_text(size = 38), legend.title = element_text(size = 38))
 ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 
 #### cowplot ####
