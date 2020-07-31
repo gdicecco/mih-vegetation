@@ -130,11 +130,11 @@ bbc_buffers <- st_buffer(bbc_sf_transf, dist = buffers)
 bbc_years <- unique(bbc_sf$censusYear)
 # write_sf(bbc_buffers, "data/bbc_site_areas.shp")
 
-gimms_files <- list.files("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
-
-gimms_df <- data.frame(file_name = gimms_files[-1], year = as.numeric(substr(gimms_files[-1], 15, 18)))
-
-bbc_ndvi <- data.frame(siteID = c(), year = c(), NDVI = c())
+# gimms_files <- list.files("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
+# 
+# gimms_df <- data.frame(file_name = gimms_files[-1], year = as.numeric(substr(gimms_files[-1], 15, 18)))
+# 
+# bbc_ndvi <- data.frame(siteID = c(), year = c(), NDVI = c())
 
 # setwd("\\\\BioArk\\HurlbertLab\\GIS\\gimms\\")
 # for(yr in bbc_years) {

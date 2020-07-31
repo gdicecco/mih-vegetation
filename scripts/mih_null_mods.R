@@ -204,6 +204,9 @@ null_output_bins_z <- null_output_bins %>%
             Sobs = mean(Sobs),
             FGnull_pct = sum(FGObs < FGNull)/1000) %>%
   mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+summary(lm(FG_z ~ ndvi.mean, data = null_output_bins_z))
+
 null_bbc_z <- ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FG_z, col = FGObs)) +
   geom_point(size = 2) +
   theme_classic() + 

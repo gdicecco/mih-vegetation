@@ -247,23 +247,25 @@ range_bins <- bbs_niches %>%
             upper = sd(spp_ndvi_max - spp_ndvi_min)) %>%
   ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 6, shape = 15) +
   labs(x = "NDVI bin", y = "NDVI range") +
-  geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper)))
+  geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper))) +
   theme(legend.position = "none")
 # ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
 
 ### NDVI range for spp in each foraging guild
-# redo labels
 trophic_abbv <- bbs_niches %>%
   ungroup() %>%
   distinct(Trophic.guild) %>%
   mutate(manual_abb = c("G:gu","I:uf","I:be",    
-                         "I:ac","N",
-                         "I:uc","O:gf",
+                         "I:aa","N",
+                         "I:ab","O:gf",
                          "I:gg","I:lf", 
                          "I:bg","F:uc",
                          "H:gf","C:gh",  
                          "G:lc","F:lc","O:af")) %>%
-  arrange(Trophic.guild)
+  arrange(Trophic.guild) %>%
+  mutate(legend_label = case_when(Trophic.guild == "Insectivore: air hawker under canopy" ~
+                                    paste0("Insectivore: air hawker below canopy", " (", manual_abb, ")"),
+                                  TRUE ~ paste0(Trophic.guild, " (", manual_abb, ")")))
 trophic_abbv$color <- col_scale
 
 abbv_labels <- c(trophic_abbv$manual_abb)
@@ -300,8 +302,8 @@ foraging_rich <- bbs_niches %>%
   left_join(trophic_abbv, by = "Trophic.guild")
 
 forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Trophic.guild)) +
-  geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color) +
-  labs(x = "NDVI bin", y = "Number of species", fill = "Trophic guild") +
+  geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color, labels = trophic_abbv$legend_label) +
+  labs(x = "NDVI bin", y = "Number of species", fill = "Foraging guild") +
   theme(legend.text = element_text(size = 38), legend.title = element_text(size = 38))
 ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 
