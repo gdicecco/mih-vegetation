@@ -290,3 +290,6 @@ ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) +
   theme_classic(base_size = 15) + labs(x = "NDVI", y = "Landscape diversity (H)", title = "BBS")
 
 summary(lm(shannonH ~ ndvi.mean, data = bbs_env_het)) # r2 = .45
+
+
+summary(lm(spRich ~ shannonH, data = bbs_env_het)) # r2 = 0.26

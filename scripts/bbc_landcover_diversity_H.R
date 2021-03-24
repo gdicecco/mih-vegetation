@@ -37,3 +37,9 @@ ggplot(bbc_plot, aes(x = meanNDVI, y = shannonH)) + geom_point() + geom_smooth(m
 
 summary(lm(shannonH ~ meanNDVI, data = bbc_plot))
 
+bbc_spp_rich <- read.csv("data/env_bbc_rich.csv", stringsAsFactors = F)
+
+bbc_env_rich <- bbc_plot %>%
+  left_join(bbc_spp_rich)
+
+summary(lm(nSpp ~ shannonH, data = bbc_env_rich)) # R2 = 0.04
