@@ -238,6 +238,8 @@ binsize <- 0.05
 
 bbs_niches$ndvi_bin <- binsize*floor(bbs_niches$route_ndvi/binsize) + binsize/2
 
+# write.csv(bbs_niches, "data/bbs_counts_niches.csv", row.names = F)
+
 # need to add error bars
 range_bins <- bbs_niches %>%
   group_by(ndvi_bin) %>%
