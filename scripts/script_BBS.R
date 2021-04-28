@@ -114,7 +114,7 @@ final.abun <- final.counts %>%
   dplyr::summarise(sum = sum(speciestotal)) 
 
 #### Plots ####
-### Figure 1 ###
+
 # ndvi abun
 env_bbs_abun = left_join(final.abun, ndvi_nbcd, by = "stateroute")
 ni_a = ggplot(env_bbs_abun, aes(x = ndvi.mean, y = log10(sum))) + geom_point() + geom_smooth(method = "lm") + theme_classic() + theme(axis.title.x=element_text(size=28),axis.title.y=element_text(size=28)) + xlab("Mean NDVI")+ ylab("log(Abundance)")  + geom_point(col = "black", shape=16, size = 2)+ theme(axis.text.x=element_text(size = 25),axis.ticks=element_blank(), axis.text.y=element_text(size=25)) 
@@ -145,7 +145,7 @@ z <- plot_grid(ni_a + theme(legend.position="top"),
                hjust = -3)
 # ggsave("Figures/cowplot_NDVI_NBCD.pdf", height = 8, width = 12)
 
-### Figure 2 ###
+### Figure 5 ###
 ndvi.plot = left_join(final.counts, ndvi_nbcd, by = "stateroute")
 ndvi_range = c()
 sp_list = unique(ndvi.plot$aou)
@@ -166,7 +166,7 @@ ndvi_range$AOU = as.factor(ndvi_range$AOU)
 ndvi_plot = filter(ndvi_range, range > 0)
 # NDVI plot
 ggplot(ndvi_plot, aes(x = reorder(AOU, - range), y = range)) + geom_errorbar(width = 0, size = 1, aes(ymin= ndvi_plot$NDVI.min, ymax=ndvi_plot$NDVI.max)) +theme_classic()+ theme(axis.title.x=element_text(size=36),axis.title.y=element_text(size=36)) + xlab("AOU")+ ylab("NDVI Range")+ theme(axis.text.x=element_text(size = 20, angle = 90),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) 
-ggsave("Figures/ndvi_range_rank.pdf", height = 32, width = 42)
+# ggsave("Figures/ndvi_range_rank.pdf", height = 32, width = 42)
 
 
 ## NDVI breadth vs. foraging guilds
@@ -250,7 +250,8 @@ range_bins <- bbs_niches %>%
   ggplot(aes(x = ndvi_bin, y = avg_range)) + geom_point(size = 6, shape = 15) +
   labs(x = "NDVI bin", y = "NDVI range") +
   geom_errorbar(aes(ymin = avg_range -(1.96*lower), ymax = avg_range +(1.96*upper))) +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  geom_smooth(method = "lm", se = F, cex = 1.5)
 # ggsave("Figures/avg_NDVI_range_vs_NDVIbin.pdf", units = "in", height = 6, width = 8)
 
 ### NDVI range for spp in each foraging guild
@@ -307,7 +308,7 @@ forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Tro
   geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color, labels = trophic_abbv$legend_label) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Foraging guild") +
   theme(legend.text = element_text(size = 38), legend.title = element_text(size = 38))
-ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
+# ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 
 #### cowplot ####
 legend <- get_legend(forage_plot) 

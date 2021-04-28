@@ -124,7 +124,7 @@ env_bbs_rich <- read.csv("data/env_bbs_rich.csv", header = TRUE)
 bbs <- ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) + 
   geom_point(col = "black", shape=16, size = 2) + 
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .16, y = 100, label = "BBS", size =11) +
+  annotate("text", x = .18, y = 100, label = "BBS", size =11) +
   xlab(" ")+ ylab("Species richness")
 # ggsave("Figures/rich_ndvi.pdf", height = 8, width = 12)
 
@@ -135,8 +135,8 @@ bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   geom_point(size = 2, col = "black") +
   labs(x = " ", y = " ") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .12, y = 50, label = "BBC", size =11)
-ggsave("Figures/spp_rich_ndvi.pdf")
+  annotate("text", x = .15, y = 50, label = "BBC", size =11)
+# ggsave("Figures/spp_rich_ndvi.pdf")
 
 # summary(lm(nSpp ~ NDVI, data = sppRich))
 
@@ -153,7 +153,7 @@ bbs_land <- ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) +
   geom_point(size = 2) + 
   labs(x = "Mean NDVI", y = "Landscape diversity (H)") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .17, y = 2.5, label = "BBS", size =11)
+  annotate("text", x = .18, y = 2.5, label = "BBS", size =11)
 
 #BBC
 landcover_nonforest <- read.csv('data/bbc_fragstats.csv', stringsAsFactors = F) %>%
@@ -193,7 +193,7 @@ bbc_land <- ggplot(bbc_plot, aes(x = meanNDVI, y = shannonH)) +
   geom_point(size = 2) + 
   labs(x = "Mean NDVI", y = " ") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) + 
-  annotate("text", x = .12, y = 2, label = "BBC", size =11)
+  annotate("text", x = .15, y = 2, label = "BBC", size =11)
 
 ## cowplot 
 plot_grid(bbs + theme(legend.position="none"),
