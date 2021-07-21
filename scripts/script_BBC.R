@@ -9,9 +9,9 @@ library(tmap)
 library(sf)
 library(spData)
 library(raster)
-library(gimms)
 library(mobr)
 library(broom)
+library(MODISTools)
 
 ## GGplot theme
 theme_set(theme_classic(base_size = 40))
@@ -157,6 +157,56 @@ bbc_years <- unique(bbc_sf$censusYear)
 # write.csv(bbc_ndvi, "data/bbc_sites_ndvi.csv", row.names = F)
 
 bbc_ndvi <- read.csv("data/bbc_sites_ndvi.csv", stringsAsFactors = F)
+
+## MODIS NDVI: May 1-July 31
+# MOD13Q1
+
+bands <- mt_bands(product = "MOD13Q1")
+ndvi_band <- bands$band[grep("NDVI", bands$band)]
+evi_band <- bands$band[grep("EVI", bands$band)]
+
+bbc_modis_years <- bbc_years[bbc_years >= 2000]
+
+bbc_coords <- bbc_censuses %>%
+  left_join(sites_distinct, by = c("siteID", "sitename")) %>%
+  dplyr::select(siteID, sitename, latitude, longitude) %>%
+  mutate_at("longitude", .funs = ~{.*-1}) %>%
+  ungroup() %>%
+  distinct() %>%
+  dplyr::select(siteID, latitude, longitude) %>%
+  rename(site_name = "siteID",
+         lat = "latitude",
+         lon = "longitude")
+
+bbc_modis_ndvi <- vector(mode = "list", length = length(bbc_modis_years))
+bbc_modis_evi <- vector(mode = "list", length = length(bbc_modis_years))
+
+for(i in 1:length(bbs_modis_years)) {
+  y <- bbs_modis_years[i]
+  
+  modis_ndvi <- mt_batch_subset(df = bbc_coords,
+                                product = "MOD13Q1",
+                                start = paste0(y, "-05-01"),
+                                end = paste0(y, "-07-31"),
+                                band = ndvi_band)
+  
+  bbc_modis_ndvi[[i]] <- modis_ndvi
+  
+  modis_evi <- mt_batch_subset(df = bbc_coords,
+                               product = "MOD13Q1",
+                               start = paste0(y, "-05-01"),
+                               end = paste0(y, "-07-31"),
+                               band = evi_band)
+  
+  bbc_modis_evi[[i]] <- modis_evi
+}
+
+modis_ndvi_df <- do.call(rbind.data.frame, bbc_modis_ndvi)
+
+modis_evi_df <- do.call(rbind.data.frame, bbc_modis_evi)
+
+write.csv(modis_ndvi_df, "data/bbc_modis_ndvi.csv", row.names = F)
+write.csv(modis_evi_df, "data/bbc_modis_evi.csv", row.names = F)
 
 # Spp Rich vs NDVI - breeders and visitors
 
