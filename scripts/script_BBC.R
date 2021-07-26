@@ -181,8 +181,8 @@ bbc_coords <- bbc_censuses %>%
 bbc_modis_ndvi <- vector(mode = "list", length = length(bbc_modis_years))
 bbc_modis_evi <- vector(mode = "list", length = length(bbc_modis_years))
 
-for(i in 1:length(bbs_modis_years)) {
-  y <- bbs_modis_years[i]
+for(i in 3:length(bbc_modis_years)) {
+  y <- bbc_modis_years[i]
   
   modis_ndvi <- mt_batch_subset(df = bbc_coords,
                                 product = "MOD13Q1",
