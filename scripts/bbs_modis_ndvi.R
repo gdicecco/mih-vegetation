@@ -51,7 +51,7 @@ for(i in 3:length(bbs_modis_years)) {
   
   bbs_modis_ndvi[[i]] <- modis_ndvi
   
-  modis_evi <- mt_batch_subset(df = bbs_sites[1:800, ],
+  modis_evi <- mt_batch_subset(df = bbs_sites[1:950, ],
                                product = "MOD13Q1",
                                start = paste0(y, "-05-01"),
                                end = paste0(y, "-07-31"),
