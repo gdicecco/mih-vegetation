@@ -50,6 +50,8 @@ avhrr_res <- avhrr_ndvi %>%
             year = 2000)
 write.csv(avhrr_res, "data/avhrr_ndvi_bbs.csv", row.names = F)
 
+avhrr_res <- read_csv("data/avhrr_ndvi_bbs.csv")
+
 ## Compare to spp rich, MODIS & GIMMS NDVI values
 bbs_gimms <- read_csv("data/gimms_ndvi_bbs_data.csv") %>%
   filter(month %in% c("may", "jun", "jul"), year %in% c(2000)) %>%
@@ -77,7 +79,8 @@ avhrr_compare <- bbs_gimms %>%
   left_join(bbs_modis_evi, by = c("site_id" = "site")) %>%
   left_join(avhrr_res, by = c("site_id" = "stateroute"), suffix = c(.x = "_modis", .y = "_avhrr"))
   
-cor(avhrr_compare[,2:5], use = "pairwise.complete.obs")
+cor_table <- cor(avhrr_compare[,2:5], use = "pairwise.complete.obs")
+write.table(cor_table, "data/avhrr_modis_gimms_cor_table.txt")
 
 bbs_rich <- bbs_final %>%
   filter(year == 2000) %>%
@@ -89,7 +92,8 @@ summary(lm(spRich ~ mean_ndvi, data = bbs_rich))
  
 theme_set(theme_classic(base_size = 15))
 ggplot(bbs_rich, aes(x= mean_ndvi, y = spRich)) + geom_point() +
-  labs(x = "AVHRR NDVI 2000", y = "Species richness") 
+  labs(x = "AVHRR NDVI 2000", y = "Species richness") +
+  annotate(geom = "text", x = 0.85, y = 20, label = "R2 = 0.39")
 ggsave("Figures/avhrr_bbs_rich.pdf")
 
 
