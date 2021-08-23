@@ -205,6 +205,31 @@ bbs_gimms <- ggplot(bbs_env, aes(x = ndvi, y = spRich)) + geom_point() +
 plot_grid(bbs_evi, bbs_ndvi, bbs_gimms, nrow = 2)
 ggsave("Figures/BBS_vegind_spRich.pdf")
 
+## BBS foraging guild z score and env heterogeneity mods
+bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
+
+bbs_het_modis <- bbs_env_het %>%
+  left_join(bbs_modis, by = c("stateroute" = "site"))
+
+summary(lm(shannonH ~ mean_ndvi, bbs_het_modis))
+
+null_output_bins <- read.csv("data/bbs_null_output_bins.csv", header = TRUE)
+
+null_output_bins_agg <- null_output_bins %>%
+  group_by(stateroute) %>%
+  summarize(FGnull_mean = mean(FGNull),
+            FGnull_sd = sd(FGNull),
+            FGObs = mean(FGObs),
+            ndvi.mean = mean(ndvi.mean),
+            Sobs = mean(Sobs),
+            FGnull_pct = sum(FGObs < FGNull)/1000) %>%
+  mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+null_output_modis <- null_output_bins_agg %>%
+  left_join(bbs_modis, by = c("stateroute" = "site"))
+
+summary(lm(FG_z ~ mean_ndvi, data = null_output_modis))
+
 # BBC plots
 
 bbc_env <- bbc_sppRich %>%

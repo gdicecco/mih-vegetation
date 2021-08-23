@@ -96,4 +96,34 @@ ggplot(bbs_rich, aes(x= mean_ndvi, y = spRich)) + geom_point() +
   annotate(geom = "text", x = 0.85, y = 20, label = "R2 = 0.39")
 ggsave("Figures/avhrr_bbs_rich.pdf")
 
+## LM for BBS landscape diversity
+
+bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
+
+summary(lm(shannonH ~ ndvi.mean, bbs_env_het))
+
+bbs_het_avhrr <- bbs_env_het %>%
+  left_join(avhrr_res)
+
+summary(lm(shannonH ~ mean_ndvi, bbs_het_avhrr))
+
+## Foraging guild z-score
+null_output_bins <- read.csv("data/bbs_null_output_bins.csv", header = TRUE)
+
+null_output_bins_agg <- null_output_bins %>%
+  group_by(stateroute) %>%
+  summarize(FGnull_mean = mean(FGNull),
+            FGnull_sd = sd(FGNull),
+            FGObs = mean(FGObs),
+            ndvi.mean = mean(ndvi.mean),
+            Sobs = mean(Sobs),
+            FGnull_pct = sum(FGObs < FGNull)/1000) %>%
+  mutate(FG_z = (FGObs - FGnull_mean)/FGnull_sd)
+
+summary(lm(FG_z ~ ndvi.mean, data = null_output_bins_agg))
+
+null_output_avhrr <- null_output_bins_agg %>%
+  left_join(avhrr_res)
+summary(lm(FG_z ~ mean_ndvi, data = null_output_avhrr))
+
 
