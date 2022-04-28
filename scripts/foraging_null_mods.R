@@ -188,11 +188,13 @@ ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = FGnull_pct, col = FGObs)) +
 null_bbs_z <- ggplot(null_output_bins_agg, aes(x = ndvi.mean, y = FG_z)) + theme_classic() + 
   geom_point(aes(col = FGObs), size = 2) + 
   geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") + 
+  labs(col = "Obs. Foraging Guilds") +
   geom_smooth(method = "lm", se = F, color = "blue", lwd = 1.25) +xlab("Mean NDVI")+ ylab("Foraging guild z-score") + theme(axis.text.x=element_text(size = 30),axis.ticks=element_blank(), axis.text.y=element_text(size=30)) +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
-        legend.key.width = unit(4, "line"), legend.position = "top") +
+  theme(legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
+        legend.key.width = unit(4, "line"), legend.position = "top", legend.title = element_text(size = 20)) +
+  guides(colour = guide_colourbar(title.position="top", title.hjust = 0.5)) +
   scale_color_continuous(breaks = c(4,6,8,10,12,14), type = "viridis") 
 
 # ggsave("Figures/FG_ndvi_binz.pdf")
@@ -216,12 +218,13 @@ null_bbc_z <- ggplot(null_output_bins_z, aes(x = ndvi.mean, y = FG_z, col = FGOb
   geom_point(size = 2) +
   theme_classic() + 
   geom_abline(intercept = 0, slope = 0, col = "black", lwd = 2, lty = "dashed") +
-  geom_smooth(method = "lm", se = F, col = "blue", lwd = 1.25) +
+  # geom_smooth(method = "lm", se = F, col = "blue", lwd = 1.25) +
   labs(x = "Mean NDVI", y = "Foraging guild z-score", col = "Obs. Foraging Guilds") +
   theme(axis.text.x=element_text(size = 28),axis.text.y=element_text(size=28)) +
   theme(axis.title.x=element_text(size = 32),axis.title.y=element_text(size=32, vjust = 2)) +
-  theme(legend.title=element_blank(), legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
-       legend.key.width = unit(4, "line"), legend.position = "top") +
+  theme(legend.text=element_text(size = 20, vjust = -1), legend.key.height=unit(2, "lines"),
+       legend.key.width = unit(4, "line"), legend.position = "top", legend.title = element_text(size = 20)) +
+  guides(colour = guide_colourbar(title.position="top", title.hjust = 0.5)) +
   scale_color_continuous(breaks = c(2,4,6,8,10,12,14), type = "viridis") 
 # ggsave("Figures/BBC_null_mod_bins_z.pdf", units = "in", width = 8, height = 6)
 
@@ -241,7 +244,7 @@ grid_effects <- plot_grid(foura,
                           align = 'hv',
                           labels = c("BBS", "BBC"),
                           label_size = 28,
-                          vjust = 5,
+                          vjust = 7,
                           hjust = -1.75) 
 
 ggsave("Figures/null_mod_plots.pdf", units = "in", width = 14, height = 8)

@@ -152,12 +152,25 @@ sp_list = unique(ndvi.plot$aou)
 for(i in sp_list){
   sp = filter(ndvi.plot, aou == i)
   ndvi = range(sp$ndvi.mean)
+  ndvi_iqr = IQR(sp$ndvi.mean)
   ndvi_mean <- sum(sp$ndvi.mean*sp$speciestotal)/sum(sp$speciestotal)
-  ndvi_range = rbind(ndvi_range, c(i, ndvi, ndvi_mean))
+  ndvi_range = rbind(ndvi_range, c(i, ndvi, ndvi_iqr, ndvi_mean))
 }
 ndvi_range = data.frame(ndvi_range)
-names(ndvi_range) = c("AOU", "NDVI.min", "NDVI.max", "NDVI.mean")
+names(ndvi_range) = c("AOU", "NDVI.min", "NDVI.max", "NDVI.iqr", "NDVI.mean")
 #write.csv(ndvi_range, "data/ndvi_range.csv", row.names = FALSE)  
+
+# ndvi - check outliers
+ndvi_out <- ndvi.plot %>%
+  group_by(aou) %>%
+  summarize(min = min(ndvi.mean),
+            max = max(ndvi.mean),
+            iqr = IQR(ndvi.mean),
+            q1 = quantile(ndvi.mean, c(0.25)),
+            q3 = quantile(ndvi.mean, c(0.75)),
+            upper = q3 + 1.5*iqr,
+            lower = q1 - 1.5*iqr,
+            outliers = n_distinct(stateroute[ndvi.mean > upper | ndvi.mean < lower]))
 
 #### NDVI range ranked ####
 ndvi_range$range = ndvi_range$NDVI.max - ndvi_range$NDVI.min
@@ -172,7 +185,7 @@ ggplot(ndvi_plot, aes(x = reorder(AOU, - range), y = range)) + geom_errorbar(wid
 ## NDVI breadth vs. foraging guilds
 
 ndvi_range <- read.csv("data/ndvi_range.csv", stringsAsFactors = F)
-troph_guild <- read.csv("\\\\BioArk\\HurlbertLab\\Databases/Trophic Guilds/Troph_guilds.csv", header = TRUE)
+troph_guild <- read.csv("/Volumes/HurlbertLab/Databases/Trophic Guilds/Troph_guilds.csv", header = TRUE)
 
 gimms_ndvi = read.csv("data/gimms_ndvi_bbs_data.csv", header = TRUE)
 tax_code <- read.csv("data/Bird_Taxonomy.csv", header = TRUE) %>%
@@ -302,11 +315,22 @@ foraging_rich <- bbs_niches %>%
   summarize(nSpp = n_distinct(aou)) %>%
   group_by(ndvi_bin, Trophic.guild) %>%
   summarize(mean_nSpp = mean(nSpp)) %>%
+  group_by(ndvi_bin) %>%
+  mutate(total_spp = sum(mean_nSpp)) %>%
   left_join(trophic_abbv, by = "Trophic.guild")
 
-forage_plot <- ggplot(foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Trophic.guild)) +
-  geom_col(position = "stack", col = "black") + scale_fill_manual(values = trophic_abbv$color, labels = trophic_abbv$legend_label) +
+totals <- foraging_rich %>%
+  ungroup() %>%
+  dplyr::select(ndvi_bin, total_spp) %>%
+  distinct()
+
+forage_plot <- ggplot() +
+  geom_col(data = foraging_rich, aes(x = ndvi_bin, y = mean_nSpp, fill = Trophic.guild),
+           position = "stack", col = "black") + 
+  scale_fill_manual(values = trophic_abbv$color, labels = trophic_abbv$legend_label) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Foraging guild") +
+  geom_text(data = totals,
+            aes(x = ndvi_bin, y = total_spp + 8, label = round(total_spp)), size = 8, vjust = 3) +
   theme(legend.text = element_text(size = 38), legend.title = element_text(size = 38))
 # ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 

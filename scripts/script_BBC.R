@@ -266,6 +266,7 @@ bbc_popdens <- bbc %>%
             CommDens = sum(nTerritory)/mean(as.numeric(area)))
 
 summary(lm(CommDens ~ NDVI, data = bbc_popdens))
+summary(lm(CommDens ~ NDVI, data = filter(bbc_popdens, CommDens < 150)))
 
 popdens <- ggplot(bbc_popdens, aes(x = NDVI, y = CommDens)) + geom_point(size = 6, alpha = 0.7) +
   labs(x = "Mean NDVI", y = "Territory density \n (territories/ha)")
@@ -290,12 +291,15 @@ nindiv <- bbc %>%
 
 nindiv <- read.csv("data/bbc_rarefaction_results.csv", stringsAsFactors = F)
 
-rarefaction <- ggplot(nindiv, aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
+rarefaction <- ggplot(filter(nindiv, !is.na(NDVI)), aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
   geom_line(lwd = 1.5) +
-  scale_color_viridis_c(guide = guide_colorbar(barheight = 10))+ 
+  # scale_color_viridis_c(guide = guide_colorbar(barheight = 10), option = "E")+ 
+  scale_color_gradient(guide = guide_colorbar(barheight = 10), 
+                        low = "#EDF8E9",
+                       high = "#006D2C") +
   labs(x = "Observed individuals", y = "Expected species", color = "Mean NDVI") +
   geom_vline(xintercept = 175, lty = 2, lwd = 2.25)
-ggsave("Figures/rarefaction_curves_BBC.pdf")
+ggsave("Figures/rarefaction_curves_BBC.pdf", rarefaction)
 
 ## E(S) vs. NDVI 
 
