@@ -162,16 +162,27 @@ names(ndvi_range) = c("AOU", "NDVI.min", "NDVI.max", "NDVI.iqr", "NDVI.mean")
 
 # ndvi - check outliers
 ndvi_out <- ndvi.plot %>%
+  group_by(aou, stateroute) %>%
+  filter(n_distinct(year) > 1) %>%
   group_by(aou) %>%
   summarize(min = min(ndvi.mean),
             max = max(ndvi.mean),
             iqr = IQR(ndvi.mean),
-            q1 = quantile(ndvi.mean, c(0.25)),
-            q3 = quantile(ndvi.mean, c(0.75)),
+            q1 = quantile(ndvi.mean, c(0.05)),
+            q3 = quantile(ndvi.mean, c(0.95)),
             upper = q3 + 1.5*iqr,
             lower = q1 - 1.5*iqr,
             outliers = n_distinct(stateroute[ndvi.mean > upper | ndvi.mean < lower]))
 
+min <- ggplot(ndvi_out, aes(x = q1, y = min)) + geom_point() + 
+  labs(x = "5th percentile", y = "min NDVI") +
+  geom_abline(slope = 1, intercept = 0)
+max <- ggplot(ndvi_out, aes(x = q3, y = max)) + geom_point() + 
+  labs(x = "95th percentile", y = "max NDVI") +
+  geom_abline(slope = 1, intercept = 0)
+plot_grid(min, max, nrow = 1)
+ggsave("Figures/ndvi_range_percentiles.pdf", height = 6, width = 11)
+ 
 #### NDVI range ranked ####
 ndvi_range$range = ndvi_range$NDVI.max - ndvi_range$NDVI.min
 # zero = 1 occurrence
@@ -320,8 +331,10 @@ foraging_rich <- bbs_niches %>%
   left_join(trophic_abbv, by = "Trophic.guild")
 
 totals <- foraging_rich %>%
+  group_by(ndvi_bin) %>%
+  mutate(n_guild = n_distinct(Trophic.guild)) %>%
   ungroup() %>%
-  dplyr::select(ndvi_bin, total_spp) %>%
+  dplyr::select(ndvi_bin, total_spp, n_guild) %>%
   distinct()
 
 forage_plot <- ggplot() +
@@ -330,7 +343,7 @@ forage_plot <- ggplot() +
   scale_fill_manual(values = trophic_abbv$color, labels = trophic_abbv$legend_label) +
   labs(x = "NDVI bin", y = "Number of species", fill = "Foraging guild") +
   geom_text(data = totals,
-            aes(x = ndvi_bin, y = total_spp + 8, label = round(total_spp)), size = 8, vjust = 3) +
+            aes(x = ndvi_bin, y = total_spp + 8, label = n_guild), size = 8, vjust = 3) +
   theme(legend.text = element_text(size = 38), legend.title = element_text(size = 38))
 # ggsave("Figures/trophic_guilds_by_NDVIbin.pdf")
 
