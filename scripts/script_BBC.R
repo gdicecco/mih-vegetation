@@ -293,10 +293,7 @@ nindiv <- read.csv("data/bbc_rarefaction_results.csv", stringsAsFactors = F)
 
 rarefaction <- ggplot(filter(nindiv, !is.na(NDVI)), aes(x = obsIndiv, y = rarefy, group = factor(siteID), color = NDVI)) +
   geom_line(lwd = 0.7) +
-  # scale_color_viridis_c(guide = guide_colorbar(barheight = 10), option = "E")+ 
-  scale_color_gradient(guide = guide_colorbar(barheight = 10), 
-                        low = "#EDF8E9",
-                       high = "#006D2C") +
+  scale_color_viridis_c(guide = guide_colorbar(barheight = 10), direction = -1) +
   labs(x = "Observed individuals", y = "Expected species", color = "Mean NDVI") +
   geom_vline(xintercept = 175, lty = 2, lwd = 2.25) +
   theme(legend.position = c(0.7, 0.5))

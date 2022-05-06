@@ -9,7 +9,7 @@ library(rgdal)
 library(raster)
 
 
-us_routes <- read_sf("\\\\BioArk\\hurlbertlab/Databases/BBS/GPS_stoplocations/bbsrte_2012_alb/bbsrte_2012_alb.shp")
+us_routes <- read_sf("/Volumes/hurlbertlab/Databases/BBS/GPS_stoplocations/bbsrte_2012_alb/bbsrte_2012_alb.shp")
 us <- tm_shape(us_routes) + tm_borders() + tm_fill(col = "light gray")
 
 # Read in BBS
@@ -130,6 +130,19 @@ bbs <- ggplot(env_bbs_rich, aes(x = ndvi.mean, y = spRich)) +
 
 summary(lm(spRich ~ ndvi.mean, data = env_bbs_rich))
 
+## Subsample to BBC sample size
+bbs_samp_rich <- purrr::map_dfr(c(1:999), ~{
+  bbs_sample <- sample_n(env_bbs_rich, 393)
+  
+  p <- summary(lm(spRich ~ ndvi.mean, data = bbs_sample))$coefficients[2,4]
+  slope <- summary(lm(spRich ~ ndvi.mean, data = bbs_sample))$coefficients[2,1]
+  
+  data.frame(pval = p, slope = slope)
+})
+
+boxplot(bbs_samp_rich, main = "NDVI")
+
+## BBC
 sppRich <- read.csv("data/env_bbc_rich.csv", header = TRUE)
 bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
   geom_point(size = 2, col = "black") +
@@ -142,6 +155,7 @@ bbc <- ggplot(sppRich, aes(x = NDVI, y = nSpp)) +
 
 ## landscape diversity
 
+
 #BBS
 bbs_env_het <- read.csv("data/bbs_site_env_heterogeneity.csv")
 
@@ -149,9 +163,22 @@ summary(lm(spRich ~ ndvi.mean, data = bbs_env_het)) # pos sig pred, r2 = 0.44
 summary(lm(spRich ~ shannonH, data = bbs_env_het)) # pos sig pred, r2 = 0.26
 summary(lm(spRich ~ ndvi.mean + shannonH, data = bbs_env_het)) # pos sig pred, r2 = 0.48
 
+## subsample test
+bbs_samp_het <- purrr::map_dfr(c(1:999), ~{
+  bbs_sample <- sample_n(bbs_env_het, 393)
+  
+  p <- summary(lm(spRich ~ shannonH, data = bbs_sample))$coefficients[2,4]
+  slope <- summary(lm(spRich ~ shannonH, data = bbs_sample))$coefficients[2,1]
+  
+  data.frame(pval = p, slope = slope)
+})
+
+boxplot(bbs_samp_het, main = "Landscape diversity")
+
+## fig
 bbs_land <- ggplot(bbs_env_het, aes(x = ndvi.mean, y = shannonH)) + 
   geom_point(size = 2) + 
-  labs(x = "Mean NDVI", y = "Landscape diversity (H)") +
+  labs(x = "Mean NDVI", y = "Landscape diversity (H')") +
   geom_smooth(method = "lm", se = FALSE, lwd =1.25) 
 
 #BBC
