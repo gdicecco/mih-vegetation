@@ -1,6 +1,8 @@
 ### More individuals or specialized niches? Distinguishing support for hypotheses explaining positive species-energy relationships
 #### Grace Di Cecco, Sara Snell Taylor, Ethan White, & Allen Hurlbert
 
+[![DOI](https://zenodo.org/badge/153173320.svg)](https://zenodo.org/badge/latestdoi/153173320)
+
 This repository contains figures and analyses exploring explanations for positive species-energy relationships in two North American breeding bird datasets, the Breeding Bird Survey (BBS) and the Breeding Bird Census (BBC).
 
 Code to replicate manuscript analyses found in `/scripts`:
